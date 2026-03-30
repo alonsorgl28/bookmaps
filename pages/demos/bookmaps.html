@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bookmaps | Pretext</title>
+<meta name="description" content="Bookmaps turns dense documents into interactive visual maps. This demo uses Revoluciones tecnologicas y capital financiero as a sample.">
+<meta name="theme-color" content="#f5f0ea">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    background:
+      radial-gradient(34% 26% at 84% 10%, rgba(30, 167, 255, 0.16), transparent 58%),
+      radial-gradient(26% 24% at 12% 88%, rgba(255, 106, 47, 0.12), transparent 62%),
+      linear-gradient(180deg, #fcfaf6 0%, #f5f2ec 48%, #efebe2 100%);
+    color: #121212;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    cursor: crosshair;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(18,18,18,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18,18,18,0.045) 1px, transparent 1px);
+    background-size: 28px 28px, 28px 28px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.52), rgba(0,0,0,0.10));
+    z-index: 0;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.12) 18%, rgba(0,0,0,0.015) 100%),
+      linear-gradient(90deg, rgba(255,255,255,0.12), transparent 24%, transparent 76%, rgba(255,255,255,0.10));
+    z-index: 0;
+  }
+  #treemap {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1;
+  }
+  .block {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid rgba(18,18,18,0.10);
+    border-radius: 0;
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0.12) 34%, rgba(255,255,255,0.03) 68%, rgba(255,255,255,0.01)),
+      linear-gradient(135deg, rgba(255,255,255,0.18), transparent 42%);
+    will-change: transform;
+    contain: layout style paint;
+    transform-origin: center center;
+    box-shadow:
+      0 14px 28px rgba(18,18,18,0.07),
+      0 2px 0 rgba(255,255,255,0.34) inset,
+      0 0 0 1px rgba(255,255,255,0.14) inset,
+      0 -10px 18px rgba(255,255,255,0.05) inset;
+    backdrop-filter: blur(3px);
+  }
+  .block::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: rgba(18,18,18,0.18);
+    mix-blend-mode: multiply;
+    opacity: 0.75;
+  }
+  .block::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-top: 1px solid rgba(255,255,255,0.20);
+    border-left: 1px solid rgba(255,255,255,0.12);
+    background: linear-gradient(180deg, rgba(255,255,255,0.14), transparent 22%, transparent 78%, rgba(255,255,255,0.04));
+    mix-blend-mode: screen;
+    opacity: 0.56;
+  }
+  .block-inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-width: 0;
+    min-height: 0;
+  }
+  .block-head {
+    min-width: 0;
+    padding: 0;
+    border-bottom: 1px solid rgba(17,16,15,0.10);
+    background: linear-gradient(180deg, rgba(255,255,255,0.24), rgba(255,255,255,0.06) 30%, rgba(18,18,18,0.03));
+  }
+  .term-toolbar {
+    height: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 0 9px 0 8px;
+    min-width: 0;
+  }
+  .term-meta {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+  }
+  .term-id {
+    font-size: 7px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.78;
+    white-space: nowrap;
+  }
+  .term-title {
+    display: none;
+  }
+  .term-status {
+    font-size: 7px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.62;
+    white-space: nowrap;
+  }
+  .block-title {
+    display: none;
+  }
+  .block-body {
+    min-width: 0;
+    min-height: 0;
+    padding: 10px 10px 9px 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  .block-title-inline {
+    display: none;
+    font-size: 7px;
+    line-height: 1.25;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.72;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .term-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    min-width: 0;
+  }
+  .term-prompt {
+    flex: 0 0 auto;
+    font-size: 8px;
+    line-height: 1.35;
+    font-weight: 700;
+    opacity: 0.70;
+  }
+  .term-text {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .block-value {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.12;
+    margin-top: 0;
+    letter-spacing: -0.02em;
+    white-space: normal;
+    overflow: hidden;
+    text-transform: uppercase;
+  }
+  .block-detail {
+    font-weight: 500;
+    font-size: 8px;
+    line-height: 1.42;
+    margin-top: 6px;
+    opacity: 0.84;
+    overflow: hidden;
+  }
+  .block-foot {
+    min-width: 0;
+    padding: 7px 10px 8px 13px;
+    border-top: 1px solid rgba(17,16,15,0.10);
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(17,16,15,0.05));
+  }
+  .term-footer {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+  }
+  .block-ref {
+    font-weight: 600;
+    font-size: 7px;
+    line-height: 1.35;
+    margin-top: 0;
+    opacity: 0.72;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+  .hud {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 20;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    font-size: 9px;
+    line-height: 1.7;
+    color: rgba(18,18,18,0.36);
+    text-align: right;
+    pointer-events: none;
+  }
+  .hud .val { color: rgba(18,18,18,0.74); font-weight: 700; }
+  .legend-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px 12px;
+    background: linear-gradient(180deg, rgba(240,237,230,0.58), rgba(240,237,230,0.96));
+    border-top: 1px solid rgba(18,18,18,0.10);
+    backdrop-filter: blur(14px);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    color: rgba(18,18,18,0.52);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    user-select: none;
+    padding: 9px 11px;
+    flex: 0 1 auto;
+    min-width: 0;
+    border-radius: 0;
+    border: 1px solid rgba(18,18,18,0.10);
+    background: rgba(255,255,255,0.34);
+  }
+  .legend-item:hover, .legend-item:active {
+    background: rgba(255,255,255,0.60);
+    color: rgba(18,18,18,0.88);
+  }
+  .legend-item.active {
+    color: rgba(18,18,18,0.96);
+    background: rgba(255,255,255,0.90);
+    box-shadow: 0 8px 18px rgba(18,18,18,0.08);
+  }
+  .legend-item .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .legend-item .lbl {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .legend-item.active .lbl { color: rgba(0,0,0,0.85); }
+  .about-btn {
+    position: fixed;
+    right: 14px;
+    bottom: 60px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 0;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(18,18,18,0.10);
+    color: rgba(18,18,18,0.54);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    transition: all 0.2s ease;
+  }
+  .about-btn:hover { background: rgba(255,255,255,0.94); color: rgba(18,18,18,0.88); }
+  .about-btn .about-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 0;
+    border: 1.5px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .load-btn {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 0;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(18,18,18,0.10);
+    color: rgba(18,18,18,0.54);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    transition: all 0.2s ease;
+  }
+  .load-btn:hover { background: rgba(255,255,255,0.94); color: rgba(18,18,18,0.88); }
+  .doc-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(440px, calc(100vw - 24px));
+    z-index: 36;
+    background:
+      radial-gradient(26% 22% at 10% 8%, rgba(255, 106, 47, 0.10), transparent 62%),
+      linear-gradient(180deg, rgba(249,246,240,0.98), rgba(241,237,230,0.99));
+    border-right: 1px solid rgba(18,18,18,0.10);
+    box-shadow: 14px 0 30px rgba(18,18,18,0.08);
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    backdrop-filter: blur(12px);
+    overflow-y: auto;
+  }
+  .doc-panel.visible { transform: translateX(0); }
+  .doc-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #3f7cff, #18c6a3 48%, #ff6a2f);
+    opacity: 0.95;
+  }
+  .doc-panel-inner {
+    padding: 22px 24px 34px 20px;
+  }
+  .doc-panel-close {
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border-radius: 0;
+    border: 1px solid rgba(18,18,18,0.10);
+    background: rgba(17,16,15,0.06);
+    color: rgba(17,16,15,0.58);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .doc-panel-kicker {
+    margin-top: 14px;
+    font: 700 10px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .doc-panel-title {
+    margin-top: 8px;
+    font-size: 24px;
+    line-height: 1.02;
+    font-weight: 700;
+    color: #141210;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .doc-panel-title::before {
+    content: "> ";
+    opacity: 0.52;
+  }
+  .doc-panel-meta {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(17,16,15,0.60);
+  }
+  .doc-section {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(17,16,15,0.10);
+  }
+  .doc-label {
+    font: 700 9px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .doc-help {
+    margin-top: 8px;
+    color: #4b4540;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .doc-textarea {
+    width: 100%;
+    min-height: 220px;
+    margin-top: 10px;
+    padding: 12px;
+    resize: vertical;
+    border: 1px solid rgba(18,18,18,0.12);
+    border-radius: 0;
+    background: rgba(255,255,255,0.62);
+    color: #181614;
+    font: 500 12px/1.5 'IBM Plex Mono', 'SF Mono', monospace;
+    outline: none;
+  }
+  .doc-textarea:focus {
+    border-color: rgba(63,124,255,0.48);
+    box-shadow: 0 0 0 1px rgba(63,124,255,0.18) inset;
+  }
+  .doc-file {
+    margin-top: 10px;
+    width: 100%;
+    font: 500 11px/1.4 'IBM Plex Mono', 'SF Mono', monospace;
+    color: #3f3a35;
+  }
+  .doc-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .doc-action {
+    border: 1px solid rgba(18,18,18,0.10);
+    background: rgba(255,255,255,0.74);
+    color: rgba(18,18,18,0.86);
+    font: 700 11px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    padding: 9px 12px;
+    border-radius: 0;
+    cursor: pointer;
+  }
+  .doc-action.primary {
+    background: rgba(18,18,18,0.92);
+    color: #f6f4ef;
+  }
+  .doc-status {
+    margin-top: 10px;
+    min-height: 18px;
+    color: rgba(18,18,18,0.62);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .info-panel {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    background:
+      radial-gradient(28% 24% at 88% 10%, rgba(30, 167, 255, 0.08), transparent 62%),
+      linear-gradient(180deg, rgba(246,243,236,0.98), rgba(239,235,227,0.99));
+    display: none;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .info-panel.visible { display: block; }
+  .info-scroll {
+    min-height: 100%;
+    padding: 56px 24px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .info-content {
+    max-width: 520px;
+    width: 100%;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #5f5953;
+  }
+  .info-close {
+    position: sticky;
+    top: 16px;
+    align-self: flex-end;
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    background: rgba(17,16,15,0.06);
+    border: 1px solid rgba(17,16,15,0.12);
+    color: rgba(17,16,15,0.5);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .info-close:hover { background: rgba(17,16,15,0.12); color: #000; }
+  .info-content h2 { font-weight: 700; font-size: 2rem; color: #171513; margin-bottom: 24px; letter-spacing: -0.03em; }
+  .info-content h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #7a736d; margin-top: 28px; margin-bottom: 10px; font-weight: 700; }
+  .info-content p { margin-bottom: 14px; color: #4e4944; }
+  .info-content strong { color: #1d1916; font-weight: 700; }
+  .info-content code { font-family: 'SF Mono', monospace; font-size: 0.85em; background: rgba(17,16,15,0.06); padding: 2px 5px; border-radius: 0; color: #0e7d68; }
+  .info-content ul { list-style: none; padding: 0; margin: 16px 0; }
+  .info-content li { padding-left: 16px; position: relative; margin-bottom: 12px; color: #6a6560; }
+  .info-content li::before { content: "\2022"; color: #ccc; position: absolute; left: 0; }
+  .chapter-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(420px, calc(100vw - 24px));
+    z-index: 35;
+    background:
+      radial-gradient(42% 34% at 86% 8%, rgba(0, 174, 255, 0.10), transparent 62%),
+      linear-gradient(180deg, rgba(243,238,229,0.98), rgba(232,224,212,0.99));
+    border-left: 1px solid rgba(18,18,18,0.10);
+    box-shadow: -14px 0 30px rgba(18,18,18,0.08);
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+    backdrop-filter: blur(12px);
+    overflow-y: auto;
+  }
+  .chapter-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #ff6a2f, #18c6a3 48%, #3f7cff);
+    opacity: 0.95;
+  }
+  .chapter-panel.visible { transform: translateX(0); }
+  .chapter-panel-inner {
+    padding: 22px 20px 34px 24px;
+  }
+  .chapter-panel-close {
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border-radius: 0;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(17,16,15,0.06);
+    color: rgba(17,16,15,0.58);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .chapter-panel-kicker {
+    margin-top: 14px;
+    font: 700 10px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .chapter-panel-title {
+    margin-top: 8px;
+    font-size: 24px;
+    line-height: 1.02;
+    font-weight: 700;
+    color: #141210;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .chapter-panel-title::before {
+    content: "> ";
+    opacity: 0.52;
+  }
+  .chapter-panel-meta {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(17,16,15,0.60);
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(17,16,15,0.10);
+  }
+  .chapter-section {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(17,16,15,0.10);
+  }
+  .chapter-section-label {
+    font: 700 9px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .chapter-section-body {
+    margin-top: 8px;
+    color: #2a2724;
+    font-size: 13px;
+    line-height: 1.62;
+  }
+  .related-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .related-item {
+    padding: 9px 10px 9px 12px;
+    border-radius: 0;
+    background: rgba(255,255,255,0.34);
+    border: 1px solid rgba(17,16,15,0.10);
+    color: #2a2724;
+    font-size: 12px;
+    line-height: 1.48;
+    position: relative;
+  }
+  .related-item::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: -1px;
+    width: 2px;
+    background: rgba(17,16,15,0.22);
+  }
+  .related-item strong {
+    display: block;
+    color: #141210;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+  .chapter-answer {
+    margin-top: 8px;
+  }
+  @media (max-width: 600px) {
+    .legend-bar { padding-bottom: env(safe-area-inset-bottom, 0); }
+    .legend-item { padding: 12px 4px; min-height: 44px; flex: 1 1 25%; }
+    .legend-item .dot { width: 10px; height: 10px; border-radius: 3px; }
+    .legend-item .lbl { font-size: 8px; }
+    .about-btn .about-label { display: none; }
+    .about-btn { padding: 6px 10px; }
+    .about-btn { right: 12px; bottom: 56px; }
+    .load-btn { right: 12px; bottom: 12px; padding: 6px 10px; }
+    .load-btn .load-label { display: none; }
+    .info-scroll { padding: 48px 20px 80px; }
+    .info-content { font-size: 14px; }
+    .info-content h2 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div id="treemap"></div>
+
+<div class="hud" id="hud">
+  <div><span class="val" id="hud-blocks">0</span> blocks</div>
+  <div><span class="val" id="hud-layouts">0</span> layouts/frame</div>
+  <div><span class="val" id="hud-time">0.00</span>ms</div>
+</div>
+
+<button class="about-btn" id="about-btn">
+  <span class="about-icon">?</span>
+  <span class="about-label">About this experiment</span>
+</button>
+<button class="load-btn" id="load-btn">
+  <span class="about-icon">+</span>
+  <span class="load-label">Load document</span>
+</button>
+
+<div class="legend-bar" id="legend-bar"></div>
+
+<aside class="doc-panel" id="doc-panel">
+  <div class="doc-panel-inner">
+    <button class="doc-panel-close" id="doc-panel-close">&times;</button>
+    <div class="doc-panel-kicker">Map generator</div>
+    <div class="doc-panel-title">Load document</div>
+    <div class="doc-panel-meta">Paste text or load a <code>.txt</code>, <code>.md</code>, text-based <code>.pdf</code>, or exported <code>.json</code>. The map stays full-screen; this panel only feeds new content into it.</div>
+
+    <section class="doc-section">
+      <div class="doc-label">Source text</div>
+      <div class="doc-help">Paste a chapter, essay, article, or book excerpt. You can also load a PDF with selectable text. For this MVP, shorter structured text still works best.</div>
+      <textarea class="doc-textarea" id="doc-textarea" placeholder="Paste text here..."></textarea>
+      <input class="doc-file" id="doc-file" type="file" accept=".txt,.md,.pdf,.json,text/plain,text/markdown,application/pdf,application/json">
+      <div class="doc-actions">
+        <button class="doc-action primary" id="generate-btn">Generate map</button>
+        <button class="doc-action" id="load-sample-btn">Load sample</button>
+      </div>
+      <div class="doc-status" id="doc-status"></div>
+    </section>
+  </div>
+</aside>
+
+<aside class="chapter-panel" id="chapter-panel">
+  <div class="chapter-panel-inner">
+    <button class="chapter-panel-close" id="chapter-panel-close">&times;</button>
+    <div class="chapter-panel-kicker" id="chapter-kicker"></div>
+    <div class="chapter-panel-title" id="chapter-title"></div>
+    <div class="chapter-panel-meta" id="chapter-meta"></div>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Tesis</div>
+      <div class="chapter-section-body" id="chapter-thesis"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Mecanismo</div>
+      <div class="chapter-section-body" id="chapter-mechanism"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Por qué importa</div>
+      <div class="chapter-section-body" id="chapter-importance"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Pregunta de comprensión</div>
+      <div class="chapter-section-body" id="chapter-question"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Connections</div>
+      <div class="related-list" id="chapter-related"></div>
+    </section>
+  </div>
+</aside>
+
+<div class="info-panel" id="info-panel">
+  <div class="info-scroll">
+    <button class="info-close" id="info-close">&times;</button>
+    <div class="info-content">
+      <h2>Bookmaps</h2>
+      <p>A real-time treemap of <strong>Revoluciones tecnologicas y capital financiero</strong>. Every block is a chapter or threshold section. Move your cursor: blocks under your attention <strong>expand</strong>, revealing more conceptual detail. Distant blocks compress. The entire layout recomputes every frame.</p>
+      <h3>Why Pretext</h3>
+      <p>Each block calls <code>layout()</code> every frame to determine how much text fits at its current dimensions. With DOM measurement, this would force repeated reflow. Pretext makes it cheap enough that the whole map can stay alive under the cursor.</p>
+      <h3>What You&apos;re Seeing</h3>
+      <ul>
+        <li><strong>19 blocks</strong> covering the front matter, the three main parts, and the epilogue.</li>
+        <li><strong>Cursor-driven expansion.</strong> Nearby chapters grow, revealing more of the book&apos;s structure and argument.</li>
+        <li><strong>Category filtering.</strong> Hover or tap the legend bar to isolate one part of the book.</li>
+        <li><strong>Live performance counter.</strong> Layout calls and time measured with <code>performance.now()</code>.</li>
+      </ul>
+      <h3>Why This Book Fits The Form</h3>
+      <p>The book is already a map of phases, agents, tensions and turning points. A treemap makes that systemic logic visible before you ever read linearly.</p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { prepare, layout } from 'https://esm.sh/@chenglou/pretext@0.0.2'
+  import * as pdfjsLib from 'https://esm.sh/pdfjs-dist@4.4.168/build/pdf.min.mjs'
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs'
+
+  const CATEGORIES = {
+    front: { label: 'Front Matter', bg: '#db8e72', bgHover: '#ef6a3a', fg: '#251512', accent: '#ff5d1f' },
+    part1: { label: 'Parte I', bg: '#c7a764', bgHover: '#e8b54b', fg: '#21170b', accent: '#f0aa1a' },
+    part2: { label: 'Parte II', bg: '#6faa94', bgHover: '#39c19d', fg: '#091b15', accent: '#12c79d' },
+    part3: { label: 'Parte III', bg: '#8c86c8', bgHover: '#6d72ff', fg: '#111126', accent: '#5a67ff' },
+    epi: { label: 'Epilogo', bg: '#6f9ec2', bgHover: '#2ea3ff', fg: '#0a1721', accent: '#1f9bff' },
+  }
+  const GENERIC_CATEGORY_TEMPLATES = [
+    { key: 'cluster1', label: 'Cluster 1', bg: '#db8e72', bgHover: '#ef6a3a', fg: '#251512', accent: '#ff5d1f' },
+    { key: 'cluster2', label: 'Cluster 2', bg: '#c7a764', bgHover: '#e8b54b', fg: '#21170b', accent: '#f0aa1a' },
+    { key: 'cluster3', label: 'Cluster 3', bg: '#6faa94', bgHover: '#39c19d', fg: '#091b15', accent: '#12c79d' },
+    { key: 'cluster4', label: 'Cluster 4', bg: '#8c86c8', bgHover: '#6d72ff', fg: '#111126', accent: '#5a67ff' },
+    { key: 'cluster5', label: 'Cluster 5', bg: '#6f9ec2', bgHover: '#2ea3ff', fg: '#0a1721', accent: '#1f9bff' },
+  ]
+
+  const CHAPTERS = [
+    { cat: 'front', name: 'Prologo', val: 'Freeman: por que importa', ref: 'Abre la tesis general', thesis: 'El libro importa porque une historia tecnologica e historia financiera en un solo marco explicativo.', mechanism: 'Freeman subraya que las revoluciones tecnologicas transforman organizacion, instituciones y crecimiento; por eso no pueden explicarse solo desde la tecnica.', importance: 'Prepara al lector para no leer el libro como historia de inventos, sino como historia de cambios sistémicos.', question: '¿Por qué Freeman considera insuficiente analizar la tecnologia sin su relacion con finanzas e instituciones?', detail: 'Freeman presenta el libro como una gran sintesis historica. La apuesta no es solo describir innovaciones, sino mostrar que cada revolucion tecnologica altera el sistema entero y necesita financiamiento, conflicto institucional y tiempo para desplegarse.', weight: 8 },
+    { cat: 'front', name: 'Agradecimientos', val: 'Red intelectual del modelo', ref: 'Schumpeter, Minsky, Freeman', thesis: 'El modelo nace de un cruce entre economia evolucionista, historia financiera y politica tecnologica.', mechanism: 'Los agradecimientos dejan ver una genealogia intelectual: el marco se construye dialogando con tradiciones distintas y problemas concretos de desarrollo.', importance: 'Ayuda a entender que el libro es interdisciplinario por diseño, no por adorno.', question: '¿Qué gana el modelo al mezclar fuentes sobre innovacion, finanzas y desarrollo?', detail: 'Aunque no es teorico en si mismo, este bloque revela el origen del libro: una conversacion larga entre economia evolucionista, historia financiera, politica tecnologica y experiencia latinoamericana.', weight: 5 },
+    { cat: 'front', name: 'Introduccion', val: 'Tesis completa en miniatura', ref: 'Revolucion, burbuja, colapso, bonanza', thesis: 'Revolucion tecnologica y burbuja financiera son fases de un mismo proceso historico recurrente.', mechanism: 'Cada nuevo paradigma necesita capital financiero para instalarse; luego sobreviene desacople, colapso y, si cambian las instituciones, despliegue productivo.', importance: 'La introduccion contiene el mapa entero del libro y te da la lente para leer todos los capitulos siguientes.', question: '¿Por qué la burbuja no aparece como un accidente externo sino como parte de la instalacion del paradigma?', detail: 'La introduccion condensa el libro entero. Sostiene que las grandes revoluciones tecnologicas y las grandes burbujas financieras no son accidentes separados, sino momentos distintos de un mismo proceso historico que se repite.', weight: 18 },
+    { cat: 'part1', name: '1. El turbulento final del siglo veinte', val: 'La crisis reciente como patron', ref: 'La nueva economia no era excepcional', thesis: 'La turbulencia de fines del siglo XX repite una secuencia ya vista en revoluciones tecnologicas anteriores.', mechanism: 'La burbuja de internet se usa como punto de partida para mostrar que entusiasmo productivo y euforia financiera suelen aparecer juntos.', importance: 'Evita leer el presente como novedad absoluta y obliga a compararlo con patrones historicos.', question: '¿Qué cambia cuando vemos la burbuja de internet como repeticion de un patron y no como anomalía?', detail: 'El cierre del siglo XX sirve como caso de entrada. La burbuja de internet y su colapso no se leen como un episodio aislado, sino como una repeticion moderna de la dinamica que ya aparecio en oleadas tecnologicas anteriores.', weight: 16 },
+    { cat: 'part1', name: '2. Revoluciones tecnologicas y paradigmas tecno-economicos', val: 'Que cambia realmente', ref: 'No es una tecnologia: es un sistema', thesis: 'Una revolucion tecnologica reorganiza el sistema productivo entero, no solo una industria aislada.', mechanism: 'Un nuevo conjunto de insumos, infraestructuras y principios de organizacion termina definiendo un nuevo paradigma tecno-economico.', importance: 'Este capitulo da el lenguaje base del libro; sin él, el resto parece una simple cronologia.', question: '¿Qué diferencia hay entre una innovacion importante y una revolucion tecnologica completa?', detail: 'Aqui se define la unidad fuerte del libro. Una revolucion tecnologica no es un invento puntual, sino un paquete de industrias, infraestructuras y principios organizativos que termina reescribiendo el sentido comun productivo de una epoca.', weight: 17 },
+    { cat: 'part1', name: '3. El moldeo social de las revoluciones tecnologicas', val: 'La tecnologia no se difunde sola', ref: 'Instituciones, conflicto y adaptacion', thesis: 'El potencial tecnico solo se realiza cuando la sociedad reajusta sus instituciones y practicas.', mechanism: 'El paradigma nuevo choca con normas, habitos y estructuras viejas; la difusion exige conflicto, aprendizaje y reacomodo institucional.', importance: 'Impide caer en determinismo tecnologico: la historia no la hace la tecnica sola.', question: '¿Por qué una gran tecnologia puede tardar decadas en traducirse en prosperidad general?', detail: 'El argumento central es que el potencial tecnico no basta. Cada oleada necesita ser socialmente moldeada: leyes, regulacion, habitos empresariales, formas de consumo y poder politico deben reajustarse para que el paradigma nuevo se vuelva dominante.', weight: 15 },
+    { cat: 'part1', name: '4. La propagacion de un paradigma', val: 'Instalacion y despliegue', ref: 'Dos grandes tiempos de la oleada', thesis: 'Cada revolucion vive dos tiempos: uno turbulento de instalacion y otro expansivo de despliegue.', mechanism: 'Primero se instala el paradigma con experimentacion, desigualdad y especulacion; despues, si el sistema se adapta, ese potencial se generaliza.', importance: 'Introduce la estructura temporal grande con la que el libro ordena toda la historia del capitalismo moderno.', question: '¿Qué distingue a un periodo de instalacion de uno de despliegue?', detail: 'El libro divide la vida de cada revolucion en dos grandes periodos. Primero, instalacion: turbulencia, experimentacion y burbuja. Despues, despliegue: difusion masiva y aprovechamiento social del potencial productivo acumulado.', weight: 14 },
+    { cat: 'part1', name: '5. Las cuatro fases de cada oleada', val: 'Irrupcion, frenesi, sinergia, madurez', ref: 'El esqueleto del modelo', thesis: 'Cada oleada se puede leer como una secuencia recurrente de cuatro fases.', mechanism: 'Irrupcion abre el paradigma, frenesi lo infla financieramente, sinergia lo estabiliza y madurez agota sus rendimientos.', importance: 'Es el diagrama mental mas importante del libro; permite ubicar cualquier periodo dentro del ciclo.', question: '¿Qué fase describe mejor un momento de burbuja especulativa y por qué?', detail: 'Este es uno de los capitulos mas importantes. Ordena cada gran oleada en cuatro fases recurrentes y permite leer donde esta una economia dentro del ciclo: comienzo disruptivo, especulacion acelerada, expansion coordinada y agotamiento.', weight: 20 },
+    { cat: 'part1', name: '6. Desarrollo desigual y rezagos en la difusion', val: 'No todos entran al mismo tiempo', ref: 'Centros, periferias y ventanas', thesis: 'La difusion de cada paradigma crea ganadores tempranos y rezagados estructurales.', mechanism: 'La nueva oleada se propaga con velocidades distintas segun pais, sector e institucion, generando brechas y oportunidades desiguales.', importance: 'Conecta el modelo con estrategia de desarrollo y con la pregunta latinoamericana por la ventana historica.', question: '¿Por qué el mismo paradigma puede abrir oportunidades para unos paises y cerrar opciones para otros?', detail: 'La difusion del paradigma es geografica y socialmente desigual. Algunos paises, sectores y regiones capturan antes las ventajas; otros llegan tarde. Esa asimetria es clave para pensar estrategia, desarrollo y oportunidad historica.', weight: 12 },
+    { cat: 'part2', name: '7. Capital financiero y capital productivo', val: 'Dos lógicas, una tension', ref: 'Financiar no es producir', thesis: 'Capital financiero y capital productivo son complementarios, pero obedecen lógicas distintas.', mechanism: 'Uno privilegia movilidad, liquidez y retornos veloces; el otro construye capacidad real, infraestructura y organizaciones duraderas.', importance: 'Esta distincion permite entender por qué la financiacion del cambio tecnico puede terminar produciendo burbujas.', question: '¿En qué sentido el capital financiero ayuda a instalar un paradigma y al mismo tiempo puede desviarlo?', detail: 'El libro separa con claridad dos agentes. El capital productivo construye capacidad real; el financiero busca movilidad y retornos rapidos. Se necesitan mutuamente, pero sus incentivos divergen y esa divergencia explica gran parte de la inestabilidad del ciclo.', weight: 18 },
+    { cat: 'part2', name: '8. La madurez', val: 'Cuando la vieja oleada se agota', ref: 'Bajan retornos, sube la busqueda', thesis: 'La madurez del paradigma viejo prepara la busqueda de uno nuevo.', mechanism: 'Cuando caen retornos y aumenta la saturacion, el capital se desplaza hacia tecnologias emergentes que todavia parecen marginales.', importance: 'Explica por qué una revolucion no empieza de la nada: nace del agotamiento relativo de la anterior.', question: '¿Qué señales indican que una oleada esta entrando en madurez?', detail: 'En la madurez, el paradigma vigente pierde dinamismo. Las ganancias faciles se reducen, aparecen signos de saturacion y el capital comienza a explorar nuevas tecnologias que todavia son marginales pero prometen mejores rendimientos futuros.', weight: 12 },
+    { cat: 'part2', name: '9. La irrupcion', val: 'El big bang del nuevo paradigma', ref: 'Primeras apuestas y primeras victorias', thesis: 'La irrupcion marca el momento en que la nueva constelacion tecnologica demuestra viabilidad.', mechanism: 'Algunas innovaciones clave muestran rendimientos extraordinarios y atraen al capital financiero, que acelera la experimentacion y la expansion temprana.', importance: 'Es la entrada real al nuevo ciclo: sin irrupcion no hay frenesi, ni colapso, ni despliegue posterior.', question: '¿Qué convierte a una innovacion prometedora en el inicio de una nueva oleada?', detail: 'La irrupcion es el momento en que un conjunto nuevo de tecnologias demuestra que puede reorganizar la economia. El capital financiero entra temprano porque puede tolerar mas riesgo y convertir experimentos dispersos en una carrera de inversion.', weight: 16 },
+    { cat: 'part2', name: '10. El frenesi', val: 'El capital se desacopla', ref: 'Euforia, manias, fraude y burbuja', thesis: 'El frenesi aparece cuando las finanzas se independizan de la economia real y exageran el potencial del paradigma.', mechanism: 'Mas credito, mas promesas y mas especulacion elevan activos y proyectos por encima de su base productiva hasta volver inevitable el colapso.', importance: 'Es la fase mas dramatica y una de las mas memorables del modelo; explica por qué la instalacion suele pasar por la burbuja.', question: '¿Por qué el frenesi no aparece solo como exceso, sino tambien como fase funcional de instalacion?', detail: 'En el frenesi se acelera todo: mas credito, mas promesas, mas brecha entre economia real y valorizacion financiera. Es la fase en que el dinero vuela por cuenta propia, multiplica activos y termina preparando el colapso.', weight: 22 },
+    { cat: 'part2', name: '11. El intervalo de reacomodo', val: 'Turning point del sistema', ref: 'Crash, regulacion y nuevo mando', thesis: 'Despues del colapso, el sistema entra en una fase donde se decide si el paradigma se estabiliza o se bloquea.', mechanism: 'La crisis obliga a redefinir reglas, frenar a las finanzas y construir un nuevo equilibrio entre Estado, mercado e inversion productiva.', importance: 'Este es el punto politico del libro: el futuro no se decide solo en la tecnologia, sino en el reacomodo institucional.', question: '¿Qué debe cambiar en el intervalo de reacomodo para que pueda comenzar la sinergia?', detail: 'Tras el colapso, el sistema entra en una zona decisiva. Se redefine la relacion entre Estado, finanzas y produccion. Si el marco institucional se corrige, el paradigma puede dejar atras la especulacion y pasar a una fase de expansion mas estable.', weight: 19 },
+    { cat: 'part2', name: '12. La sinergia', val: 'Bonanza con acoplamiento', ref: 'El paradigma ya encaja', thesis: 'La sinergia es la fase donde tecnologia, finanzas e instituciones por fin empujan en la misma direccion.', mechanism: 'Con el marco adecuado, la nueva infraestructura se masifica y el paradigma deja de ser novedad para convertirse en base normal del crecimiento.', importance: 'Explica por qué las verdaderas epocas de bonanza llegan despues del crash, no antes.', question: '¿Qué diferencia la prosperidad de la sinergia de la euforia del frenesi?', detail: 'La sinergia es la fase mas productiva y socialmente aprovechable. La tecnologia, las instituciones y la inversion empiezan a empujar en la misma direccion. Lo que antes era novedad dispersa se vuelve infraestructura normal de crecimiento.', weight: 17 },
+    { cat: 'part2', name: '13. Innovaciones financieras e institucionales', val: 'La otra capa de innovacion', ref: 'No solo cambia la tecnologia', thesis: 'Cada oleada transforma tambien las finanzas y las instituciones que la sostienen.', mechanism: 'A medida que cambia el paradigma, aparecen nuevas formas de credito, regulacion, propiedad y gobierno economico.', importance: 'Amplia el foco del lector: no basta con seguir maquinas e industrias; hay que seguir tambien la evolucion de reglas y dinero.', question: '¿Por qué una revolucion tecnologica necesita innovacion institucional ademas de innovacion tecnica?', detail: 'El libro muestra que cada oleada trae tambien nuevas formas de credito, propiedad, organizacion y regulacion. No basta con seguir la tecnica; hay que seguir tambien la evolucion de las finanzas y de las instituciones que la hacen viable o peligrosa.', weight: 13 },
+    { cat: 'part3', name: '14. La secuencia y sus fuerzas motrices', val: 'Por que el patron se repite', ref: 'Motor historico del ciclo', thesis: 'La secuencia reaparece porque responde a fuerzas recurrentes del capitalismo, no a coincidencias.', mechanism: 'La interaccion entre oportunidad tecnologica, movilidad financiera, conflicto distributivo y reajuste institucional vuelve una y otra vez a producir patrones parecidos.', importance: 'Es el capitulo que convierte el libro en teoria general, no solo en narrativa historica.', question: '¿Qué fuerzas hacen recurrente la secuencia sin volverla mecanica o identica cada vez?', detail: 'Este capitulo busca explicar la recurrencia. La secuencia no aparece por magia: surge de la interaccion entre oportunidad tecnologica, estrategia financiera, ajuste institucional, conflicto distributivo y aprendizaje historico.', weight: 15 },
+    { cat: 'part3', name: '15. Implicaciones para la teoria y las politicas', val: 'Como usar el marco', ref: 'Lectura del presente y accion', thesis: 'Saber en qué fase estamos cambia la forma correcta de teorizar y de intervenir.', mechanism: 'El modelo sirve para orientar politica industrial, regulacion financiera, estrategia empresarial y diagnostico historico segun la fase de la oleada.', importance: 'Es el puente entre comprension y accion: el marco no solo explica el pasado, tambien orienta decisiones.', question: '¿Qué decisiones de politica o estrategia dependen de identificar correctamente la fase del paradigma?', detail: 'El cierre traduce el modelo en criterio practico. Si entendemos la fase en la que estamos, podemos pensar mejor politica industrial, regulacion financiera, estrategia empresarial y posibilidades de desarrollo en distintos paises.', weight: 14 },
+    { cat: 'epi', name: 'El mundo en el intervalo de reacomodo', val: 'Diagnostico del presente', ref: 'Junio de 2002: aun en el turning point', thesis: 'A comienzos del siglo XXI, el mundo aun no habia salido del intervalo de reacomodo.', mechanism: 'La burbuja financiera ya habia colapsado, pero el nuevo marco institucional todavia no estaba listo para convertir la infraestructura instalada en bonanza sostenida.', importance: 'El epilogo muestra cómo usar el libro para leer el presente historico, no solo el pasado.', question: '¿Qué faltaba para pasar del colapso post-burbuja a una verdadera fase de despliegue?', detail: 'El epilogo ubica al comienzo del siglo XXI dentro del intervalo de reacomodo. La burbuja ya exploto, pero el nuevo marco institucional todavia no termina de nacer. Esa demora es precisamente donde se juega el futuro del despliegue.', weight: 16 },
+  ]
+
+  const CONNECTIONS = {
+    'Introduccion': [
+      ['5. Las cuatro fases de cada oleada', 'La introduccion anticipa el diagrama completo del libro.'],
+      ['7. Capital financiero y capital productivo', 'Introduce desde el inicio la tension entre ambos capitales.'],
+      ['11. El intervalo de reacomodo', 'Anuncia que sin reacomodo institucional no hay bonanza.'],
+    ],
+    '1. El turbulento final del siglo veinte': [
+      ['10. El frenesi', 'La burbuja de internet funciona como ejemplo contemporaneo del frenesi.'],
+      ['11. El intervalo de reacomodo', 'El colapso abre el turning point institucional.'],
+      ['El mundo en el intervalo de reacomodo', 'El epilogo continua ese diagnostico del presente.'],
+    ],
+    '2. Revoluciones tecnologicas y paradigmas tecno-economicos': [
+      ['4. La propagacion de un paradigma', 'Primero define el paradigma; luego estudia como se difunde.'],
+      ['5. Las cuatro fases de cada oleada', 'El paradigma es el objeto que despues se organiza en fases.'],
+      ['12. La sinergia', 'La sinergia es el momento en que ese paradigma ya domina.'],
+    ],
+    '3. El moldeo social de las revoluciones tecnologicas': [
+      ['11. El intervalo de reacomodo', 'Ambos giran sobre el ajuste institucional del sistema.'],
+      ['12. La sinergia', 'La bonanza exige que ese moldeo social ya haya ocurrido.'],
+      ['15. Implicaciones para la teoria y las politicas', 'Conecta el marco con accion politica concreta.'],
+    ],
+    '4. La propagacion de un paradigma': [
+      ['6. Desarrollo desigual y rezagos en la difusion', 'La propagacion siempre ocurre con desigualdad y retrasos.'],
+      ['12. La sinergia', 'El despliegue culmina cuando la propagacion se vuelve masiva.'],
+      ['5. Las cuatro fases de cada oleada', 'Las fases ordenan temporalmente esa propagacion.'],
+    ],
+    '5. Las cuatro fases de cada oleada': [
+      ['9. La irrupcion', 'Es la primera fase del ciclo.'],
+      ['10. El frenesi', 'Es la fase especulativa y acelerada.'],
+      ['11. El intervalo de reacomodo', 'Funciona como bisagra tras el colapso.'],
+      ['12. La sinergia', 'Describe el despliegue coordinado del paradigma.'],
+    ],
+    '6. Desarrollo desigual y rezagos en la difusion': [
+      ['15. Implicaciones para la teoria y las politicas', 'Las asimetrias de difusion exigen estrategia y politica.'],
+      ['4. La propagacion de un paradigma', 'Es la contracara geografica y sectorial de la propagacion.'],
+      ['El mundo en el intervalo de reacomodo', 'Ayuda a leer diferencias entre regiones en el presente.'],
+    ],
+    '7. Capital financiero y capital productivo': [
+      ['9. La irrupcion', 'Las finanzas entran temprano para instalar el nuevo paradigma.'],
+      ['10. El frenesi', 'En el frenesi la divergencia entre ambos se extrema.'],
+      ['12. La sinergia', 'La sinergia recompone su relacion en torno al despliegue.'],
+    ],
+    '8. La madurez': [
+      ['9. La irrupcion', 'La nueva oleada nace del agotamiento de la anterior.'],
+      ['14. La secuencia y sus fuerzas motrices', 'La madurez es una de las fuerzas que empujan la recurrencia.'],
+      ['13. Innovaciones financieras e institucionales', 'La busqueda de nuevos retornos activa nuevas formas de financiamiento.'],
+    ],
+    '9. La irrupcion': [
+      ['10. El frenesi', 'El exito temprano se convierte en carrera especulativa.'],
+      ['7. Capital financiero y capital productivo', 'Muestra la funcion de las finanzas en el arranque.'],
+      ['5. Las cuatro fases de cada oleada', 'Representa el inicio del ciclo.'],
+    ],
+    '10. El frenesi': [
+      ['11. El intervalo de reacomodo', 'El crash del frenesi obliga a un reacomodo institucional.'],
+      ['7. Capital financiero y capital productivo', 'Es la fase donde sus lógicas mas se separan.'],
+      ['El mundo en el intervalo de reacomodo', 'El epilogo lee el presente como salida incompleta de esta fase.'],
+    ],
+    '11. El intervalo de reacomodo': [
+      ['12. La sinergia', 'Si el reajuste sale bien, se abre la bonanza.'],
+      ['3. El moldeo social de las revoluciones tecnologicas', 'El reacoplamiento institucional es su núcleo.'],
+      ['15. Implicaciones para la teoria y las politicas', 'Es el punto donde mas importa la accion politica.'],
+    ],
+    '12. La sinergia': [
+      ['5. Las cuatro fases de cada oleada', 'Es la fase de despliegue coordinado.'],
+      ['3. El moldeo social de las revoluciones tecnologicas', 'Supone que la sociedad ya absorbio el paradigma.'],
+      ['15. Implicaciones para la teoria y las politicas', 'Muestra que tipo de coordinacion vuelve productiva una oleada.'],
+    ],
+    '13. Innovaciones financieras e institucionales': [
+      ['7. Capital financiero y capital productivo', 'Aterra esa distincion en arreglos concretos.'],
+      ['11. El intervalo de reacomodo', 'Muchas innovaciones institucionales cristalizan tras la crisis.'],
+      ['14. La secuencia y sus fuerzas motrices', 'Ayuda a explicar la recurrencia desde la evolucion institucional.'],
+    ],
+    '14. La secuencia y sus fuerzas motrices': [
+      ['5. Las cuatro fases de cada oleada', 'Generaliza el diagrama en teoria del cambio historico.'],
+      ['8. La madurez', 'El agotamiento del viejo paradigma es una fuerza recurrente.'],
+      ['13. Innovaciones financieras e institucionales', 'Integra la capa institucional al mecanismo del ciclo.'],
+    ],
+    '15. Implicaciones para la teoria y las politicas': [
+      ['6. Desarrollo desigual y rezagos en la difusion', 'Las asimetrias de difusion exigen lectura estrategica.'],
+      ['11. El intervalo de reacomodo', 'Subraya que ahi se juega la accion politica decisiva.'],
+      ['El mundo en el intervalo de reacomodo', 'Lleva el marco del libro al presente historico.'],
+    ],
+    'El mundo en el intervalo de reacomodo': [
+      ['10. El frenesi', 'Parte del colapso posterior a la euforia financiera.'],
+      ['11. El intervalo de reacomodo', 'Es una lectura contemporanea de esa bisagra historica.'],
+      ['15. Implicaciones para la teoria y las politicas', 'Une diagnostico del presente con orientacion practica.'],
+    ],
+  }
+
+  let currentCategories = CATEGORIES
+  let currentChapters = [...CHAPTERS]
+  let currentConnections = CONNECTIONS
+  let frozenRows = []
+  const treemapEl = document.getElementById('treemap')
+  const hudBlocks = document.getElementById('hud-blocks')
+  const hudLayouts = document.getElementById('hud-layouts')
+  const hudTime = document.getElementById('hud-time')
+  const legendBar = document.getElementById('legend-bar')
+  const infoPanel = document.getElementById('info-panel')
+  const docPanel = document.getElementById('doc-panel')
+  const docTextarea = document.getElementById('doc-textarea')
+  const docStatus = document.getElementById('doc-status')
+  const docFile = document.getElementById('doc-file')
+  const chapterPanel = document.getElementById('chapter-panel')
+  const chapterKicker = document.getElementById('chapter-kicker')
+  const chapterTitle = document.getElementById('chapter-title')
+  const chapterMeta = document.getElementById('chapter-meta')
+  const chapterThesis = document.getElementById('chapter-thesis')
+  const chapterMechanism = document.getElementById('chapter-mechanism')
+  const chapterImportance = document.getElementById('chapter-importance')
+  const chapterQuestion = document.getElementById('chapter-question')
+  const chapterRelated = document.getElementById('chapter-related')
+  let selectedBlock = null
+  let mouseX = -9999, mouseY = -9999
+  const CURSOR_RADIUS = 220
+  const EXPAND_FACTOR = 3.0
+  const LERP = 0.16
+  const DETAIL_FONT = '8px Inter'
+  const LH = 11
+  let blocks = []
+  let activeCat = null
+
+  function closePanels() {
+    chapterPanel.classList.remove('visible')
+    docPanel.classList.remove('visible')
+    selectedBlock = null
+  }
+
+  function uniqueWords(text, count = 4) {
+    const stop = new Set(['de','la','el','y','en','que','los','las','del','por','para','con','una','un','como','se','es','al','lo','su','sus','más','mas'])
+    const words = text
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .match(/[a-z0-9]{4,}/g) || []
+    const scores = new Map()
+    for (const word of words) {
+      if (stop.has(word)) continue
+      scores.set(word, (scores.get(word) || 0) + 1)
+    }
+    return [...scores.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, count)
+      .map(([word]) => word)
+  }
+
+  function sentenceCase(text) {
+    return text.replace(/\s+/g, ' ').trim()
+  }
+
+  function takeSentences(text, count = 1) {
+    const sentences = sentenceCase(text).match(/[^.!?]+[.!?]?/g) || []
+    return sentences.slice(0, count).join(' ').trim()
+  }
+
+  function firstMeaningfulLine(text) {
+    return (text.split('\n').map(line => line.trim()).find(line => line.length > 0) || '').trim()
+  }
+
+  function looksLikeHeading(line) {
+    if (!line) return false
+    if (line.length > 90) return false
+    if ((line.match(/[.:]/g) || []).length > 2) return false
+    return true
+  }
+
+  function splitIntoSections(rawText) {
+    const text = rawText.replace(/\r/g, '').trim()
+    const paragraphs = text.split(/\n\s*\n+/).map(p => sentenceCase(p)).filter(Boolean)
+    if (!paragraphs.length) return []
+
+    const sections = []
+    let current = null
+    for (const paragraph of paragraphs) {
+      const line = firstMeaningfulLine(paragraph)
+      if (looksLikeHeading(line) && paragraph.length < 180) {
+        if (current) sections.push(current)
+        current = { heading: line, body: '' }
+        continue
+      }
+      if (!current) current = { heading: '', body: '' }
+      current.body += (current.body ? '\n\n' : '') + paragraph
+    }
+    if (current) sections.push(current)
+
+    const filtered = sections.filter(section => section.body.trim().length > 80)
+    if (filtered.length >= 4 && filtered.length <= 18) return filtered
+
+    const chunkSize = Math.max(1, Math.ceil(paragraphs.length / 12))
+    const chunked = []
+    for (let i = 0; i < paragraphs.length; i += chunkSize) {
+      chunked.push({
+        heading: '',
+        body: paragraphs.slice(i, i + chunkSize).join('\n\n'),
+      })
+    }
+    return chunked.slice(0, 16)
+  }
+
+  function buildGeneratedMap(rawText) {
+    const sections = splitIntoSections(rawText)
+    if (!sections.length) return null
+
+    const groupCount = Math.min(5, Math.max(3, Math.ceil(sections.length / 4)))
+    const categories = {}
+    GENERIC_CATEGORY_TEMPLATES.slice(0, groupCount).forEach((template, index) => {
+      categories[template.key] = { ...template, label: `Cluster ${index + 1}` }
+    })
+    const categoryKeys = Object.keys(categories)
+
+    const chapters = sections.map((section, index) => {
+      const body = sentenceCase(section.body)
+      const name = section.heading || `Section ${index + 1}`
+      const summary = takeSentences(body, 1) || body.slice(0, 120)
+      const keywords = uniqueWords(body, 4)
+      const ref = keywords.length ? keywords.join(' / ') : `section ${index + 1}`
+      const detail = takeSentences(body, 2).slice(0, 240)
+      const cat = categoryKeys[Math.min(categoryKeys.length - 1, Math.floor(index / Math.ceil(sections.length / categoryKeys.length)))]
+      const weight = Math.max(8, Math.min(22, Math.round(body.length / 220)))
+      return {
+        cat,
+        name: name.slice(0, 64),
+        val: summary.slice(0, 90),
+        ref: ref.slice(0, 60),
+        detail,
+        thesis: takeSentences(body, 1),
+        mechanism: takeSentences(body, 2),
+        importance: `This section matters because it frames ${keywords.slice(0, 2).join(' and ') || 'the core argument'} within the document.`,
+        question: `How does this section change your understanding of ${keywords[0] || 'the main argument'}?`,
+        weight,
+      }
+    })
+    return { categories, chapters, connections: {} }
+  }
+
+  async function extractPdfText(file) {
+    const arrayBuffer = await file.arrayBuffer()
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+    const pages = []
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber)
+      const content = await page.getTextContent()
+      const text = content.items
+        .map(item => ('str' in item ? item.str : ''))
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+      if (text) pages.push(text)
+    }
+    return pages.join('\n\n')
+  }
+
+  function rebuildMap() {
+    treemapEl.innerHTML = ''
+    legendBar.innerHTML = ''
+    blocks = []
+    activeCat = null
+    init()
+    frozenRows = buildRowStructure(blocks)
+    for (const b of blocks) b._w = b.marker.weight
+    const vw = window.innerWidth
+    const vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    const rects = layoutFromRows(frozenRows, { x: 0, y: 0, w: vw, h: vh })
+    for (const br of rects) {
+      br.item.rx = br.x
+      br.item.ry = br.y
+      br.item.rw = br.w
+      br.item.rh = br.h
+    }
+    hudBlocks.textContent = blocks.length
+  }
+
+  function calcWorst(row, shorter, rowArea) {
+    if (rowArea <= 0 || shorter <= 0) return Infinity
+    const strip = rowArea / shorter
+    const rowW = row.reduce((s, it) => s + (it.marker?.weight || it._w), 0)
+    let worst = 0
+    for (const it of row) {
+      const w = it.marker?.weight || it._w
+      const breadth = (rowArea * (w / rowW)) / strip
+      const r = Math.max(strip / breadth, breadth / strip)
+      if (r > worst) worst = r
+    }
+    return worst
+  }
+
+  function buildRowStructure(items) {
+    const sorted = [...items].sort((a, b) => b.marker.weight - a.marker.weight)
+    const totalWeight = sorted.reduce((s, it) => s + it.marker.weight, 0)
+    if (totalWeight <= 0) return []
+    const rows = []
+    let remaining = [...sorted]
+    let areaLeft = totalWeight
+    const vw = window.innerWidth
+    const vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    let w = vw, h = vh
+
+    while (remaining.length > 0) {
+      const shorter = Math.min(w, h)
+      let row = [remaining[0]]
+      let bestWorst = calcWorst(row, shorter, row[0].marker.weight / areaLeft * w * h)
+      let i = 1
+      while (i < remaining.length) {
+        const test = [...row, remaining[i]]
+        const testArea = test.reduce((s, it) => s + it.marker.weight, 0) / areaLeft * w * h
+        const testWorst = calcWorst(test, shorter, testArea)
+        if (testWorst <= bestWorst) { row = test; bestWorst = testWorst; i++ }
+        else break
+      }
+      const rowWeight = row.reduce((s, it) => s + it.marker.weight, 0)
+      const rowFrac = rowWeight / areaLeft
+      const horiz = w >= h
+      rows.push({ items: row, direction: horiz ? 'h' : 'v' })
+      if (horiz) w -= w * rowFrac
+      else h -= h * rowFrac
+      areaLeft -= rowWeight
+      remaining = remaining.slice(row.length)
+    }
+    return rows
+  }
+
+  function layoutFromRows(rows, rect) {
+    const results = []
+    let { x, y, w, h } = rect
+    const totalWeight = rows.reduce((s, row) => s + row.items.reduce((s2, b) => s2 + b._w, 0), 0)
+    if (totalWeight <= 0) return results
+    let weightLeft = totalWeight
+
+    for (const row of rows) {
+      const rowWeight = row.items.reduce((s, b) => s + b._w, 0)
+      const rowFrac = rowWeight / weightLeft
+      if (row.direction === 'h') {
+        const rw = w * rowFrac
+        let yy = y
+        for (const b of row.items) {
+          const ih = h * (b._w / rowWeight)
+          results.push({ item: b, x, y: yy, w: rw, h: ih })
+          yy += ih
+        }
+        x += rw; w -= rw
+      } else {
+        const rh = h * rowFrac
+        let xx = x
+        for (const b of row.items) {
+          const iw = w * (b._w / rowWeight)
+          results.push({ item: b, x: xx, y, w: iw, h: rh })
+          xx += iw
+        }
+        y += rh; h -= rh
+      }
+      weightLeft -= rowWeight
+    }
+    return results
+  }
+
+  function updateLegendActive() {
+    legendBar.querySelectorAll('.legend-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.cat === activeCat)
+    })
+  }
+
+  function init() {
+    for (const [key, cat] of Object.entries(currentCategories)) {
+      const item = document.createElement('div')
+      item.className = 'legend-item'
+      item.dataset.cat = key
+      item.innerHTML = `<span class="dot" style="background:${cat.accent}"></span><span class="lbl">${cat.label}</span>`
+      const isTouch = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      item.addEventListener('mouseenter', () => { if (!isTouch()) { activeCat = key; updateLegendActive() } })
+      item.addEventListener('mouseleave', () => { if (!isTouch()) { activeCat = null; updateLegendActive() } })
+      item.addEventListener('click', e => {
+        e.preventDefault()
+        activeCat = activeCat === key ? null : key
+        updateLegendActive()
+      })
+      legendBar.appendChild(item)
+    }
+
+    blocks = currentChapters.map(marker => {
+      const cat = currentCategories[marker.cat]
+      const el = document.createElement('div')
+      el.className = 'block'
+      el.dataset.cat = marker.cat
+      el.style.backgroundColor = cat.bg
+      el.style.color = cat.fg
+      const id = marker.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 18)
+      el.innerHTML = `
+        <div class="block-inner">
+          <div class="block-head">
+            <div class="term-toolbar">
+              <div class="term-meta">
+                <div class="term-id">${id}</div>
+              </div>
+              <div class="term-status">${cat.label}</div>
+            </div>
+          </div>
+          <div class="block-body">
+            <div class="block-title-inline">${marker.name}</div>
+            <div class="term-line">
+              <div class="term-prompt">&gt;</div>
+              <div class="term-text block-value">${marker.val}</div>
+            </div>
+            <div class="term-line">
+              <div class="term-prompt"></div>
+              <div class="term-text block-detail">${marker.detail}</div>
+            </div>
+          </div>
+          <div class="block-foot">
+            <div class="term-footer">
+              <div class="term-prompt">#</div>
+              <div class="block-ref">${marker.ref}</div>
+            </div>
+          </div>
+        </div>
+      `
+      treemapEl.appendChild(el)
+      const fullText = `${marker.name} ${marker.val} ${marker.ref} ${marker.detail}`
+      return {
+        marker, el, prepared: prepare(fullText, DETAIL_FONT), cat,
+        _w: marker.weight, targetWeight: marker.weight,
+        rx: 0, ry: 0, rw: 100, rh: 100,
+        currentOpacity: 1, _els: null, _tier: -1, _pop: -1,
+      }
+    })
+    hudBlocks.textContent = blocks.length
+  }
+
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY })
+  document.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999 })
+
+  let touchTimer = null
+  document.addEventListener('touchstart', e => {
+    if (infoPanel.classList.contains('visible')) return
+    if (e.target.closest('.legend-bar') || e.target.closest('.about-btn') || e.target.closest('.info-panel')) return
+    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY
+    clearTimeout(touchTimer)
+  }, { passive: true })
+  document.addEventListener('touchmove', e => {
+    if (infoPanel.classList.contains('visible')) return
+    if (e.target.closest('.legend-bar')) return
+    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY
+    e.preventDefault()
+  }, { passive: false })
+  document.addEventListener('touchend', () => {
+    clearTimeout(touchTimer)
+    touchTimer = setTimeout(() => { mouseX = -9999; mouseY = -9999 }, 800)
+  })
+
+  document.getElementById('about-btn').addEventListener('click', () => {
+    infoPanel.classList.add('visible'); infoPanel.scrollTop = 0
+  })
+  document.getElementById('load-btn').addEventListener('click', () => {
+    docPanel.classList.add('visible')
+  })
+  document.getElementById('info-close').addEventListener('click', e => {
+    e.stopPropagation(); infoPanel.classList.remove('visible')
+  })
+  document.getElementById('doc-panel-close').addEventListener('click', e => {
+    e.stopPropagation()
+    docPanel.classList.remove('visible')
+  })
+  document.getElementById('chapter-panel-close').addEventListener('click', e => {
+    e.stopPropagation()
+    chapterPanel.classList.remove('visible')
+    selectedBlock = null
+  })
+
+  function openChapterPanel(block) {
+    selectedBlock = block
+    chapterPanel.classList.add('visible')
+    chapterKicker.textContent = `${CATEGORIES[block.marker.cat].label} · ${block.marker.val}`
+    chapterTitle.textContent = block.marker.name
+    chapterMeta.textContent = block.marker.ref
+    chapterThesis.textContent = block.marker.thesis
+    chapterMechanism.textContent = block.marker.mechanism
+    chapterImportance.textContent = block.marker.importance
+    chapterQuestion.textContent = block.marker.question
+    chapterRelated.innerHTML = ''
+    ;(currentConnections[block.marker.name] || []).forEach(([label, why]) => {
+      const item = document.createElement('div')
+      item.className = 'related-item'
+      item.innerHTML = `<strong>${label}</strong>${why}`
+      chapterRelated.appendChild(item)
+    })
+  }
+
+  function loadSample() {
+    currentCategories = CATEGORIES
+    currentChapters = [...CHAPTERS]
+    currentConnections = CONNECTIONS
+    docStatus.textContent = 'Loaded sample map.'
+    rebuildMap()
+    docPanel.classList.remove('visible')
+  }
+
+  function generateFromInput() {
+    const raw = docTextarea.value.trim()
+    if (!raw) {
+      docStatus.textContent = 'Paste text first.'
+      return
+    }
+    docStatus.textContent = 'Parsing text and generating map...'
+    const generated = buildGeneratedMap(raw)
+    if (!generated) {
+      docStatus.textContent = 'Could not generate a map from that text.'
+      return
+    }
+    currentCategories = generated.categories
+    currentChapters = generated.chapters
+    currentConnections = generated.connections
+    rebuildMap()
+    docStatus.textContent = `Generated ${generated.chapters.length} blocks.`
+    docPanel.classList.remove('visible')
+  }
+
+  docFile.addEventListener('change', async e => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      if (file.name.toLowerCase().endsWith('.pdf')) {
+        docStatus.textContent = `Extracting text from ${file.name}...`
+        const text = await extractPdfText(file)
+        if (!text.trim()) {
+          docStatus.textContent = 'No selectable text found in PDF.'
+          return
+        }
+        docTextarea.value = text
+        docStatus.textContent = `Loaded ${file.name}. Ready to generate.`
+        return
+      }
+      const text = await file.text()
+      if (file.name.endsWith('.json')) {
+        const parsed = JSON.parse(text)
+        if (parsed.chapters && parsed.categories) {
+          currentCategories = parsed.categories
+          currentChapters = parsed.chapters
+          currentConnections = parsed.connections || {}
+          rebuildMap()
+          docStatus.textContent = `Loaded ${file.name}.`
+          docPanel.classList.remove('visible')
+          return
+        }
+      }
+      docTextarea.value = text
+      docStatus.textContent = `Loaded ${file.name}. Ready to generate.`
+    } catch (err) {
+      docStatus.textContent = 'Could not read file.'
+    }
+  })
+
+  document.getElementById('load-sample-btn').addEventListener('click', loadSample)
+  document.getElementById('generate-btn').addEventListener('click', generateFromInput)
+
+  function lerpColor(a, b, t) {
+    const ar = parseInt(a.slice(1,3),16), ag = parseInt(a.slice(3,5),16), ab = parseInt(a.slice(5,7),16)
+    const br = parseInt(b.slice(1,3),16), bg = parseInt(b.slice(3,5),16), bb = parseInt(b.slice(5,7),16)
+    return `rgb(${Math.round(ar+(br-ar)*t)},${Math.round(ag+(bg-ag)*t)},${Math.round(ab+(bb-ab)*t)})`
+  }
+
+  function tick() {
+    const vw = window.innerWidth
+    const vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    let layoutCalls = 0
+    const t0 = performance.now()
+
+    for (const b of blocks) {
+      let expand = 1
+      const cx = b.rx + b.rw / 2, cy = b.ry + b.rh / 2
+      const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2)
+      if (dist < CURSOR_RADIUS) {
+        const force = 1 - dist / CURSOR_RADIUS
+        expand = 1 + force * force * EXPAND_FACTOR
+      }
+      if (activeCat !== null) {
+        if (b.marker.cat === activeCat) expand = Math.max(expand, 2.5)
+        else expand = Math.min(expand, 0.5)
+      }
+      b.targetWeight = b.marker.weight * expand
+      b._w += (b.targetWeight - b._w) * LERP
+      const targetOpacity = activeCat !== null ? (b.marker.cat === activeCat ? 1 : 0.15) : 1
+      b.currentOpacity += (targetOpacity - b.currentOpacity) * 0.15
+    }
+
+    const rects = layoutFromRows(frozenRows, { x: 0, y: 0, w: vw, h: vh })
+    for (const br of rects) {
+      const b = br.item
+      b.rx += (br.x - b.rx) * LERP
+      b.ry += (br.y - b.ry) * LERP
+      b.rw += (br.w - b.rw) * LERP
+      b.rh += (br.h - b.rh) * LERP
+
+      const rx = Math.round(b.rx * 10) / 10
+      const ry = Math.round(b.ry * 10) / 10
+      const rw = Math.round(b.rw)
+      const rh = Math.round(b.rh)
+      b.el.style.transform = `translate(${rx}px,${ry}px)`
+      b.el.style.width = rw + 'px'
+      b.el.style.height = rh + 'px'
+
+      const opi = Math.round(b.currentOpacity * 100)
+      if (b._pop !== opi) { b.el.style.opacity = b.currentOpacity; b._pop = opi }
+
+      const dist = Math.sqrt((mouseX - (b.rx + b.rw / 2)) ** 2 + (mouseY - (b.ry + b.rh / 2)) ** 2)
+      const intensity = dist < CURSOR_RADIUS ? (1 - dist / CURSOR_RADIUS) : 0
+      const hoverLevel = Math.round(intensity * 5)
+      if (b._hoverLevel !== hoverLevel) {
+        if (hoverLevel > 0) {
+          const f = hoverLevel / 5
+          b.el.style.backgroundColor = lerpColor(b.cat.bg, b.cat.bgHover, f)
+          b.el.style.boxShadow = `0 ${Math.round(f * 6)}px ${Math.round(f * 20)}px rgba(0,0,0,${(f * 0.15).toFixed(2)})`
+          b.el.style.zIndex = 10 + Math.round(f * 10)
+        } else {
+          b.el.style.backgroundColor = b.cat.bg
+          b.el.style.boxShadow = ''
+          b.el.style.zIndex = '0'
+        }
+        b._hoverLevel = hoverLevel
+      }
+      b.el.style.outline = ''
+      b.el.style.outlineOffset = ''
+
+      const availW = Math.max(20, rw - 12)
+      layout(b.prepared, availW, LH)
+      layoutCalls++
+      const area = rw * rh
+      let tier = 0
+      if (area >= 18000) tier = 4
+      else if (area >= 7000) tier = 3
+      else if (area >= 2500) tier = 2
+      else if (area >= 600) tier = 1
+
+      if (!b._els) {
+        b._els = {
+          title: b.el.querySelector('.block-title-inline'),
+          value: b.el.querySelector('.block-value'),
+          detail: b.el.querySelector('.block-detail'),
+          ref: b.el.querySelector('.block-ref'),
+        }
+        b.el.addEventListener('click', () => openChapterPanel(b))
+      }
+
+      const { title, value, detail, ref } = b._els
+      if (b._tier !== tier || tier === 4) {
+        if (tier === 0) {
+          title.style.display = 'none'; value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
+        } else if (tier === 1) {
+          title.style.display = 'none'
+          value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
+        } else if (tier === 2) {
+          title.style.display = 'none'
+          value.style.display = ''; value.style.fontSize = '10px'
+          detail.style.display = 'none'; ref.style.display = ''; ref.style.fontSize = '7px'
+        } else if (tier === 3) {
+          title.style.display = ''; title.style.fontSize = '7px'
+          value.style.display = ''; value.style.fontSize = '13px'
+          detail.style.display = ''; detail.style.fontSize = '7.4px'; detail.style.maxHeight = Math.max(0, rh - 40) + 'px'; ref.style.display = ''
+        } else {
+          title.style.display = ''; title.style.fontSize = Math.min(8, 7 + area / 32000) + 'px'
+          value.style.display = ''; value.style.fontSize = Math.min(18, 11 + area / 7500) + 'px'
+          detail.style.display = ''; detail.style.fontSize = Math.min(10.4, 7.6 + area / 24000) + 'px'
+          detail.style.maxHeight = Math.max(0, rh - 42) + 'px'
+          ref.style.display = ''
+        }
+        b._tier = tier
+      }
+    }
+
+    hudLayouts.textContent = layoutCalls
+    hudTime.textContent = (performance.now() - t0).toFixed(2)
+    requestAnimationFrame(tick)
+  }
+
+  document.fonts.ready.then(() => {
+    init()
+    frozenRows = buildRowStructure(blocks)
+    for (const b of blocks) b._w = b.marker.weight
+    const vw = window.innerWidth, vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    const rects = layoutFromRows(frozenRows, { x: 0, y: 0, w: vw, h: vh })
+    for (const br of rects) {
+      br.item.rx = br.x; br.item.ry = br.y
+      br.item.rw = br.w; br.item.rh = br.h
+    }
+    requestAnimationFrame(tick)
+  })
+
+  let resizeTimer
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer)
+    resizeTimer = setTimeout(() => {
+      frozenRows = buildRowStructure(blocks)
+      for (const b of blocks) b._w = b.marker.weight
+    }, 150)
+  })
+</script>
+</body>
+</html>

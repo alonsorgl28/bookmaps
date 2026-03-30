@@ -1,0 +1,171 @@
+export type ChapterBlock = {
+  cat: keyof typeof CATEGORIES
+  name: string
+  val: string
+  ref: string
+  detail: string
+  weight: number
+}
+
+export const CATEGORIES = {
+  front: { label: 'Front Matter', bg: '#ecc5c0', bgHover: '#e09a92', fg: '#5a2a25', accent: '#d45a50' },
+  part1: { label: 'Parte I', bg: '#f0d8a8', bgHover: '#e8c080', fg: '#5a4420', accent: '#c88a30' },
+  part2: { label: 'Parte II', bg: '#b8dcc0', bgHover: '#8cc8a0', fg: '#1e4a2a', accent: '#48a060' },
+  part3: { label: 'Parte III', bg: '#d4c0e8', bgHover: '#b898d8', fg: '#3a2060', accent: '#8a58c0' },
+  epi: { label: 'Epilogo', bg: '#b8d0ec', bgHover: '#90b8e0', fg: '#1a3050', accent: '#4080c0' },
+} as const
+
+export const CHAPTERS: ChapterBlock[] = [
+  {
+    cat: 'front',
+    name: 'Prologo',
+    val: 'Christopher Freeman',
+    ref: 'Puerta de entrada',
+    detail: 'Enmarca la tesis central: las revoluciones tecnologicas necesitan capital financiero, pero tambien terminan chocando con las instituciones heredadas.',
+    weight: 8,
+  },
+  {
+    cat: 'front',
+    name: 'Agradecimientos',
+    val: 'Genealogia intelectual',
+    ref: 'Contexto del proyecto',
+    detail: 'Muestra la red de influencias y discusiones que dieron forma al modelo: Schumpeter, Freeman, Minsky y una larga conversacion interdisciplinaria.',
+    weight: 5,
+  },
+  {
+    cat: 'front',
+    name: 'Introduccion',
+    val: 'Una interpretacion',
+    ref: 'Paginas 19-21',
+    detail: 'Resume el libro entero: revolucion tecnologica, euforia financiera, desacoplamiento institucional, colapso, reacoplamiento y bonanza.',
+    weight: 18,
+  },
+  {
+    cat: 'part1',
+    name: '1. El turbulento final del siglo veinte',
+    val: 'Capitulo 1',
+    ref: 'Presente historico',
+    detail: 'Arranca desde la burbuja de internet y la confusion del cambio de siglo para mostrar que no fue una anomalia sino parte de una secuencia recurrente.',
+    weight: 16,
+  },
+  {
+    cat: 'part1',
+    name: '2. Revoluciones tecnologicas y paradigmas tecno-economicos',
+    val: 'Capitulo 2',
+    ref: 'Cinco revoluciones',
+    detail: 'Define la unidad de analisis: conjuntos de tecnologias, industrias e infraestructuras que reorganizan el sentido comun productivo.',
+    weight: 17,
+  },
+  {
+    cat: 'part1',
+    name: '3. El moldeo social de las revoluciones tecnologicas',
+    val: 'Capitulo 3',
+    ref: 'Desacople y reacople',
+    detail: 'Explica por que la tecnologia no se difunde sola: necesita cambios institucionales, conflictos y adaptaciones que rediseñan el sistema.',
+    weight: 15,
+  },
+  {
+    cat: 'part1',
+    name: '4. La propagacion de un paradigma',
+    val: 'Capitulo 4',
+    ref: 'Instalacion y despliegue',
+    detail: 'Introduce la estructura temporal grande del libro: primero instalacion turbulenta, luego despliegue mas armonico cuando cambian las reglas.',
+    weight: 14,
+  },
+  {
+    cat: 'part1',
+    name: '5. Las cuatro fases de cada oleada',
+    val: 'Capitulo 5',
+    ref: 'Irrupcion, frenesi, sinergia, madurez',
+    detail: 'Es una de las piezas nucleares del modelo. Ordena cada gran oleada en una secuencia de cuatro fases con logicas distintas.',
+    weight: 20,
+  },
+  {
+    cat: 'part1',
+    name: '6. Desarrollo desigual y rezagos en la difusion',
+    val: 'Capitulo 6',
+    ref: 'Difusion mundial',
+    detail: 'Muestra que las oleadas no se expanden de manera uniforme: crean centros, periferias, retrasos y ventanas de oportunidad distintas.',
+    weight: 12,
+  },
+  {
+    cat: 'part2',
+    name: '7. Capital financiero y capital productivo',
+    val: 'Capitulo 7',
+    ref: 'Dos agentes',
+    detail: 'Distingue sus funciones y criterios. Son diferentes, complementarios y periodicamente entran en tension por el control del rumbo economico.',
+    weight: 18,
+  },
+  {
+    cat: 'part2',
+    name: '8. La madurez',
+    val: 'Capitulo 8',
+    ref: 'Semillas de la proxima turbulencia',
+    detail: 'Cuando una oleada envejece, caen retornos y el capital busca nuevas oportunidades; ahi empieza a sembrarse la siguiente ruptura.',
+    weight: 12,
+  },
+  {
+    cat: 'part2',
+    name: '9. La irrupcion',
+    val: 'Capitulo 9',
+    ref: 'El enamoramiento financiero',
+    detail: 'El capital financiero se apasiona con la revolucion emergente y crea instrumentos para financiar experimentos, apuestas y rejuvenecimiento sectorial.',
+    weight: 16,
+  },
+  {
+    cat: 'part2',
+    name: '10. El frenesi',
+    val: 'Capitulo 10',
+    ref: 'El casino',
+    detail: 'El capital financiero se autonomiza, se disparan manias, burbujas y brechas sociales. Es el momento de mayor energia y mayor descontrol.',
+    weight: 22,
+  },
+  {
+    cat: 'part2',
+    name: '11. El intervalo de reacomodo',
+    val: 'Capitulo 11',
+    ref: 'Regulacion y relevo',
+    detail: 'Colapso de la burbuja, reevaluacion y posibilidad de un cambio de mando desde las finanzas hacia el capital productivo y las instituciones.',
+    weight: 19,
+  },
+  {
+    cat: 'part2',
+    name: '12. La sinergia',
+    val: 'Capitulo 12',
+    ref: 'Expansion del paradigma',
+    detail: 'Cuando el marco institucional ya encaja con la nueva tecnologia, el paradigma se expande por toda la estructura productiva.',
+    weight: 17,
+  },
+  {
+    cat: 'part2',
+    name: '13. Innovaciones financieras e institucionales',
+    val: 'Capitulo 13',
+    ref: 'Cambio historico',
+    detail: 'Estudia como mutan las formas de financiamiento y las instituciones a traves de las fases y de los distintos paradigmas.',
+    weight: 13,
+  },
+  {
+    cat: 'part3',
+    name: '14. La secuencia y sus fuerzas motrices',
+    val: 'Capitulo 14',
+    ref: 'Motor del modelo',
+    detail: 'Resume la secuencia completa y explica las fuerzas que empujan el ritmo recurrente entre interes privado, interes social y cambio tecnico.',
+    weight: 15,
+  },
+  {
+    cat: 'part3',
+    name: '15. Implicaciones para la teoria y las politicas',
+    val: 'Capitulo 15',
+    ref: 'Uso del marco',
+    detail: 'Extrae consecuencias para interpretar la historia, pensar el presente y diseñar politicas acordes a cada fase de la oleada.',
+    weight: 14,
+  },
+  {
+    cat: 'epi',
+    name: 'El mundo en el intervalo de reacomodo',
+    val: 'Epilogo',
+    ref: 'Junio de 2002',
+    detail: 'Situa al mundo de inicios del siglo XXI en pleno turning point: entre la locura financiera ya explotada y la redefinicion institucional pendiente.',
+    weight: 16,
+  },
+]
