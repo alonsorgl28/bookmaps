@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bookmaps | Pretext</title>
+<meta name="description" content="Bookmaps turns dense documents into interactive visual maps. This demo uses Revoluciones tecnologicas y capital financiero as a sample.">
+<meta name="theme-color" content="#f5f0ea">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    background:
+      radial-gradient(34% 26% at 84% 10%, rgba(30, 167, 255, 0.16), transparent 58%),
+      radial-gradient(26% 24% at 12% 88%, rgba(255, 106, 47, 0.12), transparent 62%),
+      linear-gradient(180deg, #fcfaf6 0%, #f5f2ec 48%, #efebe2 100%);
+    color: #121212;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    cursor: crosshair;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(18,18,18,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18,18,18,0.045) 1px, transparent 1px);
+    background-size: 28px 28px, 28px 28px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.52), rgba(0,0,0,0.10));
+    z-index: 0;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.12) 18%, rgba(0,0,0,0.015) 100%),
+      linear-gradient(90deg, rgba(255,255,255,0.12), transparent 24%, transparent 76%, rgba(255,255,255,0.10));
+    z-index: 0;
+  }
+  #treemap {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1;
+  }
+  .block {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid rgba(18,18,18,0.10);
+    border-radius: 0;
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0.12) 34%, rgba(255,255,255,0.03) 68%, rgba(255,255,255,0.01)),
+      linear-gradient(135deg, rgba(255,255,255,0.18), transparent 42%);
+    will-change: transform;
+    contain: layout style paint;
+    transform-origin: center center;
+    box-shadow:
+      0 14px 28px rgba(18,18,18,0.07),
+      0 2px 0 rgba(255,255,255,0.34) inset,
+      0 0 0 1px rgba(255,255,255,0.14) inset,
+      0 -10px 18px rgba(255,255,255,0.05) inset;
+    backdrop-filter: blur(3px);
+  }
+  .block::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: rgba(18,18,18,0.18);
+    mix-blend-mode: multiply;
+    opacity: 0.75;
+  }
+  .block::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-top: 1px solid rgba(255,255,255,0.20);
+    border-left: 1px solid rgba(255,255,255,0.12);
+    background: linear-gradient(180deg, rgba(255,255,255,0.14), transparent 22%, transparent 78%, rgba(255,255,255,0.04));
+    mix-blend-mode: screen;
+    opacity: 0.56;
+  }
+  .block-inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-width: 0;
+    min-height: 0;
+  }
+  .block-head {
+    min-width: 0;
+    padding: 0;
+    border-bottom: 1px solid rgba(17,16,15,0.10);
+    background: linear-gradient(180deg, rgba(255,255,255,0.24), rgba(255,255,255,0.06) 30%, rgba(18,18,18,0.03));
+  }
+  .term-toolbar {
+    height: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 0 9px 0 8px;
+    min-width: 0;
+  }
+  .term-meta {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+  }
+  .term-id {
+    font-size: 7px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.78;
+    white-space: nowrap;
+  }
+  .term-title {
+    display: none;
+  }
+  .term-status {
+    font-size: 7px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.62;
+    white-space: nowrap;
+  }
+  .block-title {
+    display: none;
+  }
+  .block-body {
+    min-width: 0;
+    min-height: 0;
+    padding: 10px 10px 9px 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  .block-title-inline {
+    display: none;
+    font-size: 7px;
+    line-height: 1.25;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.72;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .term-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    min-width: 0;
+  }
+  .term-prompt {
+    flex: 0 0 auto;
+    font-size: 8px;
+    line-height: 1.35;
+    font-weight: 700;
+    opacity: 0.70;
+  }
+  .term-text {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .block-value {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1.12;
+    margin-top: 0;
+    letter-spacing: -0.02em;
+    white-space: normal;
+    overflow: hidden;
+    text-transform: uppercase;
+  }
+  .block-detail {
+    font-weight: 500;
+    font-size: 8px;
+    line-height: 1.42;
+    margin-top: 6px;
+    opacity: 0.84;
+    overflow: hidden;
+  }
+  .block-foot {
+    min-width: 0;
+    padding: 7px 10px 8px 13px;
+    border-top: 1px solid rgba(17,16,15,0.10);
+    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(17,16,15,0.05));
+  }
+  .term-footer {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+  }
+  .block-ref {
+    font-weight: 600;
+    font-size: 7px;
+    line-height: 1.35;
+    margin-top: 0;
+    opacity: 0.72;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+  .hud {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 20;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    font-size: 9px;
+    line-height: 1.7;
+    color: rgba(18,18,18,0.36);
+    text-align: right;
+    pointer-events: none;
+  }
+  .hud .val { color: rgba(18,18,18,0.74); font-weight: 700; }
+  .legend-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px 12px;
+    background: linear-gradient(180deg, rgba(240,237,230,0.58), rgba(240,237,230,0.96));
+    border-top: 1px solid rgba(18,18,18,0.10);
+    backdrop-filter: blur(14px);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    color: rgba(18,18,18,0.52);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    user-select: none;
+    padding: 9px 11px;
+    flex: 0 1 auto;
+    min-width: 0;
+    border-radius: 0;
+    border: 1px solid rgba(18,18,18,0.10);
+    background: rgba(255,255,255,0.34);
+  }
+  .legend-item:hover, .legend-item:active {
+    background: rgba(255,255,255,0.60);
+    color: rgba(18,18,18,0.88);
+  }
+  .legend-item.active {
+    color: rgba(18,18,18,0.96);
+    background: rgba(255,255,255,0.90);
+    box-shadow: 0 8px 18px rgba(18,18,18,0.08);
+  }
+  .legend-item .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .legend-item .lbl {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .legend-item.active .lbl { color: rgba(0,0,0,0.85); }
+  .about-btn {
+    position: fixed;
+    right: 14px;
+    bottom: 60px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 0;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(18,18,18,0.10);
+    color: rgba(18,18,18,0.54);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    transition: all 0.2s ease;
+  }
+  .about-btn:hover { background: rgba(255,255,255,0.94); color: rgba(18,18,18,0.88); }
+  .about-btn .about-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 0;
+    border: 1.5px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .load-btn {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 0;
+    background: rgba(255,255,255,0.82);
+    border: 1px solid rgba(18,18,18,0.10);
+    color: rgba(18,18,18,0.54);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    transition: all 0.2s ease;
+  }
+  .load-btn:hover { background: rgba(255,255,255,0.94); color: rgba(18,18,18,0.88); }
+  .doc-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(440px, calc(100vw - 24px));
+    z-index: 36;
+    background:
+      radial-gradient(26% 22% at 10% 8%, rgba(255, 106, 47, 0.10), transparent 62%),
+      linear-gradient(180deg, rgba(249,246,240,0.98), rgba(241,237,230,0.99));
+    border-right: 1px solid rgba(18,18,18,0.10);
+    box-shadow: 14px 0 30px rgba(18,18,18,0.08);
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    backdrop-filter: blur(12px);
+    overflow-y: auto;
+  }
+  .doc-panel.visible { transform: translateX(0); }
+  .doc-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #3f7cff, #18c6a3 48%, #ff6a2f);
+    opacity: 0.95;
+  }
+  .doc-panel-inner {
+    padding: 22px 24px 34px 20px;
+  }
+  .doc-panel-close {
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border-radius: 0;
+    border: 1px solid rgba(18,18,18,0.10);
+    background: rgba(17,16,15,0.06);
+    color: rgba(17,16,15,0.58);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .doc-panel-kicker {
+    margin-top: 14px;
+    font: 700 10px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .doc-panel-title {
+    margin-top: 8px;
+    font-size: 24px;
+    line-height: 1.02;
+    font-weight: 700;
+    color: #141210;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .doc-panel-title::before {
+    content: "> ";
+    opacity: 0.52;
+  }
+  .doc-panel-meta {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(17,16,15,0.60);
+  }
+  .doc-section {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(17,16,15,0.10);
+  }
+  .doc-label {
+    font: 700 9px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .doc-help {
+    margin-top: 8px;
+    color: #4b4540;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  .doc-textarea {
+    width: 100%;
+    min-height: 220px;
+    margin-top: 10px;
+    padding: 12px;
+    resize: vertical;
+    border: 1px solid rgba(18,18,18,0.12);
+    border-radius: 0;
+    background: rgba(255,255,255,0.62);
+    color: #181614;
+    font: 500 12px/1.5 'IBM Plex Mono', 'SF Mono', monospace;
+    outline: none;
+  }
+  .doc-textarea:focus {
+    border-color: rgba(63,124,255,0.48);
+    box-shadow: 0 0 0 1px rgba(63,124,255,0.18) inset;
+  }
+  .doc-file {
+    margin-top: 10px;
+    width: 100%;
+    font: 500 11px/1.4 'IBM Plex Mono', 'SF Mono', monospace;
+    color: #3f3a35;
+  }
+  .doc-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .doc-action {
+    border: 1px solid rgba(18,18,18,0.10);
+    background: rgba(255,255,255,0.74);
+    color: rgba(18,18,18,0.86);
+    font: 700 11px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    padding: 9px 12px;
+    border-radius: 0;
+    cursor: pointer;
+  }
+  .doc-action.primary {
+    background: rgba(18,18,18,0.92);
+    color: #f6f4ef;
+  }
+  .doc-status {
+    margin-top: 10px;
+    min-height: 18px;
+    color: rgba(18,18,18,0.62);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .info-panel {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    background:
+      radial-gradient(28% 24% at 88% 10%, rgba(30, 167, 255, 0.08), transparent 62%),
+      linear-gradient(180deg, rgba(246,243,236,0.98), rgba(239,235,227,0.99));
+    display: none;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .info-panel.visible { display: block; }
+  .info-scroll {
+    min-height: 100%;
+    padding: 56px 24px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .info-content {
+    max-width: 520px;
+    width: 100%;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #5f5953;
+  }
+  .info-close {
+    position: sticky;
+    top: 16px;
+    align-self: flex-end;
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    background: rgba(17,16,15,0.06);
+    border: 1px solid rgba(17,16,15,0.12);
+    color: rgba(17,16,15,0.5);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .info-close:hover { background: rgba(17,16,15,0.12); color: #000; }
+  .info-content h2 { font-weight: 700; font-size: 2rem; color: #171513; margin-bottom: 24px; letter-spacing: -0.03em; }
+  .info-content h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #7a736d; margin-top: 28px; margin-bottom: 10px; font-weight: 700; }
+  .info-content p { margin-bottom: 14px; color: #4e4944; }
+  .info-content strong { color: #1d1916; font-weight: 700; }
+  .info-content code { font-family: 'SF Mono', monospace; font-size: 0.85em; background: rgba(17,16,15,0.06); padding: 2px 5px; border-radius: 0; color: #0e7d68; }
+  .info-content ul { list-style: none; padding: 0; margin: 16px 0; }
+  .info-content li { padding-left: 16px; position: relative; margin-bottom: 12px; color: #6a6560; }
+  .info-content li::before { content: "\2022"; color: #ccc; position: absolute; left: 0; }
+  .chapter-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(420px, calc(100vw - 24px));
+    z-index: 35;
+    background:
+      radial-gradient(42% 34% at 86% 8%, rgba(0, 174, 255, 0.10), transparent 62%),
+      linear-gradient(180deg, rgba(243,238,229,0.98), rgba(232,224,212,0.99));
+    border-left: 1px solid rgba(18,18,18,0.10);
+    box-shadow: -14px 0 30px rgba(18,18,18,0.08);
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+    backdrop-filter: blur(12px);
+    overflow-y: auto;
+  }
+  .chapter-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #ff6a2f, #18c6a3 48%, #3f7cff);
+    opacity: 0.95;
+  }
+  .chapter-panel.visible { transform: translateX(0); }
+  .chapter-panel-inner {
+    padding: 22px 20px 34px 24px;
+  }
+  .chapter-panel-close {
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    border-radius: 0;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(17,16,15,0.06);
+    color: rgba(17,16,15,0.58);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .chapter-panel-kicker {
+    margin-top: 14px;
+    font: 700 10px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .chapter-panel-title {
+    margin-top: 8px;
+    font-size: 24px;
+    line-height: 1.02;
+    font-weight: 700;
+    color: #141210;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .chapter-panel-title::before {
+    content: "> ";
+    opacity: 0.52;
+  }
+  .chapter-panel-meta {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: rgba(17,16,15,0.60);
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(17,16,15,0.10);
+  }
+  .chapter-section {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(17,16,15,0.10);
+  }
+  .chapter-section-label {
+    font: 700 9px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(17,16,15,0.46);
+  }
+  .chapter-section-body {
+    margin-top: 8px;
+    color: #2a2724;
+    font-size: 13px;
+    line-height: 1.62;
+  }
+  .related-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .related-item {
+    padding: 9px 10px 9px 12px;
+    border-radius: 0;
+    background: rgba(255,255,255,0.34);
+    border: 1px solid rgba(17,16,15,0.10);
+    color: #2a2724;
+    font-size: 12px;
+    line-height: 1.48;
+    position: relative;
+  }
+  .related-item::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: -1px;
+    width: 2px;
+    background: rgba(17,16,15,0.22);
+  }
+  .related-item strong {
+    display: block;
+    color: #141210;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+  .chapter-answer {
+    margin-top: 8px;
+  }
+  @media (max-width: 600px) {
+    .legend-bar { padding-bottom: env(safe-area-inset-bottom, 0); }
+    .legend-item { padding: 12px 4px; min-height: 44px; flex: 1 1 25%; }
+    .legend-item .dot { width: 10px; height: 10px; border-radius: 3px; }
+    .legend-item .lbl { font-size: 8px; }
+    .about-btn .about-label { display: none; }
+    .about-btn { padding: 6px 10px; }
+    .about-btn { right: 12px; bottom: 56px; }
+    .load-btn { right: 12px; bottom: 12px; padding: 6px 10px; }
+    .load-btn .load-label { display: none; }
+    .info-scroll { padding: 48px 20px 80px; }
+    .info-content { font-size: 14px; }
+    .info-content h2 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div id="treemap"></div>
+
+<div class="hud" id="hud">
+  <div><span class="val" id="hud-blocks">0</span> blocks</div>
+  <div><span class="val" id="hud-layouts">0</span> layouts/frame</div>
+  <div><span class="val" id="hud-time">0.00</span>ms</div>
+</div>
+
+<button class="about-btn" id="about-btn">
+  <span class="about-icon">?</span>
+  <span class="about-label">About this experiment</span>
+</button>
+<button class="load-btn" id="load-btn">
+  <span class="about-icon">+</span>
+  <span class="load-label">Load document</span>
+</button>
+
+<div class="legend-bar" id="legend-bar"></div>
+
+<aside class="doc-panel" id="doc-panel">
+  <div class="doc-panel-inner">
+    <button class="doc-panel-close" id="doc-panel-close">&times;</button>
+    <div class="doc-panel-kicker">Map generator</div>
+    <div class="doc-panel-title">Load document</div>
+    <div class="doc-panel-meta">Paste text or load a <code>.txt</code>, <code>.md</code>, text-based <code>.pdf</code>, or exported <code>.json</code>. The map stays full-screen; this panel only feeds new content into it.</div>
+
+    <section class="doc-section">
+      <div class="doc-label">Source text</div>
+      <div class="doc-help">Paste a chapter, essay, article, or book excerpt. You can also load a PDF with selectable text. For this MVP, shorter structured text still works best.</div>
+      <textarea class="doc-textarea" id="doc-textarea" placeholder="Paste text here..."></textarea>
+      <input class="doc-file" id="doc-file" type="file" accept=".txt,.md,.pdf,.json,text/plain,text/markdown,application/pdf,application/json">
+      <div class="doc-actions">
+        <button class="doc-action primary" id="generate-btn">Generate map</button>
+        <button class="doc-action" id="load-sample-btn">Load sample</button>
+      </div>
+      <div class="doc-status" id="doc-status"></div>
+    </section>
+  </div>
+</aside>
+
+<aside class="chapter-panel" id="chapter-panel">
+  <div class="chapter-panel-inner">
+    <button class="chapter-panel-close" id="chapter-panel-close">&times;</button>
+    <div class="chapter-panel-kicker" id="chapter-kicker"></div>
+    <div class="chapter-panel-title" id="chapter-title"></div>
+    <div class="chapter-panel-meta" id="chapter-meta"></div>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Tesis</div>
+      <div class="chapter-section-body" id="chapter-thesis"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Mecanismo</div>
+      <div class="chapter-section-body" id="chapter-mechanism"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Por qué importa</div>
+      <div class="chapter-section-body" id="chapter-importance"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Pregunta de comprensión</div>
+      <div class="chapter-section-body" id="chapter-question"></div>
+    </section>
+
+    <section class="chapter-section">
+      <div class="chapter-section-label">Connections</div>
+      <div class="related-list" id="chapter-related"></div>
+    </section>
+  </div>
+</aside>
+
+<div class="info-panel" id="info-panel">
+  <div class="info-scroll">
+    <button class="info-close" id="info-close">&times;</button>
+    <div class="info-content">
+      <h2>Bookmaps</h2>
+      <p>A real-time treemap of <strong>Revoluciones tecnologicas y capital financiero</strong>. Every block is a chapter or threshold section. Move your cursor: blocks under your attention <strong>expand</strong>, revealing more conceptual detail. Distant blocks compress. The entire layout recomputes every frame.</p>
+      <h3>Why Pretext</h3>
+      <p>Each block calls <code>layout()</code> every frame to determine how much text fits at its current dimensions. With DOM measurement, this would force repeated reflow. Pretext makes it cheap enough that the whole map can stay alive under the cursor.</p>
+      <h3>What You&apos;re Seeing</h3>
+      <ul>
+        <li><strong>19 blocks</strong> covering the front matter, the three main parts, and the epilogue.</li>
+        <li><strong>Cursor-driven expansion.</strong> Nearby chapters grow, revealing more of the book&apos;s structure and argument.</li>
+        <li><strong>Category filtering.</strong> Hover or tap the legend bar to isolate one part of the book.</li>
+        <li><strong>Live performance counter.</strong> Layout calls and time measured with <code>performance.now()</code>.</li>
+      </ul>
+      <h3>Why This Book Fits The Form</h3>
+      <p>The book is already a map of phases, agents, tensions and turning points. A treemap makes that systemic logic visible before you ever read linearly.</p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { prepare, layout } from 'https://esm.sh/@chenglou/pretext@0.0.2'
+  import * as pdfjsLib from 'https://esm.sh/pdfjs-dist@4.4.168/build/pdf.min.mjs'
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs'
+
+  const CATEGORIES = {
+    front: { label: 'Front Matter', bg: '#db8e72', bgHover: '#ef6a3a', fg: '#251512', accent: '#ff5d1f' },
+    part1: { label: 'Parte I', bg: '#c7a764', bgHover: '#e8b54b', fg: '#21170b', accent: '#f0aa1a' },
+    part2: { label: 'Parte II', bg: '#6faa94', bgHover: '#39c19d', fg: '#091b15', accent: '#12c79d' },
+    part3: { label: 'Parte III', bg: '#8c86c8', bgHover: '#6d72ff', fg: '#111126', accent: '#5a67ff' },
+    epi: { label: 'Epilogo', bg: '#6f9ec2', bgHover: '#2ea3ff', fg: '#0a1721', accent: '#1f9bff' },
+  }
+  const GENERIC_CATEGORY_TEMPLATES = [
+    { key: 'cluster1', label: 'Cluster 1', bg: '#db8e72', bgHover: '#ef6a3a', fg: '#251512', accent: '#ff5d1f' },
+    { key: 'cluster2', label: 'Cluster 2', bg: '#c7a764', bgHover: '#e8b54b', fg: '#21170b', accent: '#f0aa1a' },
+    { key: 'cluster3', label: 'Cluster 3', bg: '#6faa94', bgHover: '#39c19d', fg: '#091b15', accent: '#12c79d' },
+    { key: 'cluster4', label: 'Cluster 4', bg: '#8c86c8', bgHover: '#6d72ff', fg: '#111126', accent: '#5a67ff' },
+    { key: 'cluster5', label: 'Cluster 5', bg: '#6f9ec2', bgHover: '#2ea3ff', fg: '#0a1721', accent: '#1f9bff' },
+  ]
+
+  const CHAPTERS = [
+    // DERECHA
+    { cat: 'derecha', name: 'Rafael Lopez Aliaga', val: 'Renovacion Popular', ref: 'Derecha extrema — Lima',
+      thesis: 'Empresario ultraconservador, exalcalde de Lima (2022-2026). Apodado Porky. Candidato de la derecha dura con discurso de shock economico, valores catolicos y mano dura.',
+      mechanism: 'Fusion de Ministerios de Interior y Defensa para sumar 300,000 efectivos. Expulsar migrantes ilegales. Pena de muerte. Salir de la Corte IDH. Cambiar la capital a Junin.',
+      importance: 'Lider en Polymarket con 33%. Empata tecnicamente con Keiko en encuestas. Base fuerte en Lima y sectores conservadores urbanos con alta movilizacion.',
+      question: 'Sus propuestas mas extremas — pena de muerte, cambio de capital, fusion de ministerios — son un programa de gobierno real o retorica electoral para movilizar su base?',
+      detail: 'Exalcalde de Lima. Ultraconservador. Lider en Polymarket (33%).', weight: 330 },
+
+    { cat: 'derecha', name: 'Keiko Fujimori', val: 'Fuerza Popular', ref: 'Derecha — Lima',
+      thesis: 'Hija del ex-presidente Alberto Fujimori. Lleva tres campanas presidenciales (2011, 2016, 2021) sin ganar. Tiene la base electoral mas solida y organizada del pais.',
+      mechanism: 'Seguridad ciudadana con mano dura, atraccion de inversion privada, fortalecimiento de las Fuerzas Armadas y reconstruccion del tejido institucional.',
+      importance: 'Segunda en Polymarket (18%). Maquinaria territorial extensa y voto fiel que la convierten en favorita para segunda vuelta. Su resultado definitivo depende de si su base se consolida.',
+      question: 'Puede superar el peso de las investigaciones por lavado de activos y la herencia ambivalente del fujimorismo para ganar por primera vez la presidencia?',
+      detail: 'Tres veces candidata. Segunda en Polymarket (18%). Base electoral fiel.', weight: 180 },
+
+    { cat: 'derecha', name: 'Jose Williams Zapata', val: 'Avanza Pais', ref: 'Derecha — Lima',
+      thesis: 'Excomandante general del Ejercito. Excongresista que presidio el Congreso que vaco a Pedro Castillo. Figura clave de la derecha institucional peruana.',
+      mechanism: 'Orden y seguridad desde enfoque militar. Fortalecimiento de las FFAA. Reforma del sistema de justicia. Mano dura contra el crimen organizado transnacional.',
+      importance: 'Su perfil militar y su rol en la vacancia de Castillo le dan reconocimiento en sectores conservadores, aunque no despega en encuestas ni en Polymarket.',
+      question: 'Su imagen ligada a la vacancia y al bloque conservador del Congreso lo beneficia o lo limita electoralmente ante votantes de centro?',
+      detail: 'Exjefe del Ejercito. Presidio el Congreso que vaco a Castillo.', weight: 4 },
+
+    { cat: 'derecha', name: 'Roberto Chiabra', val: 'Unidad Nacional', ref: 'Derecha — Lima',
+      thesis: 'General (r) del Ejercito y exparlamentario. Candidato de la coalicion Unidad Nacional. Propone orden y seguridad desde una vision castrense moderada.',
+      mechanism: 'Cerrar fronteras para frenar migracion ilegal, reforma radical del poder judicial, fortalecer inteligencia del Estado y combate al crimen transnacional.',
+      importance: 'Voz de sectores de derecha moderada que priorizan seguridad institucional sobre propuestas reformistas.',
+      question: 'Puede un candidato con perfil militar diferenciarse de Lopez Aliaga en el mismo espacio ideologico sin quedar opacado?',
+      detail: 'General retirado. Propone cerrar fronteras y reforma judicial.', weight: 4 },
+
+    { cat: 'derecha', name: 'Alvaro Paz de la Barra', val: 'Fe en el Peru', ref: 'Derecha — Lima',
+      thesis: 'Exalcalde del distrito de La Molina. Candidato de un partido menor que apuesta por valores tradicionales, familia cristiana y libre mercado.',
+      mechanism: 'Seguridad, familia, valores cristianos, libre mercado, reduccion del Estado y eliminacion de burocracia.',
+      importance: 'Candidato con base electoral pequena pero activa en sectores conservadores de Lima clasemedia.',
+      question: 'Puede un candidato sin caudal propio competir en el espacio electoral que ya ocupan Keiko y Lopez Aliaga?',
+      detail: 'Exalcalde de La Molina. Derecha conservadora y libre mercado.', weight: 4 },
+
+    // CENTRO-DERECHA
+    { cat: 'centroderecha', name: 'Cesar Acuna', val: 'Alianza para el Progreso', ref: 'Centro-derecha — La Libertad',
+      thesis: 'Empresario educativo del norte. Exgobernador de La Libertad. Fundador y lider de APP, el partido con mayor presencia territorial fuera de Lima.',
+      mechanism: 'Plan de choque contra el crimen: Comando Nacional contra Extorsion, Centro de Inteligencia anticriminal, incorporacion de rondas campesinas, inversion en tecnologia policial.',
+      importance: 'Solo 0.9% en Polymarket pese a ser conocido a nivel nacional. Su partido domina varias regiones del norte — su fuerza real esta en el Congreso, no en la presidencia.',
+      question: 'Puede superar el escandalo del Acunavideo y la imagen de candidato que compra votos con dadivas para construir credibilidad presidencial?',
+      detail: 'Empresario nortenio. Gran maquinaria regional. Bajo en Polymarket.', weight: 9 },
+
+    { cat: 'centroderecha', name: 'George Forsyth', val: 'Somos Peru', ref: 'Centro-derecha — Lima',
+      thesis: 'Exarquero de la seleccion peruana y exalcalde de La Victoria. Fue sorpresa en las encuestas de 2021. Vuelve con Somos Peru con imagen de gestor joven.',
+      mechanism: 'Seguridad ciudadana basada en la experiencia de La Victoria. Inversion en infraestructura. Modernizacion del Estado con enfoque gerencial.',
+      importance: '0.6% en Polymarket. Ha perdido impulso desde 2021 pero mantiene simpatia en Lima por su perfil joven y su gestion en La Victoria.',
+      question: 'Puede reconvertir su imagen de exfutbolista-alcalde en una propuesta presidencial creible sin partido solido ni maquinaria territorial?',
+      detail: 'Exarquero y exalcalde. Perfil joven y gestor. 0.6% Polymarket.', weight: 6 },
+
+    { cat: 'centroderecha', name: 'Jose Luna Galvez', val: 'Podemos Peru', ref: 'Centro-derecha — Lima',
+      thesis: 'Empresario y fundador de Podemos Peru. Exsenador. Ha estado bajo la lupa por vinculos cuestionados con magistrados del poder judicial.',
+      mechanism: 'Reforma genuina del sistema de pensiones, retiros de AFP, reduccion del costo de vida, apoyo a la pequena empresa.',
+      importance: 'Su partido tiene presencia en Lima y regiones pero su imagen esta deteriorada por escandalo judicial.',
+      question: 'Los vinculos de Podemos Peru con cuestionados magistrados del Tribunal Constitucional lo inhabilitan ante el electorado?',
+      detail: 'Fundador de Podemos Peru. Controversial. Reforma de pensiones.', weight: 4 },
+
+    { cat: 'centroderecha', name: 'Mesías Guevara', val: 'Partido Morado', ref: 'Centro-derecha — Cajamarca',
+      thesis: 'Exgobernador regional de Cajamarca. Candidato del Partido Morado (fundado por Julio Guzman). Perfil regional con base en el norte del pais.',
+      mechanism: 'Descentralizacion, fortalecimiento de gobiernos regionales, gestion territorial, orden y gobernabilidad desde las regiones.',
+      importance: '0.7% en Polymarket. Su base esta en Cajamarca. El Partido Morado busca recuperar el espacio que tuvo en 2021 con Guzman.',
+      question: 'Puede el Partido Morado reconstruir su base electoral fuera de Lima con un candidato regional como Guevara?',
+      detail: 'Exgobernador de Cajamarca. Partido Morado busca recuperar espacio.', weight: 7 },
+
+    // CENTRO
+    { cat: 'centro', name: 'Alfonso Lopez Chau', val: 'Ahora Nacion', ref: 'Centro — Lima',
+      thesis: 'Ex-superintendente de la SUNAT. Economista con perfil tecnico. Su discurso central: La primera tarea del gobierno no es economica, sino moral.',
+      mechanism: 'Reforma integral del sistema de justicia, lucha anticorrupcion desde el Estado, formalizacion economica y tributaria, modernizacion de la administracion publica.',
+      importance: 'Cuarto en Polymarket (11.1%). Atrae votantes hartos de la corrupcion que buscan un candidato limpio con experiencia tecnica y sin pasado politico cuestionado.',
+      question: 'Puede un candidato con perfil de tecnocrata moral y sin maquinaria partidaria construir la coalicion que le de la presidencia en primera vuelta?',
+      detail: 'Ex-superintendente SUNAT. Discurso moral-tecnico. 11.1% Polymarket.', weight: 111 },
+
+    { cat: 'centro', name: 'Jorge Nieto Montesinos', val: 'Partido del Buen Gobierno', ref: 'Centro — Lima',
+      thesis: 'Exministro de Defensa y Relaciones Exteriores. Politologo, diplomatico y analista. Representa la tecnocracia moderada con solida experiencia de Estado.',
+      mechanism: 'Reforma profunda del Estado, fortalecimiento institucional, lucha anticorrupcion estructural, politica exterior activa y multilateral.',
+      importance: 'Sexto en Polymarket (7%). Atrae votantes de centro que buscan experiencia de gobierno sin extremismos ni pasado controversial.',
+      question: 'Puede un candidato con perfil de tecnocrata institucional generar la adhesion emocional que requiere una campana presidencial masiva?',
+      detail: 'Excanciller y exministro de Defensa. Tecnocrata moderado. 7% Polymarket.', weight: 70 },
+
+    { cat: 'centro', name: 'Ricardo Belmont', val: 'Partido Civico Obras', ref: 'Centro — Lima',
+      thesis: 'Exalcalde de Lima (1989-1998). Empresario mediatico historico. Vuelve a la politica con una propuesta radical: federalizar el Peru.',
+      mechanism: 'Federalizacion del pais con regiones autonomas, grandes obras de infraestructura, descentralizacion radical del poder y el presupuesto.',
+      importance: 'Septimo en Polymarket (1.5%). Reconocimiento por su historica gestion en Lima. Atrae votantes con nostalgia de obras y gestion ejecutiva.',
+      question: 'Es la federalizacion una propuesta tecnicamente viable o un slogan de campana sin sustento institucional serio?',
+      detail: 'Exalcalde historico de Lima. Propone federalizar el Peru. 1.5% Polymarket.', weight: 15 },
+
+    { cat: 'centro', name: 'Wolfgang Grozo', val: 'Integridad Democratica', ref: 'Centro — Lima',
+      thesis: 'Candidato outsider que ha crecido sostenidamente en encuestas. Perfil anti-establishment con discurso de integridad y transparencia radical.',
+      mechanism: 'Lucha contra la mineria ilegal, reforma profunda del sistema de justicia, transparencia radical en el gasto publico, combate anticorrupcion sistemico.',
+      importance: '0.9% en Polymarket pero subiendo consistentemente en encuestas tradicionales. Fenomeno de redes sociales. La sorpresa de la campana.',
+      question: 'Es un candidato con propuesta sustantiva y equipo de gobierno real o solo captura el voto de protesta sin proyecto viable?',
+      detail: 'Outsider en ascenso. Integridad y reforma. Crece en encuestas.', weight: 9 },
+
+    { cat: 'centro', name: 'Fernando Olivera', val: 'Frente de la Esperanza 2021', ref: 'Centro — Lima',
+      thesis: 'Exfiscal y politico con tres decadas de trayectoria. Fue protagonista de las investigaciones contra Vladimiro Montesinos y el fujimorismo en los anos 90.',
+      mechanism: 'Reforma del sistema de justicia, recuperacion de activos del Estado, lucha anticorrupcion con base legal, fortalecimiento del Ministerio Publico.',
+      importance: '2% en encuestas. Apela a votantes que valoran trayectoria anticorrupcion historica.',
+      question: 'Puede una figura historica del pasado politico conectar con un electorado joven y hastiado de la clase politica tradicional?',
+      detail: 'Exfiscal anticorrupcion historico. Trayectoria de los anos 90.', weight: 22 },
+
+    { cat: 'centro', name: 'Marisol Perez Tello', val: 'Primero la Gente', ref: 'Centro — Lima',
+      thesis: 'Exministra de Justicia en el gobierno de PPK. Abogada y politica de centro con trayectoria en derechos humanos y justicia constitucional.',
+      mechanism: 'Reforma del sistema penitenciario, fortalecimiento de derechos ciudadanos, gobernabilidad democratica, seguridad con enfoque de derechos.',
+      importance: '0.7% en Polymarket. Intenta llenar el espacio del centro liberal con propuestas institucionales.',
+      question: 'Puede una candidata de perfil tecnico-institucional diferenciarse en un espacio donde compiten varios candidatos de centro?',
+      detail: 'Exministra de Justicia. Centro liberal. Derechos y gobernabilidad.', weight: 7 },
+
+    { cat: 'centro', name: 'Yonhy Lescano', val: 'Cooperacion Popular', ref: 'Centro — Apurimac',
+      thesis: 'Excongresista de Accion Popular por decadas. Candidato que obtuvo el 9% en primera vuelta en 2021. Ahora lidera su propia agrupacion politica.',
+      mechanism: 'Reformas legislativas estructurales, fortalecimiento de la clase media, descentralizacion economica, lucha contra el monopolio del poder.',
+      importance: '0.7% en Polymarket, muy lejos del 9% de 2021. El mercado lo descarta como factor presidencial esta vez.',
+      question: 'Por que bajo tan drasticamente de 9% en 2021 a menos del 1% en Polymarket? Que cambio en el electorado o en el candidato?',
+      detail: 'Excongresista AP. Obtuvo 9% en 2021. Hoy 0.7% Polymarket.', weight: 7 },
+
+    { cat: 'centro', name: 'Mario Vizcarra', val: 'Peru Primero', ref: 'Centro — Moquegua',
+      thesis: 'Hermano del ex-presidente Martin Vizcarra (destituido en 2020). Candidato que capitaliza el voto martinista. Ha prometido indultar a su hermano si gana.',
+      mechanism: 'Continuidad del reformismo de Martin Vizcarra, lucha anticorrupcion, reforma del Congreso, indulto al expresidente.',
+      importance: 'Menos del 0.5% en Polymarket. Su valor electoral reside principalmente en la lealtad al exmandatario, cuyo recuerdo es positivo para muchos peruanos.',
+      question: 'Es viable presentarse como candidato cuya principal propuesta es el indulto de su hermano? Es eso suficiente para una campana presidencial?',
+      detail: 'Hermano del ex-presidente. Propone indultarlo si gana.', weight: 4 },
+
+    { cat: 'centro', name: 'Rosario Fernandez', val: 'Un Camino Diferente', ref: 'Centro — Lima',
+      thesis: 'Exministra de Justicia y expresidenta del Consejo de Ministros en el gobierno de Alan Garcia. Abogada y exfiscal con trayectoria en justicia.',
+      mechanism: 'Reforma del sistema de justicia, institucionalidad democratica, gobernabilidad, propuestas de transparencia y Estado de derecho.',
+      importance: 'Candidata con trayectoria pero bajo perfil en la campana actual. Representa el centro institucional alanista.',
+      question: 'Puede una candidata con historia en el alanismo construir un proyecto propio creible para 2026 dado el desastre del segundo gobierno de Garcia?',
+      detail: 'Expresidenta del Consejo de Ministros de Garcia. Jurista.', weight: 4 },
+
+    { cat: 'centro', name: 'Rafael Belaunde', val: 'Libertad Popular', ref: 'Centro — Lima',
+      thesis: 'Candidato de centro con propuesta de liberalismo social moderado. Hereda tradiciones de la democracia cristiana y el reformismo historico peruano.',
+      mechanism: 'Liberalismo social moderado, reformas institucionales, Estado de derecho, dialogo politico como herramienta de gobierno.',
+      importance: 'Candidato de bajo perfil mediatico que representa tradiciones politicas en declive en el Peru actual.',
+      question: 'Tienen aun vigencia los partidos historicos peruanos en un escenario electoral fragmentado y dominado por outsiders?',
+      detail: 'Liberalismo social historico. Tradiciones politicas en declive.', weight: 4 },
+
+    { cat: 'centro', name: 'Enrique Valderrama', val: 'Partido Aprista Peruano', ref: 'Centro — Lima',
+      thesis: 'Candidato presidencial del historico APRA, fundado por Victor Raul Haya de la Torre. El partido mas antiguo del Peru enfrenta su peor momento electoral.',
+      mechanism: 'Propuestas apristas de centro-izquierda historica: Estado de bienestar, industrializacion, integracion latinoamericana.',
+      importance: 'El APRA fue la fuerza politica mas importante del siglo XX peruano. Hoy esta en minimos historicos. Esta eleccion medira su resiliencia institucional.',
+      question: 'Puede el APRA sobrevivir como fuerza electoral relevante tras el desastre del segundo gobierno de Alan Garcia y el suicidio del lider?',
+      detail: 'Candidato del historico APRA. El partido mas antiguo del Peru.', weight: 4 },
+
+    { cat: 'centro', name: 'Carlos Espa', val: 'Partido SiCreo', ref: 'Centro — Lima',
+      thesis: 'Candidato de un partido menor de centro. Propuestas de reforma institucional con perfil bajo en medios nacionales.',
+      mechanism: 'Reforma del Estado, institucionalidad, reduccion de la burocracia, transparencia en la gestion publica.',
+      importance: '1.1% en Polymarket — sorprendentemente alto para un candidato de perfil bajo. El mercado ve algo en el que las encuestas aun no captan.',
+      question: 'Que explica que Polymarket le asigne 1.1% mientras tiene tan poco perfil mediatico? Hay informacion que el mercado tiene y las encuestas no?',
+      detail: 'Partido SiCreo. 1.1% Polymarket. Perfil bajo pero presente en mercados.', weight: 11 },
+
+    { cat: 'centro', name: 'Carlos Jaico', val: 'Peru Moderno', ref: 'Centro — Lima',
+      thesis: 'Candidato de Peru Moderno. Partido de centro con enfoque en modernizacion del Estado y reformas graduales y tecnicas.',
+      mechanism: 'Modernizacion del Estado, reforma del servicio civil, eficiencia del gasto publico, digitalizacion de servicios.',
+      importance: 'Candidato testimonial que representa la busqueda de una tercera via tecnica entre extremos ideologicos.',
+      question: 'Puede una propuesta de modernizacion gradual captar la atencion en un contexto de crisis e inseguridad extrema?',
+      detail: 'Peru Moderno. Modernizacion del Estado y reformas tecnicas.', weight: 4 },
+
+    // IZQUIERDA
+    { cat: 'izquierda', name: 'Roberto Sanchez', val: 'Juntos por el Peru', ref: 'Izquierda — Lima',
+      thesis: 'Economista y exministro de Comercio Exterior en el gobierno de Pedro Castillo. Candidato de la izquierda democratica y moderada para 2026.',
+      mechanism: 'Estrategia integral contra la inseguridad, regulacion de la mineria con participacion comunitaria, fortalecimiento del Estado, dialogo social.',
+      importance: 'Quinto en Polymarket (10%). Principal candidato de la izquierda moderada. Intenta recuperar el voto progresista tras el desastre del gobierno Castillo.',
+      question: 'Puede un exministro de Castillo convencer a votantes de izquierda que el representa una alternativa real y no una continuidad de ese gobierno?',
+      detail: 'Exministro de Castillo. Izquierda democratica y moderada. 10% Polymarket.', weight: 100 },
+
+    { cat: 'izquierda', name: 'Vladimir Cerron', val: 'Peru Libre', ref: 'Izquierda radical — Junin',
+      thesis: 'Exgobernador de Junin condenado por corrupcion. Fundador de Peru Libre y arquitecto de la victoria de Pedro Castillo en 2021. Candidatura juridicamente cuestionada.',
+      mechanism: 'Programa marxista-leninista: nacionalizacion de recursos naturales, reforma agraria, nueva Constitucion, ruptura con el modelo neoliberal.',
+      importance: 'Candidatura simbolica y polemica. Tiene impedimentos legales por condena firme. Su presencia en la carrera activa el voto anti-izquierda que beneficia a Keiko.',
+      question: 'Puede un candidato con condena firme por corrupcion postular a la presidencia? Que dice sobre el sistema judicial peruano que este en campana?',
+      detail: 'Fundador de Peru Libre. Condenado por corrupcion. Candidatura en disputa.', weight: 4 },
+
+    { cat: 'izquierda', name: 'Fiorella Molinelli', val: 'Fuerza y Libertad', ref: 'Izquierda — Lima',
+      thesis: 'Expresidenta ejecutiva de EsSalud. Candidata de izquierda moderada con enfoque en derechos sociales, salud universal y equidad de genero.',
+      mechanism: 'Fortalecimiento del sistema de salud publico, universalizacion de la seguridad social, derechos laborales, equidad de genero en el Estado.',
+      importance: 'Representa un nicho electoral de izquierda socialdemocrata con perfil femenino en una campana dominada por hombres.',
+      question: 'Puede una candidata de izquierda moderada con perfil de gestora publica diferenciarse en un espacio electoral tan fragmentado?',
+      detail: 'Expresidenta de EsSalud. Izquierda social. Salud universal.', weight: 4 },
+
+    { cat: 'izquierda', name: 'Ronald Atencio', val: 'Alianza Electoral Venceremos', ref: 'Izquierda — Regiones',
+      thesis: 'Candidato de una alianza electoral de izquierda con base en regiones. Perfil sindical y de movimientos sociales populares.',
+      mechanism: 'Derechos laborales, fortalecimiento de sindicatos, control estatal de recursos naturales, reforma agraria.',
+      importance: '2% en encuestas. Representa la izquierda radical con menor perfil que Cerron pero mas viabilidad juridica.',
+      question: 'Puede una alianza electoral de izquierda capturar el voto que Cerron no puede consolidar por sus problemas legales?',
+      detail: 'Alianza de izquierda. Base sindical y movimientos sociales.', weight: 4 },
+
+    { cat: 'izquierda', name: 'Francisco Diez-Canseco', val: 'Peru Accion', ref: 'Izquierda — Lima',
+      thesis: 'Politico de izquierda con trayectoria en derechos humanos y movimientos sociales. Candidato de Peru Accion con propuesta de izquierda democratica.',
+      mechanism: 'Derechos humanos, reforma del Estado, economia mixta, integracion latinoamericana progresista.',
+      importance: 'Candidato de bajo perfil que representa la izquierda con enfoque en derechos y movimientos sociales.',
+      question: 'Puede la izquierda de derechos humanos construir una propuesta electoral viable cuando el debate principal es inseguridad y discursos de mano dura?',
+      detail: 'Izquierda democratica con enfoque en derechos humanos.', weight: 4 },
+
+    { cat: 'izquierda', name: 'Walter Chirinos', val: 'Partido Regionalista Integrac. Nacional', ref: 'Izquierda — Regiones',
+      thesis: 'Candidato de un partido regionalista de base andina. Propone integracion nacional desde las regiones y fortalecimiento de comunidades campesinas.',
+      mechanism: 'Regionalismo, comunidades campesinas, recursos naturales con beneficio local, integracion andina.',
+      importance: 'Candidato testimonial con base en regiones andinas y comunidades campesinas. Perfil muy local.',
+      question: 'Puede el regionalismo ser una plataforma competitiva a nivel presidencial o solo suma votos simbolicos en zonas especificas?',
+      detail: 'Partido Regionalista. Base andina y comunidades campesinas.', weight: 4 },
+
+    // OUTSIDER / OTROS
+    { cat: 'otros', name: 'Carlos Álvarez', val: 'Pais Para Todos', ref: 'Outsider — Lima',
+      thesis: 'Humorista y actor politico. Protagonista del programa El Especial del Humor. Outsider populista que ha sorprendido en encuestas llegando al 7%, tercero a nivel nacional.',
+      mechanism: 'Reducir el sueldo de congresistas, luchar contra la corrupcion desde la ciudadania, formalizacion del trabajo, reduccion del costo de vida.',
+      importance: 'Tercero en Polymarket (15.3%). Capitaliza el descontento profundo con la clase politica. Candidato genuinamente nuevo y sin pasado politico cuestionado.',
+      question: 'Tiene la experiencia de gobierno necesaria para gobernar o es solo un fenomeno mediatico de protesta que se disolvera en segunda vuelta?',
+      detail: 'Humorista convertido en candidato sorpresa. Tercero en Polymarket (15.3%).', weight: 153 },
+
+    { cat: 'otros', name: 'Charlie Carrasco', val: 'Partido Democrata Unido Peru', ref: 'Outsider — Lima',
+      thesis: 'Candidato de un partido menor con perfil mediatico. Busca diferenciarse en un campo electoral muy saturado con propuestas ciudadanas.',
+      mechanism: 'Reforma del Estado, propuestas ciudadanas directas, combate a la corrupcion, transparencia.',
+      importance: 'Candidato de bajo perfil que representa la fragmentacion del sistema politico peruano.',
+      question: 'Que espacio real tiene un partido pequeno sin estructura territorial en unas elecciones con 35 candidatos?',
+      detail: 'Partido menor. Perfil mediatico ciudadano.', weight: 4 },
+
+    { cat: 'otros', name: 'Herbert Caller', val: 'Partido Patriotico del Peru', ref: 'Otros — Lima',
+      thesis: 'Candidato del Partido Patriotico del Peru. Propuestas de corte nacionalista con enfoque en soberania y control de recursos naturales.',
+      mechanism: 'Soberania nacional, control de recursos naturales, defensa de fronteras, identidad nacional peruana.',
+      importance: 'Candidato testimonial de un partido menor con perfil patriotico y base pequena.',
+      question: 'Puede el nacionalismo economico ser una propuesta diferenciadora cuando el electorado prioriza inseguridad y economia cotidiana?',
+      detail: 'Partido Patriotico. Soberania y recursos naturales.', weight: 4 },
+
+    { cat: 'otros', name: 'Paul Jaimes', val: 'Progresemos', ref: 'Otros — Lima',
+      thesis: 'Candidato de Progresemos, partido de centro con propuestas de reforma gradual y modernizacion institucional.',
+      mechanism: 'Progresismo moderado, reformas sociales graduales, fortalecimiento de servicios publicos.',
+      importance: 'Candidato testimonial en un campo electoral muy fragmentado con pocas posibilidades de impacto presidencial.',
+      question: 'Puede el progresismo gradual capturar votos en una campana dominada por candidatos de posiciones mas extremas y mediáticas?',
+      detail: 'Progresemos. Reformismo gradual y moderado.', weight: 4 },
+
+    { cat: 'otros', name: 'Joaquin Masse', val: 'Partido Democratico Federal', ref: 'Otros — Lima',
+      thesis: 'Candidato del Partido Democratico Federal. Apuesta por la federalizacion del Estado peruano como eje central de su propuesta.',
+      mechanism: 'Federalismo, autonomia regional, descentralizacion del poder politico y presupuestal, gobiernos regionales con mas soberania.',
+      importance: 'Candidato testimonial que comparte la propuesta federal con Belmont sin lograr diferenciarse.',
+      question: 'Por que conviven dos candidatos con propuesta federal (Belmont y Masse) sin que ninguno se convierta en el referente unico de ese eje?',
+      detail: 'Partido Democratico Federal. Federalismo y descentralizacion.', weight: 4 },
+
+    { cat: 'otros', name: 'Alex Gonzales Castillo', val: 'Partido Democrata Verde', ref: 'Otros — Lima',
+      thesis: 'Candidato del Partido Democrata Verde con enfoque en medio ambiente, mineria sostenible y recursos naturales.',
+      mechanism: 'Transicion ecologica, mineria responsable, proteccion de ecosistemas, energias renovables, economia verde.',
+      importance: 'Unico candidato con eje verde como propuesta central. Nicho electoral pequeno pero coherente y diferenciado.',
+      question: 'Puede la agenda verde ser una propuesta electoralmente viable en un pais donde el debate central es inseguridad y economia inmediata?',
+      detail: 'Partido Verde. Medio ambiente y mineria sostenible.', weight: 4 },
+
+    { cat: 'otros', name: 'Antonio Ortiz', val: 'Salvemos al Peru', ref: 'Otros — Lima',
+      thesis: 'Candidato de Salvemos al Peru con un discurso de urgencia nacional y reforma institucional profunda desde la ciudadania.',
+      mechanism: 'Reforma de Estado de urgencia, combate a la corrupcion sistemica, reconstruccion institucional.',
+      importance: 'Candidato testimonial con discurso de crisis nacional en un campo muy fragmentado.',
+      question: 'Cuantos candidatos con discurso de salvacion nacional puede absorber el electorado sin que el mensaje pierda todo impacto?',
+      detail: 'Salvemos al Peru. Discurso de urgencia nacional.', weight: 4 },
+  ]
+
+  const CONNECTIONS = {
+    'Rafael Lopez Aliaga': [
+      ['Keiko Fujimori', 'Ambos lideran la derecha. Una alianza entre ellos en segunda vuelta seria determinante para el resultado final.'],
+      ['Roberto Chiabra', 'Ambos proponen mano dura y orden desde perspectivas distintas — uno empresarial, otro militar.'],
+      ['Carlos Álvarez', 'El crecimiento de Alvarez como outsider podria afectar el techo electoral de Lopez Aliaga en Lima.'],
+    ],
+    'Keiko Fujimori': [
+      ['Rafael Lopez Aliaga', 'Empatan tecnicamente en primer lugar. La competencia entre ellos divide el voto de derecha y complica la primera vuelta.'],
+      ['Jose Williams Zapata', 'Comparten el espacio de la derecha institucional y el voto anti-Castillo.'],
+      ['Vladimir Cerron', 'Sus candidaturas definen la polarizacion central de esta eleccion: derecha vs izquierda radical.'],
+    ],
+    'Carlos Álvarez': [
+      ['Wolfgang Grozo', 'Ambos outsiders que crecen capitalizando el descontento ciudadano con la clase politica tradicional.'],
+      ['Alfonso Lopez Chau', 'Ambos se presentan como ajenos a la politica tradicional, aunque con perfiles muy distintos (humorista vs tecnocrata).'],
+    ],
+    'Alfonso Lopez Chau': [
+      ['Jorge Nieto Montesinos', 'Ambos candidatos tecnicos de centro que compiten por el mismo electorado anticorrupcion.'],
+      ['Wolfgang Grozo', 'Los tres compiten por el voto anticorrupcion de centro. Podrian canibalizarse entre si.'],
+    ],
+    'Roberto Sanchez': [
+      ['Vladimir Cerron', 'Compiten por el voto de izquierda. Sanchez busca separarse del legado de Cerron y Castillo.'],
+      ['Fiorella Molinelli', 'Ambos de izquierda moderada. Sus candidaturas dividen ese espacio electoral.'],
+    ],
+    'Vladimir Cerron': [
+      ['Roberto Sanchez', 'Fundador del partido que llevo a Castillo al poder. Sanchez debe diferenciarse de este legado para crecer.'],
+      ['Keiko Fujimori', 'Su candidatura activa el voto anti-izquierda que beneficia directamente a Fujimori y Lopez Aliaga.'],
+    ],
+    'Cesar Acuna': [
+      ['George Forsyth', 'Ambos de centro-derecha compiten por el voto de gestion y pragmatismo regional.'],
+      ['Jose Williams Zapata', 'Potenciales aliados en una coalicion de centroderecha para segunda vuelta.'],
+    ],
+    'Jorge Nieto Montesinos': [
+      ['Alfonso Lopez Chau', 'Ambos candidatos tecnicos de centro anticorrupcion que se canibalizan mutuamente.'],
+      ['Ricardo Belmont', 'Dos candidatos de centro con propuestas distintas que compiten por el mismo espacio de centro moderado.'],
+    ],
+  }
+
+  let currentCategories = CATEGORIES
+  let currentChapters = [...CHAPTERS]
+  let currentConnections = CONNECTIONS
+  let frozenRows = []
+  const treemapEl = document.getElementById('treemap')
+  const hudBlocks = document.getElementById('hud-blocks')
+  const hudLayouts = document.getElementById('hud-layouts')
+  const hudTime = document.getElementById('hud-time')
+  const legendBar = document.getElementById('legend-bar')
+  const infoPanel = document.getElementById('info-panel')
+  const docPanel = document.getElementById('doc-panel')
+  const docTextarea = document.getElementById('doc-textarea')
+  const docStatus = document.getElementById('doc-status')
+  const docFile = document.getElementById('doc-file')
+  const chapterPanel = document.getElementById('chapter-panel')
+  const chapterKicker = document.getElementById('chapter-kicker')
+  const chapterTitle = document.getElementById('chapter-title')
+  const chapterMeta = document.getElementById('chapter-meta')
+  const chapterThesis = document.getElementById('chapter-thesis')
+  const chapterMechanism = document.getElementById('chapter-mechanism')
+  const chapterImportance = document.getElementById('chapter-importance')
+  const chapterQuestion = document.getElementById('chapter-question')
+  const chapterRelated = document.getElementById('chapter-related')
+  let selectedBlock = null
+  let mouseX = -9999, mouseY = -9999
+  const CURSOR_RADIUS = 220
+  const EXPAND_FACTOR = 3.0
+  const LERP = 0.16
+  const DETAIL_FONT = '8px Inter'
+  const LH = 11
+  let blocks = []
+  let activeCat = null
+
+  function closePanels() {
+    chapterPanel.classList.remove('visible')
+    docPanel.classList.remove('visible')
+    selectedBlock = null
+  }
+
+  function uniqueWords(text, count = 4) {
+    const stop = new Set(['de','la','el','y','en','que','los','las','del','por','para','con','una','un','como','se','es','al','lo','su','sus','más','mas'])
+    const words = text
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .match(/[a-z0-9]{4,}/g) || []
+    const scores = new Map()
+    for (const word of words) {
+      if (stop.has(word)) continue
+      scores.set(word, (scores.get(word) || 0) + 1)
+    }
+    return [...scores.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, count)
+      .map(([word]) => word)
+  }
+
+  function sentenceCase(text) {
+    return text.replace(/\s+/g, ' ').trim()
+  }
+
+  function takeSentences(text, count = 1) {
+    const sentences = sentenceCase(text).match(/[^.!?]+[.!?]?/g) || []
+    return sentences.slice(0, count).join(' ').trim()
+  }
+
+  function firstMeaningfulLine(text) {
+    return (text.split('\n').map(line => line.trim()).find(line => line.length > 0) || '').trim()
+  }
+
+  function looksLikeHeading(line) {
+    if (!line) return false
+    if (line.length > 90) return false
+    if ((line.match(/[.:]/g) || []).length > 2) return false
+    return true
+  }
+
+  function splitIntoSections(rawText) {
+    const text = rawText.replace(/\r/g, '').trim()
+    const paragraphs = text.split(/\n\s*\n+/).map(p => sentenceCase(p)).filter(Boolean)
+    if (!paragraphs.length) return []
+
+    const sections = []
+    let current = null
+    for (const paragraph of paragraphs) {
+      const line = firstMeaningfulLine(paragraph)
+      if (looksLikeHeading(line) && paragraph.length < 180) {
+        if (current) sections.push(current)
+        current = { heading: line, body: '' }
+        continue
+      }
+      if (!current) current = { heading: '', body: '' }
+      current.body += (current.body ? '\n\n' : '') + paragraph
+    }
+    if (current) sections.push(current)
+
+    const filtered = sections.filter(section => section.body.trim().length > 80)
+    if (filtered.length >= 4 && filtered.length <= 18) return filtered
+
+    const chunkSize = Math.max(1, Math.ceil(paragraphs.length / 12))
+    const chunked = []
+    for (let i = 0; i < paragraphs.length; i += chunkSize) {
+      chunked.push({
+        heading: '',
+        body: paragraphs.slice(i, i + chunkSize).join('\n\n'),
+      })
+    }
+    return chunked.slice(0, 16)
+  }
+
+  function buildGeneratedMap(rawText) {
+    const sections = splitIntoSections(rawText)
+    if (!sections.length) return null
+
+    const groupCount = Math.min(5, Math.max(3, Math.ceil(sections.length / 4)))
+    const categories = {}
+    GENERIC_CATEGORY_TEMPLATES.slice(0, groupCount).forEach((template, index) => {
+      categories[template.key] = { ...template, label: `Cluster ${index + 1}` }
+    })
+    const categoryKeys = Object.keys(categories)
+
+    const chapters = sections.map((section, index) => {
+      const body = sentenceCase(section.body)
+      const name = section.heading || `Section ${index + 1}`
+      const summary = takeSentences(body, 1) || body.slice(0, 120)
+      const keywords = uniqueWords(body, 4)
+      const ref = keywords.length ? keywords.join(' / ') : `section ${index + 1}`
+      const detail = takeSentences(body, 2).slice(0, 240)
+      const cat = categoryKeys[Math.min(categoryKeys.length - 1, Math.floor(index / Math.ceil(sections.length / categoryKeys.length)))]
+      const weight = Math.max(8, Math.min(22, Math.round(body.length / 220)))
+      return {
+        cat,
+        name: name.slice(0, 64),
+        val: summary.slice(0, 90),
+        ref: ref.slice(0, 60),
+        detail,
+        thesis: takeSentences(body, 1),
+        mechanism: takeSentences(body, 2),
+        importance: `This section matters because it frames ${keywords.slice(0, 2).join(' and ') || 'the core argument'} within the document.`,
+        question: `How does this section change your understanding of ${keywords[0] || 'the main argument'}?`,
+        weight,
+      }
+    })
+    return { categories, chapters, connections: {} }
+  }
+
+  async function extractPdfText(file) {
+    const arrayBuffer = await file.arrayBuffer()
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+    const pages = []
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber)
+      const content = await page.getTextContent()
+      const text = content.items
+        .map(item => ('str' in item ? item.str : ''))
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+      if (text) pages.push(text)
+    }
+    return pages.join('\n\n')
+  }
+
+  function rebuildMap() {
+    treemapEl.innerHTML = ''
+    legendBar.innerHTML = ''
+    blocks = []
+    activeCat = null
+    init()
+    frozenRows = buildRowStructure(blocks)
+    for (const b of blocks) b._w = b.marker.weight
+    const vw = window.innerWidth
+    const vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    const rects = layoutFromRows(frozenRows, { x: 0, y: 0, w: vw, h: vh })
+    for (const br of rects) {
+      br.item.rx = br.x
+      br.item.ry = br.y
+      br.item.rw = br.w
+      br.item.rh = br.h
+    }
+    hudBlocks.textContent = blocks.length
+  }
+
+  function calcWorst(row, shorter, rowArea) {
+    if (rowArea <= 0 || shorter <= 0) return Infinity
+    const strip = rowArea / shorter
+    const rowW = row.reduce((s, it) => s + (it.marker?.weight || it._w), 0)
+    let worst = 0
+    for (const it of row) {
+      const w = it.marker?.weight || it._w
+      const breadth = (rowArea * (w / rowW)) / strip
+      const r = Math.max(strip / breadth, breadth / strip)
+      if (r > worst) worst = r
+    }
+    return worst
+  }
+
+  function buildRowStructure(items) {
+    const sorted = [...items].sort((a, b) => b.marker.weight - a.marker.weight)
+    const totalWeight = sorted.reduce((s, it) => s + it.marker.weight, 0)
+    if (totalWeight <= 0) return []
+    const rows = []
+    let remaining = [...sorted]
+    let areaLeft = totalWeight
+    const vw = window.innerWidth
+    const vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    let w = vw, h = vh
+
+    while (remaining.length > 0) {
+      const shorter = Math.min(w, h)
+      let row = [remaining[0]]
+      let bestWorst = calcWorst(row, shorter, row[0].marker.weight / areaLeft * w * h)
+      let i = 1
+      while (i < remaining.length) {
+        const test = [...row, remaining[i]]
+        const testArea = test.reduce((s, it) => s + it.marker.weight, 0) / areaLeft * w * h
+        const testWorst = calcWorst(test, shorter, testArea)
+        if (testWorst <= bestWorst) { row = test; bestWorst = testWorst; i++ }
+        else break
+      }
+      const rowWeight = row.reduce((s, it) => s + it.marker.weight, 0)
+      const rowFrac = rowWeight / areaLeft
+      const horiz = w >= h
+      rows.push({ items: row, direction: horiz ? 'h' : 'v' })
+      if (horiz) w -= w * rowFrac
+      else h -= h * rowFrac
+      areaLeft -= rowWeight
+      remaining = remaining.slice(row.length)
+    }
+    return rows
+  }
+
+  function layoutFromRows(rows, rect) {
+    const results = []
+    let { x, y, w, h } = rect
+    const totalWeight = rows.reduce((s, row) => s + row.items.reduce((s2, b) => s2 + b._w, 0), 0)
+    if (totalWeight <= 0) return results
+    let weightLeft = totalWeight
+
+    for (const row of rows) {
+      const rowWeight = row.items.reduce((s, b) => s + b._w, 0)
+      const rowFrac = rowWeight / weightLeft
+      if (row.direction === 'h') {
+        const rw = w * rowFrac
+        let yy = y
+        for (const b of row.items) {
+          const ih = h * (b._w / rowWeight)
+          results.push({ item: b, x, y: yy, w: rw, h: ih })
+          yy += ih
+        }
+        x += rw; w -= rw
+      } else {
+        const rh = h * rowFrac
+        let xx = x
+        for (const b of row.items) {
+          const iw = w * (b._w / rowWeight)
+          results.push({ item: b, x: xx, y, w: iw, h: rh })
+          xx += iw
+        }
+        y += rh; h -= rh
+      }
+      weightLeft -= rowWeight
+    }
+    return results
+  }
+
+  function updateLegendActive() {
+    legendBar.querySelectorAll('.legend-item').forEach(el => {
+      el.classList.toggle('active', el.dataset.cat === activeCat)
+    })
+  }
+
+  function init() {
+    for (const [key, cat] of Object.entries(currentCategories)) {
+      const item = document.createElement('div')
+      item.className = 'legend-item'
+      item.dataset.cat = key
+      item.innerHTML = `<span class="dot" style="background:${cat.accent}"></span><span class="lbl">${cat.label}</span>`
+      const isTouch = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      item.addEventListener('mouseenter', () => { if (!isTouch()) { activeCat = key; updateLegendActive() } })
+      item.addEventListener('mouseleave', () => { if (!isTouch()) { activeCat = null; updateLegendActive() } })
+      item.addEventListener('click', e => {
+        e.preventDefault()
+        activeCat = activeCat === key ? null : key
+        updateLegendActive()
+      })
+      legendBar.appendChild(item)
+    }
+
+    blocks = currentChapters.map(marker => {
+      const cat = currentCategories[marker.cat]
+      const el = document.createElement('div')
+      el.className = 'block'
+      el.dataset.cat = marker.cat
+      el.style.backgroundColor = cat.bg
+      el.style.color = cat.fg
+      const id = marker.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 18)
+      el.innerHTML = `
+        <div class="block-inner">
+          <div class="block-head">
+            <div class="term-toolbar">
+              <div class="term-meta">
+                <div class="term-id">${id}</div>
+              </div>
+              <div class="term-status">${cat.label}</div>
+            </div>
+          </div>
+          <div class="block-body">
+            <div class="block-title-inline">${marker.name}</div>
+            <div class="term-line">
+              <div class="term-prompt">&gt;</div>
+              <div class="term-text block-value">${marker.val}</div>
+            </div>
+            <div class="term-line">
+              <div class="term-prompt"></div>
+              <div class="term-text block-detail">${marker.detail}</div>
+            </div>
+          </div>
+          <div class="block-foot">
+            <div class="term-footer">
+              <div class="term-prompt">#</div>
+              <div class="block-ref">${marker.ref}</div>
+            </div>
+          </div>
+        </div>
+      `
+      treemapEl.appendChild(el)
+      const fullText = `${marker.name} ${marker.val} ${marker.ref} ${marker.detail}`
+      return {
+        marker, el, prepared: prepare(fullText, DETAIL_FONT), cat,
+        _w: marker.weight, targetWeight: marker.weight,
+        rx: 0, ry: 0, rw: 100, rh: 100,
+        currentOpacity: 1, _els: null, _tier: -1, _pop: -1,
+      }
+    })
+    hudBlocks.textContent = blocks.length
+  }
+
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY })
+  document.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999 })
+
+  let touchTimer = null
+  document.addEventListener('touchstart', e => {
+    if (infoPanel.classList.contains('visible')) return
+    if (e.target.closest('.legend-bar') || e.target.closest('.about-btn') || e.target.closest('.info-panel')) return
+    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY
+    clearTimeout(touchTimer)
+  }, { passive: true })
+  document.addEventListener('touchmove', e => {
+    if (infoPanel.classList.contains('visible')) return
+    if (e.target.closest('.legend-bar')) return
+    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY
+    e.preventDefault()
+  }, { passive: false })
+  document.addEventListener('touchend', () => {
+    clearTimeout(touchTimer)
+    touchTimer = setTimeout(() => { mouseX = -9999; mouseY = -9999 }, 800)
+  })
+
+  document.getElementById('about-btn').addEventListener('click', () => {
+    infoPanel.classList.add('visible'); infoPanel.scrollTop = 0
+  })
+  document.getElementById('load-btn').addEventListener('click', () => {
+    docPanel.classList.add('visible')
+  })
+  document.getElementById('info-close').addEventListener('click', e => {
+    e.stopPropagation(); infoPanel.classList.remove('visible')
+  })
+  document.getElementById('doc-panel-close').addEventListener('click', e => {
+    e.stopPropagation()
+    docPanel.classList.remove('visible')
+  })
+  document.getElementById('chapter-panel-close').addEventListener('click', e => {
+    e.stopPropagation()
+    chapterPanel.classList.remove('visible')
+    selectedBlock = null
+  })
+
+  function openChapterPanel(block) {
+    selectedBlock = block
+    chapterPanel.classList.add('visible')
+    chapterKicker.textContent = `${CATEGORIES[block.marker.cat].label} · ${block.marker.val}`
+    chapterTitle.textContent = block.marker.name
+    chapterMeta.textContent = block.marker.ref
+    chapterThesis.textContent = block.marker.thesis
+    chapterMechanism.textContent = block.marker.mechanism
+    chapterImportance.textContent = block.marker.importance
+    chapterQuestion.textContent = block.marker.question
+    chapterRelated.innerHTML = ''
+    ;(currentConnections[block.marker.name] || []).forEach(([label, why]) => {
+      const item = document.createElement('div')
+      item.className = 'related-item'
+      item.innerHTML = `<strong>${label}</strong>${why}`
+      chapterRelated.appendChild(item)
+    })
+  }
+
+  function loadSample() {
+    currentCategories = CATEGORIES
+    currentChapters = [...CHAPTERS]
+    currentConnections = CONNECTIONS
+    docStatus.textContent = 'Loaded sample map.'
+    rebuildMap()
+    docPanel.classList.remove('visible')
+  }
+
+  function generateFromInput() {
+    const raw = docTextarea.value.trim()
+    if (!raw) {
+      docStatus.textContent = 'Paste text first.'
+      return
+    }
+    docStatus.textContent = 'Parsing text and generating map...'
+    const generated = buildGeneratedMap(raw)
+    if (!generated) {
+      docStatus.textContent = 'Could not generate a map from that text.'
+      return
+    }
+    currentCategories = generated.categories
+    currentChapters = generated.chapters
+    currentConnections = generated.connections
+    rebuildMap()
+    docStatus.textContent = `Generated ${generated.chapters.length} blocks.`
+    docPanel.classList.remove('visible')
+  }
+
+  docFile.addEventListener('change', async e => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      if (file.name.toLowerCase().endsWith('.pdf')) {
+        docStatus.textContent = `Extracting text from ${file.name}...`
+        const text = await extractPdfText(file)
+        if (!text.trim()) {
+          docStatus.textContent = 'No selectable text found in PDF.'
+          return
+        }
+        docTextarea.value = text
+        docStatus.textContent = `Loaded ${file.name}. Ready to generate.`
+        return
+      }
+      const text = await file.text()
+      if (file.name.endsWith('.json')) {
+        const parsed = JSON.parse(text)
+        if (parsed.chapters && parsed.categories) {
+          currentCategories = parsed.categories
+          currentChapters = parsed.chapters
+          currentConnections = parsed.connections || {}
+          rebuildMap()
+          docStatus.textContent = `Loaded ${file.name}.`
+          docPanel.classList.remove('visible')
+          return
+        }
+      }
+      docTextarea.value = text
+      docStatus.textContent = `Loaded ${file.name}. Ready to generate.`
+    } catch (err) {
+      docStatus.textContent = 'Could not read file.'
+    }
+  })
+
+  document.getElementById('load-sample-btn').addEventListener('click', loadSample)
+  document.getElementById('generate-btn').addEventListener('click', generateFromInput)
+
+  function lerpColor(a, b, t) {
+    const ar = parseInt(a.slice(1,3),16), ag = parseInt(a.slice(3,5),16), ab = parseInt(a.slice(5,7),16)
+    const br = parseInt(b.slice(1,3),16), bg = parseInt(b.slice(3,5),16), bb = parseInt(b.slice(5,7),16)
+    return `rgb(${Math.round(ar+(br-ar)*t)},${Math.round(ag+(bg-ag)*t)},${Math.round(ab+(bb-ab)*t)})`
+  }
+
+  function tick() {
+    const vw = window.innerWidth
+    const vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    let layoutCalls = 0
+    const t0 = performance.now()
+
+    for (const b of blocks) {
+      let expand = 1
+      const cx = b.rx + b.rw / 2, cy = b.ry + b.rh / 2
+      const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2)
+      if (dist < CURSOR_RADIUS) {
+        const force = 1 - dist / CURSOR_RADIUS
+        expand = 1 + force * force * EXPAND_FACTOR
+      }
+      if (activeCat !== null) {
+        if (b.marker.cat === activeCat) expand = Math.max(expand, 2.5)
+        else expand = Math.min(expand, 0.5)
+      }
+      b.targetWeight = b.marker.weight * expand
+      b._w += (b.targetWeight - b._w) * LERP
+      const targetOpacity = activeCat !== null ? (b.marker.cat === activeCat ? 1 : 0.15) : 1
+      b.currentOpacity += (targetOpacity - b.currentOpacity) * 0.15
+    }
+
+    const rects = layoutFromRows(frozenRows, { x: 0, y: 0, w: vw, h: vh })
+    for (const br of rects) {
+      const b = br.item
+      b.rx += (br.x - b.rx) * LERP
+      b.ry += (br.y - b.ry) * LERP
+      b.rw += (br.w - b.rw) * LERP
+      b.rh += (br.h - b.rh) * LERP
+
+      const rx = Math.round(b.rx * 10) / 10
+      const ry = Math.round(b.ry * 10) / 10
+      const rw = Math.round(b.rw)
+      const rh = Math.round(b.rh)
+      b.el.style.transform = `translate(${rx}px,${ry}px)`
+      b.el.style.width = rw + 'px'
+      b.el.style.height = rh + 'px'
+
+      const opi = Math.round(b.currentOpacity * 100)
+      if (b._pop !== opi) { b.el.style.opacity = b.currentOpacity; b._pop = opi }
+
+      const dist = Math.sqrt((mouseX - (b.rx + b.rw / 2)) ** 2 + (mouseY - (b.ry + b.rh / 2)) ** 2)
+      const intensity = dist < CURSOR_RADIUS ? (1 - dist / CURSOR_RADIUS) : 0
+      const hoverLevel = Math.round(intensity * 5)
+      if (b._hoverLevel !== hoverLevel) {
+        if (hoverLevel > 0) {
+          const f = hoverLevel / 5
+          b.el.style.backgroundColor = lerpColor(b.cat.bg, b.cat.bgHover, f)
+          b.el.style.boxShadow = `0 ${Math.round(f * 6)}px ${Math.round(f * 20)}px rgba(0,0,0,${(f * 0.15).toFixed(2)})`
+          b.el.style.zIndex = 10 + Math.round(f * 10)
+        } else {
+          b.el.style.backgroundColor = b.cat.bg
+          b.el.style.boxShadow = ''
+          b.el.style.zIndex = '0'
+        }
+        b._hoverLevel = hoverLevel
+      }
+      b.el.style.outline = ''
+      b.el.style.outlineOffset = ''
+
+      const availW = Math.max(20, rw - 12)
+      layout(b.prepared, availW, LH)
+      layoutCalls++
+      const area = rw * rh
+      let tier = 0
+      if (area >= 18000) tier = 4
+      else if (area >= 7000) tier = 3
+      else if (area >= 2500) tier = 2
+      else if (area >= 600) tier = 1
+
+      if (!b._els) {
+        b._els = {
+          title: b.el.querySelector('.block-title-inline'),
+          value: b.el.querySelector('.block-value'),
+          detail: b.el.querySelector('.block-detail'),
+          ref: b.el.querySelector('.block-ref'),
+        }
+        b.el.addEventListener('click', () => openChapterPanel(b))
+      }
+
+      const { title, value, detail, ref } = b._els
+      if (b._tier !== tier || tier === 4) {
+        if (tier === 0) {
+          title.style.display = 'none'; value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
+        } else if (tier === 1) {
+          title.style.display = 'none'
+          value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
+        } else if (tier === 2) {
+          title.style.display = 'none'
+          value.style.display = ''; value.style.fontSize = '10px'
+          detail.style.display = 'none'; ref.style.display = ''; ref.style.fontSize = '7px'
+        } else if (tier === 3) {
+          title.style.display = ''; title.style.fontSize = '7px'
+          value.style.display = ''; value.style.fontSize = '13px'
+          detail.style.display = ''; detail.style.fontSize = '7.4px'; detail.style.maxHeight = Math.max(0, rh - 40) + 'px'; ref.style.display = ''
+        } else {
+          title.style.display = ''; title.style.fontSize = Math.min(8, 7 + area / 32000) + 'px'
+          value.style.display = ''; value.style.fontSize = Math.min(18, 11 + area / 7500) + 'px'
+          detail.style.display = ''; detail.style.fontSize = Math.min(10.4, 7.6 + area / 24000) + 'px'
+          detail.style.maxHeight = Math.max(0, rh - 42) + 'px'
+          ref.style.display = ''
+        }
+        b._tier = tier
+      }
+    }
+
+    hudLayouts.textContent = layoutCalls
+    hudTime.textContent = (performance.now() - t0).toFixed(2)
+    requestAnimationFrame(tick)
+  }
+
+  document.fonts.ready.then(() => {
+    init()
+    frozenRows = buildRowStructure(blocks)
+    for (const b of blocks) b._w = b.marker.weight
+    const vw = window.innerWidth, vh = window.innerHeight - legendBar.getBoundingClientRect().height
+    const rects = layoutFromRows(frozenRows, { x: 0, y: 0, w: vw, h: vh })
+    for (const br of rects) {
+      br.item.rx = br.x; br.item.ry = br.y
+      br.item.rw = br.w; br.item.rh = br.h
+    }
+    requestAnimationFrame(tick)
+  })
+
+  let resizeTimer
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer)
+    resizeTimer = setTimeout(() => {
+      frozenRows = buildRowStructure(blocks)
+      for (const b of blocks) b._w = b.marker.weight
+    }, 150)
+  })
+</script>
+</body>
+</html>
