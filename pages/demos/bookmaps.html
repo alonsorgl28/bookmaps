@@ -157,11 +157,12 @@
   }
   .block-title-inline {
     display: none;
-    font-size: 7px;
-    line-height: 1.25;
-    letter-spacing: 0.14em;
+    font-size: 9px;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    opacity: 0.72;
+    font-weight: 700;
+    opacity: 0.95;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -194,7 +195,7 @@
     text-transform: uppercase;
   }
   .block-detail {
-    font-weight: 500;
+    font-weight: 112;
     font-size: 8px;
     line-height: 1.42;
     margin-top: 6px;
@@ -214,7 +215,7 @@
     min-width: 0;
   }
   .block-ref {
-    font-weight: 600;
+    font-weight: 122;
     font-size: 7px;
     line-height: 1.35;
     margin-top: 0;
@@ -257,7 +258,7 @@
     justify-content: center;
     gap: 5px;
     font-size: 9px;
-    font-weight: 600;
+    font-weight: 122;
     color: rgba(18,18,18,0.52);
     letter-spacing: 0.02em;
     cursor: pointer;
@@ -305,7 +306,7 @@
     border: 1px solid rgba(18,18,18,0.10);
     color: rgba(18,18,18,0.54);
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 112;
     cursor: pointer;
     font-family: 'IBM Plex Mono', 'SF Mono', monospace;
     transition: all 0.2s ease;
@@ -337,7 +338,7 @@
     border: 1px solid rgba(18,18,18,0.10);
     color: rgba(18,18,18,0.54);
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 112;
     cursor: pointer;
     font-family: 'IBM Plex Mono', 'SF Mono', monospace;
     transition: all 0.2s ease;
@@ -798,35 +799,35 @@
       mechanism: 'Fusion de Ministerios de Interior y Defensa para sumar 300,000 efectivos. Expulsar migrantes ilegales. Pena de muerte. Salir de la Corte IDH. Cambiar la capital a Junin.',
       importance: 'Lider en Polymarket con 33%. Empata tecnicamente con Keiko en encuestas. Base fuerte en Lima y sectores conservadores urbanos con alta movilizacion.',
       question: 'Sus propuestas mas extremas — pena de muerte, cambio de capital, fusion de ministerios — son un programa de gobierno real o retorica electoral para movilizar su base?',
-      detail: 'Exalcalde de Lima. Ultraconservador. Lider en Polymarket (33%).', weight: 330 },
+      detail: 'Exalcalde de Lima. Ultraconservador. Lider en Polymarket (33%).', weight: 48 },
 
     { cat: 'derecha', name: 'Keiko Fujimori', val: 'Fuerza Popular', ref: 'Derecha — Lima',
       thesis: 'Hija del ex-presidente Alberto Fujimori. Lleva tres campanas presidenciales (2011, 2016, 2021) sin ganar. Tiene la base electoral mas solida y organizada del pais.',
       mechanism: 'Seguridad ciudadana con mano dura, atraccion de inversion privada, fortalecimiento de las Fuerzas Armadas y reconstruccion del tejido institucional.',
       importance: 'Segunda en Polymarket (18%). Maquinaria territorial extensa y voto fiel que la convierten en favorita para segunda vuelta. Su resultado definitivo depende de si su base se consolida.',
       question: 'Puede superar el peso de las investigaciones por lavado de activos y la herencia ambivalente del fujimorismo para ganar por primera vez la presidencia?',
-      detail: 'Tres veces candidata. Segunda en Polymarket (18%). Base electoral fiel.', weight: 180 },
+      detail: 'Tres veces candidata. Segunda en Polymarket (18%). Base electoral fiel.', weight: 41 },
 
     { cat: 'derecha', name: 'Jose Williams Zapata', val: 'Avanza Pais', ref: 'Derecha — Lima',
       thesis: 'Excomandante general del Ejercito. Excongresista que presidio el Congreso que vaco a Pedro Castillo. Figura clave de la derecha institucional peruana.',
       mechanism: 'Orden y seguridad desde enfoque militar. Fortalecimiento de las FFAA. Reforma del sistema de justicia. Mano dura contra el crimen organizado transnacional.',
       importance: 'Su perfil militar y su rol en la vacancia de Castillo le dan reconocimiento en sectores conservadores, aunque no despega en encuestas ni en Polymarket.',
       question: 'Su imagen ligada a la vacancia y al bloque conservador del Congreso lo beneficia o lo limita electoralmente ante votantes de centro?',
-      detail: 'Exjefe del Ejercito. Presidio el Congreso que vaco a Castillo.', weight: 4 },
+      detail: 'Exjefe del Ejercito. Presidio el Congreso que vaco a Castillo.', weight: 16 },
 
     { cat: 'derecha', name: 'Roberto Chiabra', val: 'Unidad Nacional', ref: 'Derecha — Lima',
       thesis: 'General (r) del Ejercito y exparlamentario. Candidato de la coalicion Unidad Nacional. Propone orden y seguridad desde una vision castrense moderada.',
       mechanism: 'Cerrar fronteras para frenar migracion ilegal, reforma radical del poder judicial, fortalecer inteligencia del Estado y combate al crimen transnacional.',
       importance: 'Voz de sectores de derecha moderada que priorizan seguridad institucional sobre propuestas reformistas.',
       question: 'Puede un candidato con perfil militar diferenciarse de Lopez Aliaga en el mismo espacio ideologico sin quedar opacado?',
-      detail: 'General retirado. Propone cerrar fronteras y reforma judicial.', weight: 4 },
+      detail: 'General retirado. Propone cerrar fronteras y reforma judicial.', weight: 16 },
 
     { cat: 'derecha', name: 'Alvaro Paz de la Barra', val: 'Fe en el Peru', ref: 'Derecha — Lima',
       thesis: 'Exalcalde del distrito de La Molina. Candidato de un partido menor que apuesta por valores tradicionales, familia cristiana y libre mercado.',
       mechanism: 'Seguridad, familia, valores cristianos, libre mercado, reduccion del Estado y eliminacion de burocracia.',
       importance: 'Candidato con base electoral pequena pero activa en sectores conservadores de Lima clasemedia.',
       question: 'Puede un candidato sin caudal propio competir en el espacio electoral que ya ocupan Keiko y Lopez Aliaga?',
-      detail: 'Exalcalde de La Molina. Derecha conservadora y libre mercado.', weight: 4 },
+      detail: 'Exalcalde de La Molina. Derecha conservadora y libre mercado.', weight: 16 },
 
     // CENTRO-DERECHA
     { cat: 'centroderecha', name: 'Cesar Acuna', val: 'Alianza para el Progreso', ref: 'Centro-derecha — La Libertad',
@@ -834,28 +835,28 @@
       mechanism: 'Plan de choque contra el crimen: Comando Nacional contra Extorsion, Centro de Inteligencia anticriminal, incorporacion de rondas campesinas, inversion en tecnologia policial.',
       importance: 'Solo 0.9% en Polymarket pese a ser conocido a nivel nacional. Su partido domina varias regiones del norte — su fuerza real esta en el Congreso, no en la presidencia.',
       question: 'Puede superar el escandalo del Acunavideo y la imagen de candidato que compra votos con dadivas para construir credibilidad presidencial?',
-      detail: 'Empresario nortenio. Gran maquinaria regional. Bajo en Polymarket.', weight: 9 },
+      detail: 'Empresario nortenio. Gran maquinaria regional. Bajo en Polymarket.', weight: 19 },
 
     { cat: 'centroderecha', name: 'George Forsyth', val: 'Somos Peru', ref: 'Centro-derecha — Lima',
       thesis: 'Exarquero de la seleccion peruana y exalcalde de La Victoria. Fue sorpresa en las encuestas de 2021. Vuelve con Somos Peru con imagen de gestor joven.',
       mechanism: 'Seguridad ciudadana basada en la experiencia de La Victoria. Inversion en infraestructura. Modernizacion del Estado con enfoque gerencial.',
       importance: '0.6% en Polymarket. Ha perdido impulso desde 2021 pero mantiene simpatia en Lima por su perfil joven y su gestion en La Victoria.',
       question: 'Puede reconvertir su imagen de exfutbolista-alcalde en una propuesta presidencial creible sin partido solido ni maquinaria territorial?',
-      detail: 'Exarquero y exalcalde. Perfil joven y gestor. 0.6% Polymarket.', weight: 6 },
+      detail: 'Exarquero y exalcalde. Perfil joven y gestor. 0.6% Polymarket.', weight: 17 },
 
     { cat: 'centroderecha', name: 'Jose Luna Galvez', val: 'Podemos Peru', ref: 'Centro-derecha — Lima',
       thesis: 'Empresario y fundador de Podemos Peru. Exsenador. Ha estado bajo la lupa por vinculos cuestionados con magistrados del poder judicial.',
       mechanism: 'Reforma genuina del sistema de pensiones, retiros de AFP, reduccion del costo de vida, apoyo a la pequena empresa.',
       importance: 'Su partido tiene presencia en Lima y regiones pero su imagen esta deteriorada por escandalo judicial.',
       question: 'Los vinculos de Podemos Peru con cuestionados magistrados del Tribunal Constitucional lo inhabilitan ante el electorado?',
-      detail: 'Fundador de Podemos Peru. Controversial. Reforma de pensiones.', weight: 4 },
+      detail: 'Fundador de Podemos Peru. Controversial. Reforma de pensiones.', weight: 16 },
 
     { cat: 'centroderecha', name: 'Mesías Guevara', val: 'Partido Morado', ref: 'Centro-derecha — Cajamarca',
       thesis: 'Exgobernador regional de Cajamarca. Candidato del Partido Morado (fundado por Julio Guzman). Perfil regional con base en el norte del pais.',
       mechanism: 'Descentralizacion, fortalecimiento de gobiernos regionales, gestion territorial, orden y gobernabilidad desde las regiones.',
       importance: '0.7% en Polymarket. Su base esta en Cajamarca. El Partido Morado busca recuperar el espacio que tuvo en 2021 con Guzman.',
       question: 'Puede el Partido Morado reconstruir su base electoral fuera de Lima con un candidato regional como Guevara?',
-      detail: 'Exgobernador de Cajamarca. Partido Morado busca recuperar espacio.', weight: 7 },
+      detail: 'Exgobernador de Cajamarca. Partido Morado busca recuperar espacio.', weight: 18 },
 
     // CENTRO
     { cat: 'centro', name: 'Alfonso Lopez Chau', val: 'Ahora Nacion', ref: 'Centro — Lima',
@@ -863,91 +864,91 @@
       mechanism: 'Reforma integral del sistema de justicia, lucha anticorrupcion desde el Estado, formalizacion economica y tributaria, modernizacion de la administracion publica.',
       importance: 'Cuarto en Polymarket (11.1%). Atrae votantes hartos de la corrupcion que buscan un candidato limpio con experiencia tecnica y sin pasado politico cuestionado.',
       question: 'Puede un candidato con perfil de tecnocrata moral y sin maquinaria partidaria construir la coalicion que le de la presidencia en primera vuelta?',
-      detail: 'Ex-superintendente SUNAT. Discurso moral-tecnico. 11.1% Polymarket.', weight: 111 },
+      detail: 'Ex-superintendente SUNAT. Discurso moral-tecnico. 11.1% Polymarket.', weight: 36 },
 
     { cat: 'centro', name: 'Jorge Nieto Montesinos', val: 'Partido del Buen Gobierno', ref: 'Centro — Lima',
       thesis: 'Exministro de Defensa y Relaciones Exteriores. Politologo, diplomatico y analista. Representa la tecnocracia moderada con solida experiencia de Estado.',
       mechanism: 'Reforma profunda del Estado, fortalecimiento institucional, lucha anticorrupcion estructural, politica exterior activa y multilateral.',
       importance: 'Sexto en Polymarket (7%). Atrae votantes de centro que buscan experiencia de gobierno sin extremismos ni pasado controversial.',
       question: 'Puede un candidato con perfil de tecnocrata institucional generar la adhesion emocional que requiere una campana presidencial masiva?',
-      detail: 'Excanciller y exministro de Defensa. Tecnocrata moderado. 7% Polymarket.', weight: 70 },
+      detail: 'Excanciller y exministro de Defensa. Tecnocrata moderado. 7% Polymarket.', weight: 32 },
 
     { cat: 'centro', name: 'Ricardo Belmont', val: 'Partido Civico Obras', ref: 'Centro — Lima',
       thesis: 'Exalcalde de Lima (1989-1998). Empresario mediatico historico. Vuelve a la politica con una propuesta radical: federalizar el Peru.',
       mechanism: 'Federalizacion del pais con regiones autonomas, grandes obras de infraestructura, descentralizacion radical del poder y el presupuesto.',
       importance: 'Septimo en Polymarket (1.5%). Reconocimiento por su historica gestion en Lima. Atrae votantes con nostalgia de obras y gestion ejecutiva.',
       question: 'Es la federalizacion una propuesta tecnicamente viable o un slogan de campana sin sustento institucional serio?',
-      detail: 'Exalcalde historico de Lima. Propone federalizar el Peru. 1.5% Polymarket.', weight: 15 },
+      detail: 'Exalcalde historico de Lima. Propone federalizar el Peru. 1.5% Polymarket.', weight: 22 },
 
     { cat: 'centro', name: 'Wolfgang Grozo', val: 'Integridad Democratica', ref: 'Centro — Lima',
       thesis: 'Candidato outsider que ha crecido sostenidamente en encuestas. Perfil anti-establishment con discurso de integridad y transparencia radical.',
       mechanism: 'Lucha contra la mineria ilegal, reforma profunda del sistema de justicia, transparencia radical en el gasto publico, combate anticorrupcion sistemico.',
       importance: '0.9% en Polymarket pero subiendo consistentemente en encuestas tradicionales. Fenomeno de redes sociales. La sorpresa de la campana.',
       question: 'Es un candidato con propuesta sustantiva y equipo de gobierno real o solo captura el voto de protesta sin proyecto viable?',
-      detail: 'Outsider en ascenso. Integridad y reforma. Crece en encuestas.', weight: 9 },
+      detail: 'Outsider en ascenso. Integridad y reforma. Crece en encuestas.', weight: 19 },
 
     { cat: 'centro', name: 'Fernando Olivera', val: 'Frente de la Esperanza 2021', ref: 'Centro — Lima',
       thesis: 'Exfiscal y politico con tres decadas de trayectoria. Fue protagonista de las investigaciones contra Vladimiro Montesinos y el fujimorismo en los anos 90.',
       mechanism: 'Reforma del sistema de justicia, recuperacion de activos del Estado, lucha anticorrupcion con base legal, fortalecimiento del Ministerio Publico.',
       importance: '2% en encuestas. Apela a votantes que valoran trayectoria anticorrupcion historica.',
       question: 'Puede una figura historica del pasado politico conectar con un electorado joven y hastiado de la clase politica tradicional?',
-      detail: 'Exfiscal anticorrupcion historico. Trayectoria de los anos 90.', weight: 22 },
+      detail: 'Exfiscal anticorrupcion historico. Trayectoria de los anos 90.', weight: 24 },
 
     { cat: 'centro', name: 'Marisol Perez Tello', val: 'Primero la Gente', ref: 'Centro — Lima',
       thesis: 'Exministra de Justicia en el gobierno de PPK. Abogada y politica de centro con trayectoria en derechos humanos y justicia constitucional.',
       mechanism: 'Reforma del sistema penitenciario, fortalecimiento de derechos ciudadanos, gobernabilidad democratica, seguridad con enfoque de derechos.',
       importance: '0.7% en Polymarket. Intenta llenar el espacio del centro liberal con propuestas institucionales.',
       question: 'Puede una candidata de perfil tecnico-institucional diferenciarse en un espacio donde compiten varios candidatos de centro?',
-      detail: 'Exministra de Justicia. Centro liberal. Derechos y gobernabilidad.', weight: 7 },
+      detail: 'Exministra de Justicia. Centro liberal. Derechos y gobernabilidad.', weight: 18 },
 
     { cat: 'centro', name: 'Yonhy Lescano', val: 'Cooperacion Popular', ref: 'Centro — Apurimac',
       thesis: 'Excongresista de Accion Popular por decadas. Candidato que obtuvo el 9% en primera vuelta en 2021. Ahora lidera su propia agrupacion politica.',
       mechanism: 'Reformas legislativas estructurales, fortalecimiento de la clase media, descentralizacion economica, lucha contra el monopolio del poder.',
       importance: '0.7% en Polymarket, muy lejos del 9% de 2021. El mercado lo descarta como factor presidencial esta vez.',
       question: 'Por que bajo tan drasticamente de 9% en 2021 a menos del 1% en Polymarket? Que cambio en el electorado o en el candidato?',
-      detail: 'Excongresista AP. Obtuvo 9% en 2021. Hoy 0.7% Polymarket.', weight: 7 },
+      detail: 'Excongresista AP. Obtuvo 9% en 2021. Hoy 0.7% Polymarket.', weight: 18 },
 
     { cat: 'centro', name: 'Mario Vizcarra', val: 'Peru Primero', ref: 'Centro — Moquegua',
       thesis: 'Hermano del ex-presidente Martin Vizcarra (destituido en 2020). Candidato que capitaliza el voto martinista. Ha prometido indultar a su hermano si gana.',
       mechanism: 'Continuidad del reformismo de Martin Vizcarra, lucha anticorrupcion, reforma del Congreso, indulto al expresidente.',
       importance: 'Menos del 0.5% en Polymarket. Su valor electoral reside principalmente en la lealtad al exmandatario, cuyo recuerdo es positivo para muchos peruanos.',
       question: 'Es viable presentarse como candidato cuya principal propuesta es el indulto de su hermano? Es eso suficiente para una campana presidencial?',
-      detail: 'Hermano del ex-presidente. Propone indultarlo si gana.', weight: 4 },
+      detail: 'Hermano del ex-presidente. Propone indultarlo si gana.', weight: 16 },
 
     { cat: 'centro', name: 'Rosario Fernandez', val: 'Un Camino Diferente', ref: 'Centro — Lima',
       thesis: 'Exministra de Justicia y expresidenta del Consejo de Ministros en el gobierno de Alan Garcia. Abogada y exfiscal con trayectoria en justicia.',
       mechanism: 'Reforma del sistema de justicia, institucionalidad democratica, gobernabilidad, propuestas de transparencia y Estado de derecho.',
       importance: 'Candidata con trayectoria pero bajo perfil en la campana actual. Representa el centro institucional alanista.',
       question: 'Puede una candidata con historia en el alanismo construir un proyecto propio creible para 2026 dado el desastre del segundo gobierno de Garcia?',
-      detail: 'Expresidenta del Consejo de Ministros de Garcia. Jurista.', weight: 4 },
+      detail: 'Expresidenta del Consejo de Ministros de Garcia. Jurista.', weight: 16 },
 
     { cat: 'centro', name: 'Rafael Belaunde', val: 'Libertad Popular', ref: 'Centro — Lima',
       thesis: 'Candidato de centro con propuesta de liberalismo social moderado. Hereda tradiciones de la democracia cristiana y el reformismo historico peruano.',
       mechanism: 'Liberalismo social moderado, reformas institucionales, Estado de derecho, dialogo politico como herramienta de gobierno.',
       importance: 'Candidato de bajo perfil mediatico que representa tradiciones politicas en declive en el Peru actual.',
       question: 'Tienen aun vigencia los partidos historicos peruanos en un escenario electoral fragmentado y dominado por outsiders?',
-      detail: 'Liberalismo social historico. Tradiciones politicas en declive.', weight: 4 },
+      detail: 'Liberalismo social historico. Tradiciones politicas en declive.', weight: 16 },
 
     { cat: 'centro', name: 'Enrique Valderrama', val: 'Partido Aprista Peruano', ref: 'Centro — Lima',
       thesis: 'Candidato presidencial del historico APRA, fundado por Victor Raul Haya de la Torre. El partido mas antiguo del Peru enfrenta su peor momento electoral.',
       mechanism: 'Propuestas apristas de centro-izquierda historica: Estado de bienestar, industrializacion, integracion latinoamericana.',
       importance: 'El APRA fue la fuerza politica mas importante del siglo XX peruano. Hoy esta en minimos historicos. Esta eleccion medira su resiliencia institucional.',
       question: 'Puede el APRA sobrevivir como fuerza electoral relevante tras el desastre del segundo gobierno de Alan Garcia y el suicidio del lider?',
-      detail: 'Candidato del historico APRA. El partido mas antiguo del Peru.', weight: 4 },
+      detail: 'Candidato del historico APRA. El partido mas antiguo del Peru.', weight: 16 },
 
     { cat: 'centro', name: 'Carlos Espa', val: 'Partido SiCreo', ref: 'Centro — Lima',
       thesis: 'Candidato de un partido menor de centro. Propuestas de reforma institucional con perfil bajo en medios nacionales.',
       mechanism: 'Reforma del Estado, institucionalidad, reduccion de la burocracia, transparencia en la gestion publica.',
       importance: '1.1% en Polymarket — sorprendentemente alto para un candidato de perfil bajo. El mercado ve algo en el que las encuestas aun no captan.',
       question: 'Que explica que Polymarket le asigne 1.1% mientras tiene tan poco perfil mediatico? Hay informacion que el mercado tiene y las encuestas no?',
-      detail: 'Partido SiCreo. 1.1% Polymarket. Perfil bajo pero presente en mercados.', weight: 11 },
+      detail: 'Partido SiCreo. 1.1% Polymarket. Perfil bajo pero presente en mercados.', weight: 21 },
 
     { cat: 'centro', name: 'Carlos Jaico', val: 'Peru Moderno', ref: 'Centro — Lima',
       thesis: 'Candidato de Peru Moderno. Partido de centro con enfoque en modernizacion del Estado y reformas graduales y tecnicas.',
       mechanism: 'Modernizacion del Estado, reforma del servicio civil, eficiencia del gasto publico, digitalizacion de servicios.',
       importance: 'Candidato testimonial que representa la busqueda de una tercera via tecnica entre extremos ideologicos.',
       question: 'Puede una propuesta de modernizacion gradual captar la atencion en un contexto de crisis e inseguridad extrema?',
-      detail: 'Peru Moderno. Modernizacion del Estado y reformas tecnicas.', weight: 4 },
+      detail: 'Peru Moderno. Modernizacion del Estado y reformas tecnicas.', weight: 16 },
 
     // IZQUIERDA
     { cat: 'izquierda', name: 'Roberto Sanchez', val: 'Juntos por el Peru', ref: 'Izquierda — Lima',
@@ -955,42 +956,42 @@
       mechanism: 'Estrategia integral contra la inseguridad, regulacion de la mineria con participacion comunitaria, fortalecimiento del Estado, dialogo social.',
       importance: 'Quinto en Polymarket (10%). Principal candidato de la izquierda moderada. Intenta recuperar el voto progresista tras el desastre del gobierno Castillo.',
       question: 'Puede un exministro de Castillo convencer a votantes de izquierda que el representa una alternativa real y no una continuidad de ese gobierno?',
-      detail: 'Exministro de Castillo. Izquierda democratica y moderada. 10% Polymarket.', weight: 100 },
+      detail: 'Exministro de Castillo. Izquierda democratica y moderada. 10% Polymarket.', weight: 35 },
 
     { cat: 'izquierda', name: 'Vladimir Cerron', val: 'Peru Libre', ref: 'Izquierda radical — Junin',
       thesis: 'Exgobernador de Junin condenado por corrupcion. Fundador de Peru Libre y arquitecto de la victoria de Pedro Castillo en 2021. Candidatura juridicamente cuestionada.',
       mechanism: 'Programa marxista-leninista: nacionalizacion de recursos naturales, reforma agraria, nueva Constitucion, ruptura con el modelo neoliberal.',
       importance: 'Candidatura simbolica y polemica. Tiene impedimentos legales por condena firme. Su presencia en la carrera activa el voto anti-izquierda que beneficia a Keiko.',
       question: 'Puede un candidato con condena firme por corrupcion postular a la presidencia? Que dice sobre el sistema judicial peruano que este en campana?',
-      detail: 'Fundador de Peru Libre. Condenado por corrupcion. Candidatura en disputa.', weight: 4 },
+      detail: 'Fundador de Peru Libre. Condenado por corrupcion. Candidatura en disputa.', weight: 16 },
 
     { cat: 'izquierda', name: 'Fiorella Molinelli', val: 'Fuerza y Libertad', ref: 'Izquierda — Lima',
       thesis: 'Expresidenta ejecutiva de EsSalud. Candidata de izquierda moderada con enfoque en derechos sociales, salud universal y equidad de genero.',
       mechanism: 'Fortalecimiento del sistema de salud publico, universalizacion de la seguridad social, derechos laborales, equidad de genero en el Estado.',
       importance: 'Representa un nicho electoral de izquierda socialdemocrata con perfil femenino en una campana dominada por hombres.',
       question: 'Puede una candidata de izquierda moderada con perfil de gestora publica diferenciarse en un espacio electoral tan fragmentado?',
-      detail: 'Expresidenta de EsSalud. Izquierda social. Salud universal.', weight: 4 },
+      detail: 'Expresidenta de EsSalud. Izquierda social. Salud universal.', weight: 16 },
 
     { cat: 'izquierda', name: 'Ronald Atencio', val: 'Alianza Electoral Venceremos', ref: 'Izquierda — Regiones',
       thesis: 'Candidato de una alianza electoral de izquierda con base en regiones. Perfil sindical y de movimientos sociales populares.',
       mechanism: 'Derechos laborales, fortalecimiento de sindicatos, control estatal de recursos naturales, reforma agraria.',
       importance: '2% en encuestas. Representa la izquierda radical con menor perfil que Cerron pero mas viabilidad juridica.',
       question: 'Puede una alianza electoral de izquierda capturar el voto que Cerron no puede consolidar por sus problemas legales?',
-      detail: 'Alianza de izquierda. Base sindical y movimientos sociales.', weight: 4 },
+      detail: 'Alianza de izquierda. Base sindical y movimientos sociales.', weight: 16 },
 
     { cat: 'izquierda', name: 'Francisco Diez-Canseco', val: 'Peru Accion', ref: 'Izquierda — Lima',
       thesis: 'Politico de izquierda con trayectoria en derechos humanos y movimientos sociales. Candidato de Peru Accion con propuesta de izquierda democratica.',
       mechanism: 'Derechos humanos, reforma del Estado, economia mixta, integracion latinoamericana progresista.',
       importance: 'Candidato de bajo perfil que representa la izquierda con enfoque en derechos y movimientos sociales.',
       question: 'Puede la izquierda de derechos humanos construir una propuesta electoral viable cuando el debate principal es inseguridad y discursos de mano dura?',
-      detail: 'Izquierda democratica con enfoque en derechos humanos.', weight: 4 },
+      detail: 'Izquierda democratica con enfoque en derechos humanos.', weight: 16 },
 
     { cat: 'izquierda', name: 'Walter Chirinos', val: 'Partido Regionalista Integrac. Nacional', ref: 'Izquierda — Regiones',
       thesis: 'Candidato de un partido regionalista de base andina. Propone integracion nacional desde las regiones y fortalecimiento de comunidades campesinas.',
       mechanism: 'Regionalismo, comunidades campesinas, recursos naturales con beneficio local, integracion andina.',
       importance: 'Candidato testimonial con base en regiones andinas y comunidades campesinas. Perfil muy local.',
       question: 'Puede el regionalismo ser una plataforma competitiva a nivel presidencial o solo suma votos simbolicos en zonas especificas?',
-      detail: 'Partido Regionalista. Base andina y comunidades campesinas.', weight: 4 },
+      detail: 'Partido Regionalista. Base andina y comunidades campesinas.', weight: 16 },
 
     // OUTSIDER / OTROS
     { cat: 'otros', name: 'Carlos Álvarez', val: 'Pais Para Todos', ref: 'Outsider — Lima',
@@ -998,49 +999,49 @@
       mechanism: 'Reducir el sueldo de congresistas, luchar contra la corrupcion desde la ciudadania, formalizacion del trabajo, reduccion del costo de vida.',
       importance: 'Tercero en Polymarket (15.3%). Capitaliza el descontento profundo con la clase politica. Candidato genuinamente nuevo y sin pasado politico cuestionado.',
       question: 'Tiene la experiencia de gobierno necesaria para gobernar o es solo un fenomeno mediatico de protesta que se disolvera en segunda vuelta?',
-      detail: 'Humorista convertido en candidato sorpresa. Tercero en Polymarket (15.3%).', weight: 153 },
+      detail: 'Humorista convertido en candidato sorpresa. Tercero en Polymarket (15.3%).', weight: 39 },
 
     { cat: 'otros', name: 'Charlie Carrasco', val: 'Partido Democrata Unido Peru', ref: 'Outsider — Lima',
       thesis: 'Candidato de un partido menor con perfil mediatico. Busca diferenciarse en un campo electoral muy saturado con propuestas ciudadanas.',
       mechanism: 'Reforma del Estado, propuestas ciudadanas directas, combate a la corrupcion, transparencia.',
       importance: 'Candidato de bajo perfil que representa la fragmentacion del sistema politico peruano.',
       question: 'Que espacio real tiene un partido pequeno sin estructura territorial en unas elecciones con 35 candidatos?',
-      detail: 'Partido menor. Perfil mediatico ciudadano.', weight: 4 },
+      detail: 'Partido menor. Perfil mediatico ciudadano.', weight: 16 },
 
     { cat: 'otros', name: 'Herbert Caller', val: 'Partido Patriotico del Peru', ref: 'Otros — Lima',
       thesis: 'Candidato del Partido Patriotico del Peru. Propuestas de corte nacionalista con enfoque en soberania y control de recursos naturales.',
       mechanism: 'Soberania nacional, control de recursos naturales, defensa de fronteras, identidad nacional peruana.',
       importance: 'Candidato testimonial de un partido menor con perfil patriotico y base pequena.',
       question: 'Puede el nacionalismo economico ser una propuesta diferenciadora cuando el electorado prioriza inseguridad y economia cotidiana?',
-      detail: 'Partido Patriotico. Soberania y recursos naturales.', weight: 4 },
+      detail: 'Partido Patriotico. Soberania y recursos naturales.', weight: 16 },
 
     { cat: 'otros', name: 'Paul Jaimes', val: 'Progresemos', ref: 'Otros — Lima',
       thesis: 'Candidato de Progresemos, partido de centro con propuestas de reforma gradual y modernizacion institucional.',
       mechanism: 'Progresismo moderado, reformas sociales graduales, fortalecimiento de servicios publicos.',
       importance: 'Candidato testimonial en un campo electoral muy fragmentado con pocas posibilidades de impacto presidencial.',
       question: 'Puede el progresismo gradual capturar votos en una campana dominada por candidatos de posiciones mas extremas y mediáticas?',
-      detail: 'Progresemos. Reformismo gradual y moderado.', weight: 4 },
+      detail: 'Progresemos. Reformismo gradual y moderado.', weight: 16 },
 
     { cat: 'otros', name: 'Joaquin Masse', val: 'Partido Democratico Federal', ref: 'Otros — Lima',
       thesis: 'Candidato del Partido Democratico Federal. Apuesta por la federalizacion del Estado peruano como eje central de su propuesta.',
       mechanism: 'Federalismo, autonomia regional, descentralizacion del poder politico y presupuestal, gobiernos regionales con mas soberania.',
       importance: 'Candidato testimonial que comparte la propuesta federal con Belmont sin lograr diferenciarse.',
       question: 'Por que conviven dos candidatos con propuesta federal (Belmont y Masse) sin que ninguno se convierta en el referente unico de ese eje?',
-      detail: 'Partido Democratico Federal. Federalismo y descentralizacion.', weight: 4 },
+      detail: 'Partido Democratico Federal. Federalismo y descentralizacion.', weight: 16 },
 
     { cat: 'otros', name: 'Alex Gonzales Castillo', val: 'Partido Democrata Verde', ref: 'Otros — Lima',
       thesis: 'Candidato del Partido Democrata Verde con enfoque en medio ambiente, mineria sostenible y recursos naturales.',
       mechanism: 'Transicion ecologica, mineria responsable, proteccion de ecosistemas, energias renovables, economia verde.',
       importance: 'Unico candidato con eje verde como propuesta central. Nicho electoral pequeno pero coherente y diferenciado.',
       question: 'Puede la agenda verde ser una propuesta electoralmente viable en un pais donde el debate central es inseguridad y economia inmediata?',
-      detail: 'Partido Verde. Medio ambiente y mineria sostenible.', weight: 4 },
+      detail: 'Partido Verde. Medio ambiente y mineria sostenible.', weight: 16 },
 
     { cat: 'otros', name: 'Antonio Ortiz', val: 'Salvemos al Peru', ref: 'Otros — Lima',
       thesis: 'Candidato de Salvemos al Peru con un discurso de urgencia nacional y reforma institucional profunda desde la ciudadania.',
       mechanism: 'Reforma de Estado de urgencia, combate a la corrupcion sistemica, reconstruccion institucional.',
       importance: 'Candidato testimonial con discurso de crisis nacional en un campo muy fragmentado.',
       question: 'Cuantos candidatos con discurso de salvacion nacional puede absorber el electorado sin que el mensaje pierda todo impacto?',
-      detail: 'Salvemos al Peru. Discurso de urgencia nacional.', weight: 4 },
+      detail: 'Salvemos al Peru. Discurso de urgencia nacional.', weight: 16 },
   ]
 
   const CONNECTIONS = {
@@ -1636,21 +1637,21 @@
         if (tier === 0) {
           title.style.display = 'none'; value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 1) {
-          title.style.display = 'none'
+          title.style.display = ''; title.style.fontSize = '7px'
           value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 2) {
-          title.style.display = 'none'
-          value.style.display = ''; value.style.fontSize = '10px'
-          detail.style.display = 'none'; ref.style.display = ''; ref.style.fontSize = '7px'
+          title.style.display = ''; title.style.fontSize = '9px'
+          value.style.display = ''; value.style.fontSize = '7.5px'
+          detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 3) {
-          title.style.display = ''; title.style.fontSize = '7px'
-          value.style.display = ''; value.style.fontSize = '13px'
-          detail.style.display = ''; detail.style.fontSize = '7.4px'; detail.style.maxHeight = Math.max(0, rh - 40) + 'px'; ref.style.display = ''
+          title.style.display = ''; title.style.fontSize = '11px'
+          value.style.display = ''; value.style.fontSize = '8px'
+          detail.style.display = ''; detail.style.fontSize = '7px'; detail.style.maxHeight = Math.max(0, rh - 48) + 'px'; ref.style.display = ''
         } else {
-          title.style.display = ''; title.style.fontSize = Math.min(8, 7 + area / 32000) + 'px'
-          value.style.display = ''; value.style.fontSize = Math.min(18, 11 + area / 7500) + 'px'
-          detail.style.display = ''; detail.style.fontSize = Math.min(10.4, 7.6 + area / 24000) + 'px'
-          detail.style.maxHeight = Math.max(0, rh - 42) + 'px'
+          title.style.display = ''; title.style.fontSize = Math.min(16, 10 + area / 14000) + 'px'
+          value.style.display = ''; value.style.fontSize = Math.min(11, 8 + area / 28000) + 'px'
+          detail.style.display = ''; detail.style.fontSize = Math.min(10, 7.5 + area / 30000) + 'px'
+          detail.style.maxHeight = Math.max(0, rh - 56) + 'px'
           ref.style.display = ''
         }
         b._tier = tier
