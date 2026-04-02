@@ -688,10 +688,6 @@
   <span class="about-icon">?</span>
   <span class="about-label">About this experiment</span>
 </button>
-<button class="load-btn" id="load-btn">
-  <span class="about-icon">+</span>
-  <span class="load-label">Load document</span>
-</button>
 
 <div class="legend-bar" id="legend-bar"></div>
 
@@ -778,11 +774,11 @@
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs'
 
   const CATEGORIES = {
-    derecha:       { label: 'Derecha',          bg: '#d97060', bgHover: '#ef4a2a', fg: '#2a0805', accent: '#ff3820' },
-    centroderecha: { label: 'Centro-derecha',   bg: '#c9a84a', bgHover: '#e8b828', fg: '#261a05', accent: '#e8a810' },
-    centro:        { label: 'Centro',           bg: '#5faa78', bgHover: '#30b855', fg: '#081a0e', accent: '#12aa40' },
-    izquierda:     { label: 'Izquierda',        bg: '#7a7fcc', bgHover: '#4852ee', fg: '#0a0c28', accent: '#3a45ff' },
-    otros:         { label: 'Outsider / Otros', bg: '#78abc0', bgHover: '#3fa8cc', fg: '#081820', accent: '#1888b8' },
+    derecha:       { label: 'Derecha',          bg: '#a8c4e8', bgHover: '#7aaad8', fg: '#0e2040', accent: '#2c6cb8' },
+    centroderecha: { label: 'Centro-derecha',   bg: '#c8d8f0', bgHover: '#a0bce8', fg: '#1a2a40', accent: '#6090d0' },
+    centro:        { label: 'Centro',           bg: '#d8d4c0', bgHover: '#c0baa0', fg: '#2a2410', accent: '#7a7060' },
+    izquierda:     { label: 'Izquierda',        bg: '#e8a898', bgHover: '#d87060', fg: '#401010', accent: '#c03828' },
+    otros:         { label: 'Outsider / Otros', bg: '#b8ddd8', bgHover: '#80c8c0', fg: '#0e2a28', accent: '#2a9080' },
   }
   const GENERIC_CATEGORY_TEMPLATES = [
     { key: 'cluster1', label: 'Cluster 1', bg: '#db8e72', bgHover: '#ef6a3a', fg: '#251512', accent: '#ff5d1f' },
