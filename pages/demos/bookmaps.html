@@ -701,22 +701,19 @@
     }
     .mobile-topbar {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: auto;
+      justify-content: end;
     }
-    .mobile-mode-switch {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 6px;
-    }
-    .mobile-mode-btn {
+    .mobile-view-toggle {
       border: 1px solid rgba(18,18,18,0.10);
       background: rgba(255,255,255,0.76);
       color: rgba(18,18,18,0.54);
       font: 700 11px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
       padding: 9px 10px;
       cursor: pointer;
+      min-width: 68px;
     }
-    .mobile-mode-btn.active {
+    .mobile-view-toggle.active {
       background: rgba(18,18,18,0.92);
       color: #f6f4ef;
     }
@@ -899,10 +896,7 @@
 <div class="mobile-shell" id="mobile-shell">
   <div class="mobile-toolbar">
     <div class="mobile-topbar">
-      <div class="mobile-mode-switch" id="mobile-mode-switch">
-        <button class="mobile-mode-btn active" id="mobile-mode-map" data-mode="map">Mapa</button>
-        <button class="mobile-mode-btn" id="mobile-mode-list" data-mode="list">Lista</button>
-      </div>
+      <button class="mobile-view-toggle" id="mobile-view-toggle" type="button">Lista</button>
     </div>
     <label class="mobile-search">
       <span class="mobile-search-label">Buscar</span>
@@ -1043,9 +1037,12 @@
       thesis: 'Empresario y exalcalde de Lima. Es el candidato presidencial de Renovación Popular y su campaña gira alrededor de la seguridad, el orden y un discurso conservador.',
       mechanism: 'Propone medidas duras contra el crimen, cambios fuertes en seguridad y una reforma del Estado con menos trabas y más autoridad.',
       importance: 'Al 2 de abril aparece primero en Polymarket con 33%. Es uno de los nombres más visibles de la derecha en esta elección.',
-      controversy: 'Ha sido cuestionado por el tono extremo de varias propuestas y por su estilo confrontacional en campaña. También carga con críticas por su paso por la alcaldía de Lima.',
       question: '¿Su campaña crecerá más por sus propuestas de seguridad o por su estilo directo y confrontacional?',
-      detail: 'Empresario y exalcalde de Lima. Primero en Polymarket (33%).', plan: 'https://mpesije.jne.gob.pe/docs/2096b44a-f3b6-4c81-b03d-94fbfc9ac762.pdf', weight: 48 },
+      detail: 'Empresario y exalcalde de Lima. Primero en Polymarket (33%).', plan: 'https://mpesije.jne.gob.pe/docs/2096b44a-f3b6-4c81-b03d-94fbfc9ac762.pdf',
+      sources: [
+        ['Perfil oficial en la Municipalidad de Lima', 'Confirma su cargo como alcalde de Lima.', 'https://www.gob.pe/institucion/munilima/funcionarios/90804-rafael-lopez-aliaga'],
+        ['Andina: propuesta de expulsión de extranjeros con delitos', 'Sirve para contrastar una de sus propuestas de seguridad en campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-lopez-aliaga-ofrece-expulsar-a-extranjeros-que-cometan-delitos-1063374.aspx']
+      ], weight: 48 },
 
     { cat: 'derecha', name: 'Keiko Fujimori', val: 'Fuerza Popular', ref: 'Derecha — Lima',
       thesis: 'Líder de Fuerza Popular e hija de Alberto Fujimori. Ya compitió tres veces por la presidencia y sigue teniendo una base política fiel.',
@@ -1053,15 +1050,22 @@
       importance: 'Al 2 de abril aparece segunda en Polymarket con 20%. Sigue siendo una de las figuras con más reconocimiento nacional.',
       controversy: 'Su candidatura sigue marcada por las investigaciones por lavado de activos y por el rechazo que genera el legado político del fujimorismo en parte del país.',
       question: '¿Su experiencia y su base partidaria le alcanzarán para volver a pelear la presidencia?',
-      detail: 'Líder de Fuerza Popular. Segunda en Polymarket (20%).', plan: 'https://mpesije.jne.gob.pe/docs/da4b943d-4344-4743-9362-a11ccf3054cb.pdf', weight: 41 },
+      detail: 'Líder de Fuerza Popular. Segunda en Polymarket (20%).', plan: 'https://mpesije.jne.gob.pe/docs/da4b943d-4344-4743-9362-a11ccf3054cb.pdf',
+      sources: [
+        ['Andina: propuesta de seguridad de Fuerza Popular', 'Resume una parte central de su oferta de campaña en 2026.', 'https://andina.pe/agencia/noticia-elecciones-2026-fuerza-popular-propone-sistema-seguridad-que-permita-combatir-crimen-organizado-1063202.aspx'],
+        ['Andina: cierre de fronteras y relación con Bolivia', 'Ayuda a verificar una propuesta pública de su campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-keiko-fujimori-promete-cerrar-fronteras-si-bolivia-no-pide-disculpas-1065993.aspx']
+      ], weight: 41 },
 
     { cat: 'derecha', name: 'José Williams Zapata', val: 'Avanza País', ref: 'Derecha — Lima',
       thesis: 'Militar en retiro, excongresista y expresidente del Congreso. Su perfil público está muy ligado al orden y la seguridad.',
       mechanism: 'Propone reforzar a las Fuerzas Armadas, endurecer la lucha contra el crimen y cambiar el sistema de justicia.',
       importance: 'Tiene reconocimiento por su paso por el Congreso y por su carrera militar, aunque hoy aparece lejos de los primeros lugares.',
-      controversy: 'Su figura genera debate por su papel en el Congreso que vacó a Pedro Castillo y por el peso que da a una salida más militar frente a la crisis.',
       question: '¿Su perfil militar suma votos en una campaña marcada por el miedo al crimen?',
-      detail: 'Militar en retiro y excongresista. Enfoque fuerte en seguridad.', plan: 'https://mpesije.jne.gob.pe/docs/5857261c-789e-4599-ac05-4531654b10b4.pdf', weight: 16 },
+      detail: 'Militar en retiro y excongresista. Enfoque fuerte en seguridad.', plan: 'https://mpesije.jne.gob.pe/docs/5857261c-789e-4599-ac05-4531654b10b4.pdf',
+      sources: [
+        ['Congreso: elección como presidente del Parlamento', 'Confirma uno de sus cargos públicos más visibles.', 'https://comunicaciones.congreso.gob.pe/damos-cuenta/congresista-jose-williams-zapata-es-elegido-como-nuevo-presidente-del-congreso/'],
+        ['Andina: fortalecer PNP y Fuerzas Armadas', 'Resume una de sus principales propuestas de campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-jose-williams-plantea-fortalecer-a-pnp-y-ffaa-1063138.aspx']
+      ], weight: 16 },
 
     { cat: 'derecha', name: 'Roberto Chiabra', val: 'Unidad Nacional', ref: 'Derecha — Lima',
       thesis: 'General en retiro y exparlamentario. Se presenta como una opción de derecha con foco en seguridad y gestión del Estado.',
@@ -1082,7 +1086,6 @@
       thesis: 'Empresario, exgobernador de La Libertad y fundador de APP. Su principal fortaleza es el partido que construyó en varias regiones.',
       mechanism: 'Su plan habla de seguridad, lucha contra la extorsión, inteligencia y más apoyo a la policía.',
       importance: 'Tiene presencia política nacional por APP, aunque en Polymarket aparece lejos de los primeros puestos.',
-      controversy: 'Sigue arrastrando críticas por el Acuñavideo y por denuncias antiguas sobre uso de dinero y regalos en campaña.',
       question: '¿Su organización regional puede convertirlo en un actor más competitivo en la campaña?',
       detail: 'Fundador de APP. Presencia regional. Bajo en Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/72576403-804a-4f28-85d3-bf4c7e648667.pdf', weight: 19 },
 
@@ -1090,7 +1093,6 @@
       thesis: 'Exarquero de la selección y exalcalde de La Victoria. Busca volver a la carrera presidencial con una imagen de gestor joven.',
       mechanism: 'Pone el foco en seguridad, obras e ideas de gestión más moderna para el Estado.',
       importance: 'Fue un nombre fuerte en la política reciente, pero hoy aparece más abajo en el mercado.',
-      controversy: 'Una de las dudas más repetidas sobre su candidatura es si su imagen pública pesa más que sus resultados concretos de gestión y si puede sostener una campaña nacional con estructura real.',
       question: '¿Puede volver a crecer o su mejor momento político ya pasó?',
       detail: 'Exarquero y exalcalde. Seguridad y gestión. 0.6% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/1334ac30-c28e-42a5-8fc5-79a4638ccd2a.pdf', weight: 17 },
 
@@ -1098,7 +1100,6 @@
       thesis: 'Empresario, excongresista y fundador de Podemos Perú. Es una figura conocida, pero también arrastra cuestionamientos públicos.',
       mechanism: 'Habla de pensiones, retiros de AFP, costo de vida y apoyo a negocios pequeños.',
       importance: 'Tiene partido y presencia política, pero llega a la carrera con una imagen discutida.',
-      controversy: 'Su nombre aparece ligado a cuestionamientos públicos sobre sus vínculos con actores del sistema de justicia, lo que debilita su imagen.',
       question: '¿Sus propuestas económicas pesan más que sus cuestionamientos públicos?',
       detail: 'Fundador de Podemos Perú. Pensiones y costo de vida.', plan: 'https://mpesije.jne.gob.pe/docs/67b637b0-e2f7-47cc-8b23-fa16be709cc2.pdf', weight: 16 },
 
@@ -1115,7 +1116,11 @@
       mechanism: 'Propone cambios en justicia, formalización, administración pública y control de la corrupción.',
       importance: 'Al 2 de abril ronda 9% en Polymarket. Es uno de los nombres de centro con mejor posición en el mercado.',
       question: '¿Puede crecer a nivel nacional sin una maquinaria partidaria tan fuerte como la de otros candidatos?',
-      detail: 'Economista y exrector de la UNI. 9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/7d70c5e1-2246-42e8-90c2-372aa1cf7f52.pdf', weight: 36 },
+      detail: 'Economista y exrector de la UNI. 9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/7d70c5e1-2246-42e8-90c2-372aa1cf7f52.pdf',
+      sources: [
+        ['UNI: rectorado', 'Confirma su paso por el rectorado de la Universidad Nacional de Ingeniería.', 'https://uni.edu.pe/index.php/rectorado/10-autoridades/559-alfonso-lopez-chau-nava'],
+        ['Andina: propuesta sobre Loreto y energía', 'Ayuda a verificar una línea visible de su campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-lopez-chau-promete-convertir-a-loreto-motor-energetico-y-economico-1064939.aspx']
+      ], weight: 36 },
 
     { cat: 'centro', name: 'Jorge Nieto Montesinos', val: 'Partido del Buen Gobierno', ref: 'Centro — Lima',
       thesis: 'Exministro de Defensa y de Cultura. Tiene un perfil de centro marcado por la experiencia en el Estado.',
@@ -1128,7 +1133,6 @@
       thesis: 'Exalcalde de Lima y figura histórica de la política local. Vuelve con una propuesta fuerte de federalismo.',
       mechanism: 'Propone dar más autonomía a las regiones y cambiar la forma en que se reparte el poder en el país.',
       importance: 'Al 2 de abril ronda 3% en Polymarket. Sigue siendo un nombre conocido para parte del electorado.',
-      controversy: 'Su regreso revive críticas antiguas por su estilo personalista y también dudas sobre si su propuesta de federalismo tiene viabilidad real en el corto plazo.',
       question: '¿Su idea de federalizar el Perú puede atraer nuevos votantes o queda como una propuesta de nicho?',
       detail: 'Exalcalde de Lima. Federalismo. 3% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/5643db28-6dbd-4d35-b79e-30d20d3bed85.pdf', weight: 22 },
 
@@ -1164,7 +1168,6 @@
       thesis: 'Hermano de Martín Vizcarra y candidato de Perú Primero. Su campaña está muy ligada a la figura del expresidente.',
       mechanism: 'Ofrece continuidad del reformismo de Vizcarra, lucha anticorrupción y hasta el indulto para su hermano.',
       importance: 'En Polymarket aparece por debajo de 0.5%. Su candidatura depende mucho del peso político de Martín Vizcarra.',
-      controversy: 'Su principal controversia es que su campaña gira alrededor de la defensa de su hermano, incluido el ofrecimiento de indultarlo si gana.',
       question: '¿Una campaña tan ligada a otro líder puede crecer por sí sola?',
       detail: 'Hermano de Martín Vizcarra. Menos de 0.5% en Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/f9624874-7cf6-4737-8db3-b73707c98e70.pdf', weight: 16 },
 
@@ -1172,7 +1175,6 @@
       thesis: 'Abogada, exministra de Justicia y ex primera ministra. Su perfil está muy ligado a la justicia y la gobernabilidad.',
       mechanism: 'Habla de Estado de derecho, transparencia, reforma judicial y fortalecimiento institucional.',
       importance: 'Es una candidata con experiencia, aunque con poca visibilidad en la campaña actual.',
-      controversy: 'Su paso por el segundo gobierno de Alan García puede generar rechazo en votantes que asocian esa etapa con una crisis fuerte de confianza política.',
       question: '¿Puede convertir su experiencia técnica en una propuesta que conecte con más gente?',
       detail: 'Exministra y ex primera ministra. Justicia y gobernabilidad.', plan: 'https://mpesije.jne.gob.pe/docs/de662f06-21d5-4523-a3ec-4fcbacabe16c.pdf', weight: 16 },
 
@@ -1187,7 +1189,6 @@
       thesis: 'Es el candidato del APRA, uno de los partidos históricos del Perú. Su postulación busca mantener vivo ese espacio político.',
       mechanism: 'Su mensaje recoge ideas clásicas del aprismo sobre bienestar, industria e integración regional.',
       importance: 'Su candidatura importa porque muestra si el APRA todavía puede tener lugar en la política nacional.',
-      controversy: 'La gran carga de su candidatura es el desgaste histórico del APRA y el peso que todavía tiene el recuerdo del segundo gobierno de Alan García.',
       question: '¿El APRA todavía puede mover votos en una elección tan fragmentada?',
       detail: 'Candidato del APRA. Busca mantener vigente al partido.', plan: 'https://mpesije.jne.gob.pe/docs/4d581919-b090-43d4-89e4-e284fde587b7.pdf', weight: 16 },
 
@@ -1210,9 +1211,12 @@
       thesis: 'Psicólogo, excongresista y exministro de Comercio Exterior y Turismo. Busca representar una izquierda moderada en 2026.',
       mechanism: 'Propone diálogo social, regulación de recursos, fortalecimiento del Estado y una estrategia amplia de seguridad.',
       importance: 'Al 2 de abril ronda 8.9% en Polymarket. Es uno de los nombres con más peso dentro de la izquierda moderada.',
-      controversy: 'Su principal punto débil es haber sido ministro del gobierno de Pedro Castillo, una marca que aún genera distancia en parte del electorado.',
       question: '¿Puede crecer sin quedar atado al desgaste del gobierno de Pedro Castillo?',
-      detail: 'Excongresista y exministro. 8.9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/3dd0e649-061c-4f31-8c3f-7a0836b58bde.pdf', weight: 35 },
+      detail: 'Excongresista y exministro. 8.9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/3dd0e649-061c-4f31-8c3f-7a0836b58bde.pdf',
+      sources: [
+        ['MINCETUR: juramentación como ministro', 'Confirma su paso por el Ministerio de Comercio Exterior y Turismo.', 'https://www.gob.pe/institucion/mincetur/noticias/627603-roberto-sanchez-palomino-juro-como-ministro-de-comercio-exterior-y-turismo'],
+        ['Andina: propuesta de Estado fuerte y democrático', 'Resume una parte visible de su discurso de campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-roberto-sanchez-plantea-construir-un-estado-fuerte-y-democratico-1063210.aspx']
+      ], weight: 35 },
 
     { cat: 'izquierda', name: 'Vladimir Cerrón', val: 'Perú Libre', ref: 'Izquierda radical — Junín',
       thesis: 'Exgobernador de Junín y fundador de Perú Libre. Su candidatura está marcada por su condena por corrupción y por una propuesta de izquierda dura.',
@@ -1220,7 +1224,12 @@
       importance: 'Es una candidatura polémica por su situación judicial y por el peso que tuvo en la victoria de Pedro Castillo en 2021.',
       controversy: 'Su principal controversia es su condena por corrupción. Además, su relación con el gobierno de Castillo sigue siendo un tema de fuerte rechazo para muchos votantes.',
       question: '¿Su figura moviliza apoyo real o pesa más como símbolo y conflicto político?',
-      detail: 'Fundador de Perú Libre. Condenado por corrupción.', plan: 'https://mpesije.jne.gob.pe/docs/b2d25860-484e-4226-bd13-a57fb83c59cb.pdf', weight: 16 },
+      detail: 'Fundador de Perú Libre. Condenado por corrupción.', plan: 'https://mpesije.jne.gob.pe/docs/b2d25860-484e-4226-bd13-a57fb83c59cb.pdf',
+      sources: [
+        ['Poder Judicial: caso Vladimir Cerrón', 'Sirve para sostener con una fuente pública su situación judicial.', 'https://www.pj.gob.pe/wps/wcm/connect/CorteSuprema/s_cortes_suprema_home/as_Inicio/as_enlaces_destacados/as_imagen_prensa/as_actualidad_importante/?WCM_PI=1&WCM_Page.5505af004d73fd689aa5baebdce25060=39'],
+        ['Andina: hoja de vida 2026', 'Resume su trayectoria y remite a la hoja de vida oficial.', 'https://andina.pe/agencia/noticia-elecciones-2026-revisa-hoja-vida-vladimir-cerron-peru-libre-1065390.aspx'],
+        ['Andina: plan de gobierno 2026', 'Resume propuestas visibles de su plan.', 'https://andina.pe/agencia/noticia-elecciones-2026-conoce-plan-gobierno-vladimir-cerron-rojas-1065379.aspx']
+      ], weight: 16 },
 
     { cat: 'izquierda', name: 'Fiorella Molinelli', val: 'Fuerza y Libertad', ref: 'Izquierda — Lima',
       thesis: 'Expresidenta ejecutiva de EsSalud. Su perfil está muy ligado a la salud pública, la seguridad social y la gestión.',
@@ -1255,9 +1264,11 @@
       thesis: 'Humorista y actor conocido por televisión. Entra a la carrera como outsider y conecta con el voto de protesta.',
       mechanism: 'Habla de bajar privilegios políticos, luchar contra la corrupción y aliviar el costo de vida.',
       importance: 'Al 2 de abril aparece tercero en Polymarket con 15.3%. Es uno de los nombres nuevos con más atención en el mercado.',
-      controversy: 'Su principal punto débil es la duda sobre su experiencia real para gobernar y para formar un equipo sólido más allá de su figura mediática.',
       question: '¿Puede pasar de figura mediática a candidato con estructura y equipo de gobierno?',
-      detail: 'Humorista y outsider. Tercero en Polymarket (15.3%).', plan: 'https://mpesije.jne.gob.pe/docs/76291ee3-eba2-4c88-adef-2530f2d70bb8.pdf', weight: 39 },
+      detail: 'Humorista y outsider. Tercero en Polymarket (15.3%).', plan: 'https://mpesije.jne.gob.pe/docs/76291ee3-eba2-4c88-adef-2530f2d70bb8.pdf',
+      sources: [
+        ['Andina: shock carcelario y expulsión de extranjeros con antecedentes', 'Resume dos propuestas visibles de su campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-carlos-alvarez-plantea-shock-carcelario-y-expulsar-a-extranjeros-con-antecedentes-1063160.aspx']
+      ], weight: 39 },
 
     { cat: 'centro', name: 'Charlie Carrasco', val: 'Partido Demócrata Unido Perú', ref: 'Outsider — Lima',
       thesis: 'Candidato de un partido pequeño en una carrera muy cargada. Su mensaje busca presentarse como una opción ciudadana.',
@@ -1327,7 +1338,7 @@
   const chapterSources = document.getElementById('chapter-sources')
   const mobileListView = document.getElementById('mobile-list-view')
   const mobileSearchInput = document.getElementById('mobile-search-input')
-  const mobileModeButtons = [...document.querySelectorAll('.mobile-mode-btn')]
+  const mobileViewToggle = document.getElementById('mobile-view-toggle')
   const MOBILE_BREAKPOINT = 768
   const DESKTOP_TIER_THRESHOLDS = [600, 2500, 7000, 18000]
   const MOBILE_TIER_THRESHOLDS = [200, 800, 3000, 9000]
@@ -1554,9 +1565,8 @@
 
   function updateMobileModeUI() {
     document.body.classList.toggle('mobile-list-mode', isMobileLayout && mobileViewMode === 'list')
-    mobileModeButtons.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.mode === mobileViewMode)
-    })
+    mobileViewToggle.classList.toggle('active', isMobileLayout && mobileViewMode === 'list')
+    mobileViewToggle.textContent = mobileViewMode === 'list' ? 'Mapa' : 'Lista'
   }
 
   function focusMarker(marker, { openPanel = false, switchToMap = false } = {}) {
@@ -1836,6 +1846,9 @@
     if (block.marker.plan) {
       sources.push(['Plan de gobierno (JNE)', 'Fuente oficial del candidato y de su partido.', block.marker.plan])
     }
+    if (Array.isArray(block.marker.sources)) {
+      sources.push(...block.marker.sources)
+    }
     sources.push(['Mercado Polymarket', 'Fuente usada para el tamaño del bloque.', 'https://polymarket.com/event/peru-presidential-election-winner'])
     sources.push(['Cédula ONPE 2026', 'Referencia oficial del proceso electoral.', 'https://eg2026.onpe.gob.pe/cedula/cedula-de-sufragio/'])
     sources.push(['Portal JNE', 'Portal institucional para revisar información electoral oficial.', 'https://portal.jne.gob.pe/portal/'])
@@ -1922,11 +1935,9 @@
     mobileSearchQuery = e.target.value || ''
     renderMobileList()
   })
-  mobileModeButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      mobileViewMode = btn.dataset.mode
-      updateMobileModeUI()
-    })
+  mobileViewToggle.addEventListener('click', () => {
+    mobileViewMode = mobileViewMode === 'list' ? 'map' : 'list'
+    updateMobileModeUI()
   })
 
   function handleBlockTap(block, event) {
