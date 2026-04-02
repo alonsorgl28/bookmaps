@@ -1631,18 +1631,18 @@
         if (tier === 0) {
           title.style.display = 'none'; value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 1) {
-          title.style.display = 'block'; title.style.fontSize = '12px'; title.style.whiteSpace = 'nowrap'
+          title.style.display = 'block'; title.style.fontSize = '9px'; title.style.whiteSpace = 'nowrap'
           value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 2) {
-          title.style.display = 'block'; title.style.fontSize = '16px'; title.style.whiteSpace = 'normal'
-          value.style.display = 'block'; value.style.fontSize = '10px'
+          title.style.display = 'block'; title.style.fontSize = '11px'; title.style.whiteSpace = 'normal'
+          value.style.display = 'block'; value.style.fontSize = '9px'
           detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 3) {
-          title.style.display = 'block'; title.style.fontSize = '18px'; title.style.whiteSpace = 'normal'
-          value.style.display = 'block'; value.style.fontSize = '10px'
+          title.style.display = 'block'; title.style.fontSize = '13px'; title.style.whiteSpace = 'normal'
+          value.style.display = 'block'; value.style.fontSize = '9px'
           detail.style.display = 'block'; detail.style.fontSize = '7px'; detail.style.maxHeight = Math.max(0, rh - 48) + 'px'; ref.style.display = 'block'
         } else {
-          title.style.display = 'block'; title.style.fontSize = Math.min(32, 20 + area / 6000) + 'px'; title.style.whiteSpace = 'normal'
+          title.style.display = 'block'; title.style.fontSize = Math.min(19, 12 + area / 10000) + 'px'; title.style.whiteSpace = 'normal'
           value.style.display = 'block'; value.style.fontSize = Math.min(11, 8 + area / 28000) + 'px'
           detail.style.display = 'block'; detail.style.fontSize = Math.min(10, 7.5 + area / 30000) + 'px'
           detail.style.maxHeight = Math.max(0, rh - 56) + 'px'
