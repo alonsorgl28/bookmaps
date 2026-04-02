@@ -667,8 +667,11 @@
   }
   @media (max-width: 768px) {
     #treemap {
-      top: 60px;
+      top: 56px;
       bottom: 74px;
+    }
+    body.mobile-list-mode #treemap {
+      display: none;
     }
     .hud {
       display: none;
@@ -684,6 +687,10 @@
       background:
         linear-gradient(180deg, rgba(252,250,246,0.96), rgba(252,250,246,0.84) 74%, rgba(252,250,246,0));
       pointer-events: none;
+    }
+    body.mobile-list-mode .mobile-shell {
+      background: #fcfaf6;
+      border-bottom: 1px solid rgba(18,18,18,0.08);
     }
     .mobile-shell > * {
       pointer-events: auto;
@@ -706,7 +713,7 @@
       background: rgba(255,255,255,0.76);
       color: rgba(18,18,18,0.54);
       font: 700 11px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
-      padding: 10px 10px;
+      padding: 9px 10px;
       cursor: pointer;
     }
     .mobile-mode-btn.active {
@@ -727,7 +734,7 @@
     }
     .mobile-search input {
       width: 100%;
-      height: 38px;
+      height: 34px;
       border: 0;
       outline: none;
       background: transparent;
@@ -755,23 +762,22 @@
       color: #141210;
     }
     .mobile-list-meta {
-      margin-top: 6px;
-      font-size: 10px;
+      margin-top: 4px;
+      font-size: 9px;
       line-height: 1.35;
-      color: rgba(18,18,18,0.56);
+      color: rgba(18,18,18,0.44);
     }
     .mobile-list-view {
       display: none;
       position: fixed;
-      top: 98px;
+      top: 92px;
       left: 0;
       right: 0;
       bottom: calc(60px + env(safe-area-inset-bottom, 0px));
       z-index: 23;
       overflow-y: auto;
-      padding: 8px 12px 24px;
-      background:
-        linear-gradient(180deg, rgba(252,250,246,0.96), rgba(245,242,236,0.98));
+      padding: 10px 12px 24px;
+      background: #fcfaf6;
     }
     body.mobile-list-mode .mobile-list-view {
       display: block;
@@ -786,10 +792,10 @@
     }
     .mobile-list-card {
       width: 100%;
-      margin-top: 8px;
-      border: 1px solid rgba(18,18,18,0.10);
-      background: rgba(255,255,255,0.78);
-      padding: 12px;
+      margin-top: 10px;
+      border: 1px solid rgba(18,18,18,0.08);
+      background: rgba(255,255,255,0.94);
+      padding: 13px 12px;
       text-align: left;
       cursor: pointer;
     }
@@ -797,8 +803,8 @@
       margin-top: 0;
     }
     .mobile-list-card.active {
-      box-shadow: 0 10px 24px rgba(18,18,18,0.10);
-      background: rgba(255,255,255,0.94);
+      box-shadow: 0 8px 18px rgba(18,18,18,0.08);
+      background: #ffffff;
     }
     .mobile-list-topline {
       display: flex;
@@ -990,14 +996,14 @@
       <h3>Cómo se mide el tamaño</h3>
       <p>El área de cada bloque refleja la <strong>probabilidad implícita de mercado</strong> observada en <a href="https://polymarket.com/event/peru-presidential-election-winner" target="_blank" rel="noopener">Polymarket</a>. Al 2 de abril de 2026, el mercado mostraba un volumen aproximado de <strong>US$4.89M</strong> y ubicaba a Rafael López Aliaga en 33%, Keiko Fujimori en 20% y Carlos Álvarez en 15.3%. Este experimento usa esa señal como una referencia dinámica de expectativas agregadas, no como verdad definitiva ni como sustituto de encuestas, voto real o análisis territorial.</p>
       <h3>Fuentes y límites</h3>
-      <p>Los datos base de candidaturas y planes de gobierno se contrastan con fuentes públicas, principalmente el <a href="https://portal.jne.gob.pe/portal/" target="_blank" rel="noopener">JNE</a>, la <a href="https://eg2026.onpe.gob.pe/cedula/cedula-de-sufragio/" target="_blank" rel="noopener">ONPE</a> y la cobertura electoral de <a href="https://andina.pe/agencia/seccion-elecciones-2026.aspx" target="_blank" rel="noopener">Andina</a>. Las secciones “tesis”, “mecanismo”, “importancia” y “pregunta” son una <strong>síntesis editorial</strong> construida a partir de esas fuentes; no equivalen a citas textuales ni a una ficha oficial del candidato.</p>
+      <p>Los datos base de candidaturas y planes de gobierno se contrastan con fuentes públicas, principalmente el <a href="https://portal.jne.gob.pe/portal/" target="_blank" rel="noopener">JNE</a>, la <a href="https://eg2026.onpe.gob.pe/cedula/cedula-de-sufragio/" target="_blank" rel="noopener">ONPE</a> y notas de contexto verificable como esta guía de <a href="https://andina.pe/agencia/noticia-elecciones-2026-consulta-aqui-las-hojas-vida-las-candidaturas-presidenciales-1057441.aspx" target="_blank" rel="noopener">Andina sobre hojas de vida presidenciales</a>. Las secciones “Quién es”, “Qué propone”, “Por qué importa” y “Pregunta clave” son una <strong>síntesis editorial</strong> construida a partir de esas fuentes; no equivalen a citas textuales ni a una ficha oficial del candidato.</p>
       <p>Polymarket es útil porque agrega información dispersa y actualiza incentivos en tiempo real, pero también tiene límites: depende de liquidez, composición de traders y narrativa de mercado. Por eso el mapa debe leerse como una herramienta para explorar estructura y contexto, no como un pronóstico definitivo del resultado electoral.</p>
       <h3>Qué estás viendo</h3>
       <ul>
         <li><strong>35 candidaturas</strong> organizadas por posición ideológica: Derecha, Centro-derecha, Centro, Izquierda y Outsiders.</li>
         <li><strong>Expansión por cursor.</strong> Acércate a un candidato para leer su ficha, propuestas y pregunta clave.</li>
         <li><strong>Filtro por bloque.</strong> Haz clic en la leyenda para aislar una corriente política.</li>
-        <li><strong>Click para detalle.</strong> Abre el panel lateral con síntesis editorial, plan de gobierno y conexiones con otros candidatos.</li>
+        <li><strong>Click para detalle.</strong> Abre el panel lateral con síntesis editorial, controversias públicas y fuentes para seguir verificando.</li>
       </ul>
       <h3>Por qué el treemap</h3>
       <p>El campo electoral peruano de 2026 es un sistema complejo: muchos actores, fuerzas dispares, bloques que se forman y se disuelven. El treemap permite ver, de un vistazo, cómo conviven candidaturas grandes, medianas y marginales dentro de una misma conversación pública. La apuesta del experimento es que una visualización espacial puede ayudar a leer mejor la fragmentación que una lista lineal o una tabla.</p>
@@ -1829,7 +1835,7 @@
     sources.push(['Mercado Polymarket', 'Fuente usada para el tamaño del bloque.', 'https://polymarket.com/event/peru-presidential-election-winner'])
     sources.push(['Cédula ONPE 2026', 'Referencia oficial del proceso electoral.', 'https://eg2026.onpe.gob.pe/cedula/cedula-de-sufragio/'])
     sources.push(['Portal JNE', 'Portal institucional para revisar información electoral oficial.', 'https://portal.jne.gob.pe/portal/'])
-    sources.push(['Andina Elecciones 2026', 'Cobertura pública para contraste y contexto.', 'https://andina.pe/agencia/seccion-elecciones-2026.aspx'])
+    sources.push(['Andina: hojas de vida 2026', 'Guía pública para consultar hojas de vida presidenciales y acceder a la Plataforma Electoral del JNE.', 'https://andina.pe/agencia/noticia-elecciones-2026-consulta-aqui-las-hojas-vida-las-candidaturas-presidenciales-1057441.aspx'])
     sources.forEach(([label, why, href]) => {
       const item = document.createElement('div')
       item.className = 'related-item'
