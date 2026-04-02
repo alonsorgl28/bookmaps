@@ -667,7 +667,7 @@
   }
   @media (max-width: 768px) {
     #treemap {
-      top: 136px;
+      top: 60px;
       bottom: 74px;
     }
     .hud {
@@ -690,7 +690,13 @@
     }
     .mobile-toolbar {
       display: grid;
-      gap: 8px;
+      gap: 6px;
+    }
+    .mobile-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 6px;
+      align-items: center;
     }
     .mobile-mode-switch {
       display: grid;
@@ -702,21 +708,40 @@
       background: rgba(255,255,255,0.76);
       color: rgba(18,18,18,0.54);
       font: 700 11px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
-      padding: 10px 12px;
+      padding: 10px 10px;
       cursor: pointer;
     }
     .mobile-mode-btn.active {
       background: rgba(18,18,18,0.92);
       color: #f6f4ef;
     }
+    .mobile-utility-btn {
+      min-width: 52px;
+      border: 1px solid rgba(18,18,18,0.10);
+      background: rgba(255,255,255,0.76);
+      color: rgba(18,18,18,0.58);
+      font: 700 10px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
+      padding: 10px 9px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .mobile-utility-btn.active {
+      background: rgba(18,18,18,0.92);
+      color: #f6f4ef;
+    }
     .mobile-search {
-      display: flex;
+      display: none;
       align-items: center;
       gap: 8px;
       padding: 0 12px;
       border: 1px solid rgba(18,18,18,0.10);
       background: rgba(255,255,255,0.74);
       backdrop-filter: blur(10px);
+    }
+    body.mobile-search-open .mobile-search,
+    body.mobile-list-mode .mobile-search {
+      display: flex;
     }
     .mobile-search input {
       width: 100%;
@@ -735,13 +760,16 @@
       flex: 0 0 auto;
     }
     .mobile-featured {
-      display: grid;
+      display: none;
       grid-auto-flow: column;
       grid-auto-columns: minmax(124px, 1fr);
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 4px;
       scrollbar-width: none;
+    }
+    body.mobile-summary-open .mobile-featured {
+      display: grid;
     }
     .mobile-featured::-webkit-scrollbar {
       display: none;
@@ -783,7 +811,7 @@
     .mobile-list-view {
       display: none;
       position: fixed;
-      top: 136px;
+      top: 108px;
       left: 0;
       right: 0;
       bottom: calc(60px + env(safe-area-inset-bottom, 0px));
@@ -908,9 +936,13 @@
 
 <div class="mobile-shell" id="mobile-shell">
   <div class="mobile-toolbar">
-    <div class="mobile-mode-switch" id="mobile-mode-switch">
-      <button class="mobile-mode-btn active" id="mobile-mode-map" data-mode="map">Mapa</button>
-      <button class="mobile-mode-btn" id="mobile-mode-list" data-mode="list">Lista</button>
+    <div class="mobile-topbar">
+      <div class="mobile-mode-switch" id="mobile-mode-switch">
+        <button class="mobile-mode-btn active" id="mobile-mode-map" data-mode="map">Mapa</button>
+        <button class="mobile-mode-btn" id="mobile-mode-list" data-mode="list">Lista</button>
+      </div>
+      <button class="mobile-utility-btn" id="mobile-search-toggle" type="button">Buscar</button>
+      <button class="mobile-utility-btn" id="mobile-summary-toggle" type="button">Top</button>
     </div>
     <label class="mobile-search">
       <span class="mobile-search-label">Buscar</span>
@@ -994,8 +1026,8 @@
     </section>
 
     <section class="chapter-section">
-      <div class="chapter-section-label">Conexiones</div>
-      <div class="related-list" id="chapter-related"></div>
+      <div class="chapter-section-label">Fuentes</div>
+      <div class="related-list" id="chapter-sources"></div>
     </section>
   </div>
 </aside>
@@ -1099,6 +1131,7 @@
       thesis: 'Exarquero de la selección y exalcalde de La Victoria. Busca volver a la carrera presidencial con una imagen de gestor joven.',
       mechanism: 'Pone el foco en seguridad, obras e ideas de gestión más moderna para el Estado.',
       importance: 'Fue un nombre fuerte en la política reciente, pero hoy aparece más abajo en el mercado.',
+      controversy: 'Una de las dudas más repetidas sobre su candidatura es si su imagen pública pesa más que sus resultados concretos de gestión y si puede sostener una campaña nacional con estructura real.',
       question: '¿Puede volver a crecer o su mejor momento político ya pasó?',
       detail: 'Exarquero y exalcalde. Seguridad y gestión. 0.6% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/1334ac30-c28e-42a5-8fc5-79a4638ccd2a.pdf', weight: 17 },
 
@@ -1136,6 +1169,7 @@
       thesis: 'Exalcalde de Lima y figura histórica de la política local. Vuelve con una propuesta fuerte de federalismo.',
       mechanism: 'Propone dar más autonomía a las regiones y cambiar la forma en que se reparte el poder en el país.',
       importance: 'Al 2 de abril ronda 3% en Polymarket. Sigue siendo un nombre conocido para parte del electorado.',
+      controversy: 'Su regreso revive críticas antiguas por su estilo personalista y también dudas sobre si su propuesta de federalismo tiene viabilidad real en el corto plazo.',
       question: '¿Su idea de federalizar el Perú puede atraer nuevos votantes o queda como una propuesta de nicho?',
       detail: 'Exalcalde de Lima. Federalismo. 3% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/5643db28-6dbd-4d35-b79e-30d20d3bed85.pdf', weight: 22 },
 
@@ -1179,6 +1213,7 @@
       thesis: 'Abogada, exministra de Justicia y ex primera ministra. Su perfil está muy ligado a la justicia y la gobernabilidad.',
       mechanism: 'Habla de Estado de derecho, transparencia, reforma judicial y fortalecimiento institucional.',
       importance: 'Es una candidata con experiencia, aunque con poca visibilidad en la campaña actual.',
+      controversy: 'Su paso por el segundo gobierno de Alan García puede generar rechazo en votantes que asocian esa etapa con una crisis fuerte de confianza política.',
       question: '¿Puede convertir su experiencia técnica en una propuesta que conecte con más gente?',
       detail: 'Exministra y ex primera ministra. Justicia y gobernabilidad.', plan: 'https://mpesije.jne.gob.pe/docs/de662f06-21d5-4523-a3ec-4fcbacabe16c.pdf', weight: 16 },
 
@@ -1193,6 +1228,7 @@
       thesis: 'Es el candidato del APRA, uno de los partidos históricos del Perú. Su postulación busca mantener vivo ese espacio político.',
       mechanism: 'Su mensaje recoge ideas clásicas del aprismo sobre bienestar, industria e integración regional.',
       importance: 'Su candidatura importa porque muestra si el APRA todavía puede tener lugar en la política nacional.',
+      controversy: 'La gran carga de su candidatura es el desgaste histórico del APRA y el peso que todavía tiene el recuerdo del segundo gobierno de Alan García.',
       question: '¿El APRA todavía puede mover votos en una elección tan fragmentada?',
       detail: 'Candidato del APRA. Busca mantener vigente al partido.', plan: 'https://mpesije.jne.gob.pe/docs/4d581919-b090-43d4-89e4-e284fde587b7.pdf', weight: 16 },
 
@@ -1367,11 +1403,13 @@
   const chapterImportance = document.getElementById('chapter-importance')
   const chapterControversy = document.getElementById('chapter-controversy')
   const chapterQuestion = document.getElementById('chapter-question')
-  const chapterRelated = document.getElementById('chapter-related')
+  const chapterSources = document.getElementById('chapter-sources')
   const mobileFeatured = document.getElementById('mobile-featured')
   const mobileListView = document.getElementById('mobile-list-view')
   const mobileSearchInput = document.getElementById('mobile-search-input')
   const mobileModeButtons = [...document.querySelectorAll('.mobile-mode-btn')]
+  const mobileSearchToggle = document.getElementById('mobile-search-toggle')
+  const mobileSummaryToggle = document.getElementById('mobile-summary-toggle')
   const MOBILE_BREAKPOINT = 768
   const DESKTOP_TIER_THRESHOLDS = [600, 2500, 7000, 18000]
   const MOBILE_TIER_THRESHOLDS = [200, 800, 3000, 9000]
@@ -1381,6 +1419,8 @@
   let isMobileLayout = window.innerWidth <= MOBILE_BREAKPOINT
   let mobileViewMode = 'map'
   let mobileSearchQuery = ''
+  let mobileSearchOpen = false
+  let mobileSummaryOpen = false
   let mouseX = -9999, mouseY = -9999
   const CURSOR_RADIUS = 220
   const EXPAND_FACTOR = 3.0
@@ -1423,6 +1463,8 @@
     setPointerOffscreen()
     activeBlock = null
     mobileViewMode = 'map'
+    mobileSearchOpen = false
+    mobileSummaryOpen = false
     if (!isMobileLayout) selectedBlock = null
     updateMobileModeUI()
     renderMobileFeatured()
@@ -1603,9 +1645,13 @@
 
   function updateMobileModeUI() {
     document.body.classList.toggle('mobile-list-mode', isMobileLayout && mobileViewMode === 'list')
+    document.body.classList.toggle('mobile-search-open', isMobileLayout && (mobileSearchOpen || mobileViewMode === 'list'))
+    document.body.classList.toggle('mobile-summary-open', isMobileLayout && mobileSummaryOpen && mobileViewMode === 'map')
     mobileModeButtons.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.mode === mobileViewMode)
     })
+    mobileSearchToggle.classList.toggle('active', isMobileLayout && (mobileSearchOpen || mobileViewMode === 'list'))
+    mobileSummaryToggle.classList.toggle('active', isMobileLayout && mobileSummaryOpen && mobileViewMode === 'map')
   }
 
   function focusMarker(marker, { openPanel = false, switchToMap = false } = {}) {
@@ -1624,6 +1670,7 @@
     mobileFeatured.innerHTML = ''
     if (!isMobileLayout) return
     const featured = getFilteredChapters().slice(0, MOBILE_FEATURED_COUNT)
+    if (!featured.length) return
     const activeName = getActiveBlockName()
     featured.forEach((marker, index) => {
       const card = document.createElement('button')
@@ -1874,6 +1921,9 @@
       e.target.closest('.load-btn') ||
       e.target.closest('.info-panel')
     ) return
+    mobileSearchOpen = false
+    mobileSummaryOpen = false
+    updateMobileModeUI()
     closeChapterPanel()
   })
 
@@ -1904,12 +1954,20 @@
     } else {
       planSection.style.display = 'none'
     }
-    chapterRelated.innerHTML = ''
-    ;(currentConnections[block.marker.name] || []).forEach(([label, why]) => {
+    chapterSources.innerHTML = ''
+    const sources = []
+    if (block.marker.plan) {
+      sources.push(['Plan de gobierno (JNE)', 'Fuente oficial del candidato y de su partido.', block.marker.plan])
+    }
+    sources.push(['Mercado Polymarket', 'Fuente usada para el tamaño del bloque.', 'https://polymarket.com/event/peru-presidential-election-winner'])
+    sources.push(['Cédula ONPE 2026', 'Referencia oficial del proceso electoral.', 'https://eg2026.onpe.gob.pe/cedula/cedula-de-sufragio/'])
+    sources.push(['Portal JNE', 'Portal institucional para revisar información electoral oficial.', 'https://portal.jne.gob.pe/portal/'])
+    sources.push(['Andina Elecciones 2026', 'Cobertura pública para contraste y contexto.', 'https://andina.pe/agencia/seccion-elecciones-2026.aspx'])
+    sources.forEach(([label, why, href]) => {
       const item = document.createElement('div')
       item.className = 'related-item'
-      item.innerHTML = `<strong>${label}</strong>${why}`
-      chapterRelated.appendChild(item)
+      item.innerHTML = `<strong><a href="${href}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${label} ↗</a></strong>${why}`
+      chapterSources.appendChild(item)
     })
     renderMobileFeatured()
     renderMobileList()
@@ -1989,14 +2047,35 @@
   document.getElementById('generate-btn').addEventListener('click', generateFromInput)
   mobileSearchInput.addEventListener('input', e => {
     mobileSearchQuery = e.target.value || ''
+    if (isMobileLayout && mobileSearchQuery.trim()) mobileSearchOpen = true
+    updateMobileModeUI()
     renderMobileFeatured()
     renderMobileList()
   })
   mobileModeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       mobileViewMode = btn.dataset.mode
+      if (mobileViewMode === 'list') {
+        mobileSearchOpen = true
+        mobileSummaryOpen = false
+      } else {
+        mobileSearchOpen = false
+        mobileSummaryOpen = false
+      }
       updateMobileModeUI()
     })
+  })
+  mobileSearchToggle.addEventListener('click', () => {
+    mobileSearchOpen = !mobileSearchOpen
+    if (!mobileSearchOpen && mobileViewMode === 'map' && !mobileSearchQuery.trim()) {
+      mobileSearchInput.blur()
+    }
+    updateMobileModeUI()
+    if (mobileSearchOpen) mobileSearchInput.focus()
+  })
+  mobileSummaryToggle.addEventListener('click', () => {
+    mobileSummaryOpen = !mobileSummaryOpen
+    updateMobileModeUI()
   })
 
   function handleBlockTap(block, event) {
