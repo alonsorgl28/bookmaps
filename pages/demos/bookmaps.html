@@ -657,6 +657,31 @@
   .chapter-answer {
     margin-top: 8px;
   }
+  @media (max-width: 768px) {
+    .chapter-panel {
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 70vh;
+      border-left: none;
+      border-top: 1px solid rgba(18,18,18,0.10);
+      box-shadow: 0 -14px 30px rgba(18,18,18,0.08);
+      transform: translateY(100%);
+      overscroll-behavior: contain;
+    }
+    .chapter-panel::before {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+    }
+    .chapter-panel.visible { transform: translateY(0); }
+    .chapter-panel-inner {
+      padding: 18px 18px calc(28px + env(safe-area-inset-bottom, 0px)) 18px;
+    }
+  }
   @media (max-width: 600px) {
     .legend-bar { padding-bottom: env(safe-area-inset-bottom, 0); }
     .legend-item { padding: 12px 4px; min-height: 44px; flex: 1 1 25%; }
@@ -718,12 +743,12 @@
     <div class="chapter-panel-meta" id="chapter-meta"></div>
 
     <section class="chapter-section">
-      <div class="chapter-section-label">Tesis</div>
+      <div class="chapter-section-label">Quien es</div>
       <div class="chapter-section-body" id="chapter-thesis"></div>
     </section>
 
     <section class="chapter-section">
-      <div class="chapter-section-label">Mecanismo</div>
+      <div class="chapter-section-label">Que propone</div>
       <div class="chapter-section-body" id="chapter-mechanism"></div>
     </section>
 
@@ -733,13 +758,13 @@
     </section>
 
     <section class="chapter-section">
-      <div class="chapter-section-label">Pregunta de comprensión</div>
+      <div class="chapter-section-label">Pregunta clave</div>
       <div class="chapter-section-body" id="chapter-question"></div>
     </section>
 
     <section class="chapter-section" id="chapter-plan-section" style="display:none">
-      <div class="chapter-section-label">Plan de Gobierno</div>
-      <div class="chapter-section-body"><a id="chapter-plan-link" href="#" target="_blank" rel="noopener" style="color:#2c6cb8;text-decoration:none;font-weight:700;font-size:13px;">Descargar PDF (JNE) ↗</a></div>
+      <div class="chapter-section-label">Fuente oficial</div>
+      <div class="chapter-section-body"><a id="chapter-plan-link" href="#" target="_blank" rel="noopener" style="color:#2c6cb8;text-decoration:none;font-weight:700;font-size:13px;">Ver plan de gobierno (JNE) ↗</a></div>
     </section>
 
     <section class="chapter-section">
@@ -754,18 +779,21 @@
     <button class="info-close" id="info-close">&times;</button>
     <div class="info-content">
       <h2>Elecciones Perú 2026</h2>
-      <p>Un mapa en tiempo real de los <strong>35 candidatos presidenciales</strong> de las elecciones peruanas del 12 de abril de 2026. Cada bloque es un candidato. Mueve el cursor: los candidatos cercanos se <strong>expanden</strong>, revelando su propuesta, posición y contexto. Los bloques comprimen y el layout se recalcula cada frame.</p>
+      <p>Un mapa interactivo de <strong>35 candidaturas presidenciales activas</strong> de las elecciones peruanas del 12 de abril de 2026. El universo original llegó a 36 fórmulas presidenciales, pero la visualización trabaja con 35 candidaturas en carrera al cierre editorial de este dataset. Cada bloque representa una candidatura y su tamaño se actualiza a partir de un snapshot del mercado de Polymarket, no de una encuesta oficial.</p>
       <h3>Cómo se mide el tamaño</h3>
-      <p>El area de cada bloque refleja su probabilidad en <strong>Polymarket</strong> — el mercado de predicción con $4.6M de volumen en esta elección. Lopez Aliaga lidera (33%), seguido por Keiko (18%) y Carlos Alvarez (15%). El mercado es más preciso que las encuestas porque usa dinero real.</p>
+      <p>El area de cada bloque refleja la <strong>probabilidad implícita de mercado</strong> observada en <a href="https://polymarket.com/event/peru-presidential-election-winner" target="_blank" rel="noopener">Polymarket</a>. Al 2 de abril de 2026, el mercado mostraba un volumen aproximado de <strong>US$4.89M</strong> y ubicaba a Rafael López Aliaga en 33%, Keiko Fujimori en 20% y Carlos Álvarez en 15.3%. Este experimento usa esa señal como proxy dinámico de expectativas agregadas, no como verdad definitiva ni como sustituto de encuestas, voto real o análisis territorial.</p>
+      <h3>Fuentes y límites</h3>
+      <p>Los datos base de candidaturas y planes de gobierno se contrastan con fuentes públicas, principalmente el <a href="https://portal.jne.gob.pe/portal/" target="_blank" rel="noopener">JNE</a>, la <a href="https://eg2026.onpe.gob.pe/cedula/cedula-de-sufragio/" target="_blank" rel="noopener">ONPE</a> y la cobertura electoral de <a href="https://andina.pe/agencia/seccion-elecciones-2026.aspx" target="_blank" rel="noopener">Andina</a>. Las secciones “tesis”, “mecanismo”, “importancia” y “pregunta” son una <strong>síntesis editorial</strong> construida a partir de esas fuentes; no equivalen a citas textuales ni a una ficha oficial del candidato.</p>
+      <p>Polymarket es útil porque agrega información dispersa y actualiza incentivos en tiempo real, pero también tiene límites: depende de liquidez, composición de traders y narrativa de mercado. Por eso el mapa debe leerse como una herramienta para explorar estructura y contexto, no como un pronóstico definitivo del resultado electoral.</p>
       <h3>Qué estás viendo</h3>
       <ul>
-        <li><strong>35 candidatos</strong> organizados por posición ideológica: Derecha, Centro-derecha, Centro, Izquierda y Outsiders.</li>
+        <li><strong>35 candidaturas</strong> organizadas por posición ideológica: Derecha, Centro-derecha, Centro, Izquierda y Outsiders.</li>
         <li><strong>Expansion por cursor.</strong> Acércate a un candidato para leer su tesis, propuestas y pregunta clave.</li>
         <li><strong>Filtro por bloque.</strong> Haz clic en la leyenda para aislar una corriente política.</li>
-        <li><strong>Click para detalle.</strong> Abre el panel lateral con tesis completa, mecanismo y conexiónes con otros candidatos.</li>
+        <li><strong>Click para detalle.</strong> Abre el panel lateral con síntesis editorial, plan de gobierno y conexiones con otros candidatos.</li>
       </ul>
       <h3>Por qué el treemap</h3>
-      <p>El campo electoral peruano de 2026 es un sistema complejo: muchos actores, fuerzas dispares, bloques que se forman y disuelven. El treemap hace visible esa estructura de un vistazo, antes de leer nada linealmente.</p>
+      <p>El campo electoral peruano de 2026 es un sistema complejo: muchos actores, fuerzas dispares, bloques que se forman y se disuelven. El treemap permite ver, de un vistazo, cómo conviven candidaturas grandes, medianas y marginales dentro de una misma conversación pública. La apuesta del experimento es que una visualización espacial puede ayudar a leer mejor la fragmentación que una lista lineal o una tabla.</p>
     </div>
   </div>
 </div>
@@ -795,253 +823,253 @@
   const CHAPTERS = [
     // DERECHA
     { cat: 'derecha', name: 'Rafael Lopez Aliaga', val: 'Renovacíon Popular', ref: 'Derecha extrema — Lima',
-      thesis: 'Empresario ultraconservador, exalcalde de Lima (2022-2026). Apodado Porky. Candidato de la derecha dura con discurso de shock económico, valores católicos y mano dura.',
-      mechanism: 'Fusion de Ministerios de Interior y Defensa para sumar 300,000 efectivos. Expulsar migrantes ilegales. Pena de muerte. Salir de la Corte IDH. Cambiar la capital a Junín.',
-      importance: 'Lider en Polymarket con 33%. Empata técnicamente con Keiko en encuestas. Base fuerte en Lima y sectores conservadores urbanos con alta movilización.',
-      question: 'Sus propuestas más extremas — pena de muerte, cambio de capital, fusion de ministerios — son un programa de gobierno real o retórica electoral para movilizar su base?',
-      detail: 'Exalcalde de Lima. Ultraconservador. Lider en Polymarket (33%).', plan: 'https://mpesije.jne.gob.pe/docs/2096b44a-f3b6-4c81-b03d-94fbfc9ac762.pdf', weight: 48 },
+      thesis: 'Empresario y exalcalde de Lima. Es el candidato presidencial de Renovacion Popular y su campaña gira alrededor de seguridad, orden y un discurso conservador.',
+      mechanism: 'Propone medidas duras contra el crimen, cambios fuertes en seguridad y una reforma del Estado con menos trabas y mas autoridad.',
+      importance: 'Al 2 de abril aparece primero en Polymarket con 33%. Es uno de los nombres mas visibles de la derecha en esta eleccion.',
+      question: 'Su campaña crecera mas por sus propuestas de seguridad o por su estilo directo y confrontacional?',
+      detail: 'Empresario y exalcalde de Lima. Primero en Polymarket (33%).', plan: 'https://mpesije.jne.gob.pe/docs/2096b44a-f3b6-4c81-b03d-94fbfc9ac762.pdf', weight: 48 },
 
     { cat: 'derecha', name: 'Keiko Fujimori', val: 'Fuerza Popular', ref: 'Derecha — Lima',
-      thesis: 'Hija del ex-presidente Alberto Fujimori. Lleva tres campañas presidenciales (2011, 2016, 2021) sin ganar. Tiene la base electoral más solida y organizada del pais.',
-      mechanism: 'Seguridad ciudadana con mano dura, atracción de inversión privada, fortalecimiento de las Fuerzas Armadas y reconstruccion del tejido instituciónal.',
-      importance: 'Segunda en Polymarket (18%). Maquinaria territorial extensa y voto fiel que la convierten en favorita para segúnda vuelta. Su resultado definitivo depende de si su base se consolida.',
-      question: 'Puede superar el peso de las investigaciónes por lavado de activos y la herencia ambivalente del fujimorismo para ganar por primera vez la presidencia?',
-      detail: 'Tres veces candidata. Segunda en Polymarket (18%). Base electoral fiel.', plan: 'https://mpesije.jne.gob.pe/docs/da4b943d-4344-4743-9362-a11ccf3054cb.pdf', weight: 41 },
+      thesis: 'Lider de Fuerza Popular e hija de Alberto Fujimori. Ya compitio tres veces por la presidencia y sigue teniendo una base politica fiel.',
+      mechanism: 'Su campaña insiste en seguridad, inversion privada, apoyo a las Fuerzas Armadas y orden institucional.',
+      importance: 'Al 2 de abril aparece segunda en Polymarket con 20%. Sigue siendo una de las figuras con mas reconocimiento nacional.',
+      question: 'Su experiencia y su base partidaria le alcanzaran para volver a pelear la presidencia?',
+      detail: 'Lider de Fuerza Popular. Segunda en Polymarket (20%).', plan: 'https://mpesije.jne.gob.pe/docs/da4b943d-4344-4743-9362-a11ccf3054cb.pdf', weight: 41 },
 
     { cat: 'derecha', name: 'Jose Williams Zapata', val: 'Avanza Pais', ref: 'Derecha — Lima',
-      thesis: 'Excomandante general del Ejercito. Excongresista que presidio el Congreso que vaco a Pedro Castillo. Figura clave de la derecha instituciónal peruana.',
-      mechanism: 'Orden y seguridad desde enfoque militar. Fortalecimiento de las FFAA. Reforma del sistema de justicia. Mano dura contra el crimen organizado transnaciónal.',
-      importance: 'Su perfil militar y su rol en la vacancia de Castillo le dan reconocimiento en sectores conservadores, aunque no despega en encuestas ni en Polymarket.',
-      question: 'Su imagen ligada a la vacancia y al bloque conservador del Congreso lo beneficia o lo limita electoralmente ante votantes de centro?',
-      detail: 'Exjefe del Ejercito. Presidio el Congreso que vaco a Castillo.', plan: 'https://mpesije.jne.gob.pe/docs/5857261c-789e-4599-ac05-4531654b10b4.pdf', weight: 16 },
+      thesis: 'Militar en retiro, excongresista y expresidente del Congreso. Su perfil publico esta muy ligado al orden y la seguridad.',
+      mechanism: 'Propone reforzar a las Fuerzas Armadas, endurecer la lucha contra el crimen y cambiar el sistema de justicia.',
+      importance: 'Tiene reconocimiento por su paso por el Congreso y por su carrera militar, aunque hoy aparece lejos de los primeros lugares.',
+      question: 'Su perfil militar suma votos en una campaña marcada por el miedo al crimen?',
+      detail: 'Militar en retiro y excongresista. Enfoque fuerte en seguridad.', plan: 'https://mpesije.jne.gob.pe/docs/5857261c-789e-4599-ac05-4531654b10b4.pdf', weight: 16 },
 
     { cat: 'derecha', name: 'Roberto Chiabra', val: 'Unidad Nacional', ref: 'Derecha — Lima',
-      thesis: 'General (r) del Ejercito y exparlamentario. Candidato de la coalición Unidad Nacional. Propone orden y seguridad desde una visión castrense moderada.',
-      mechanism: 'Cerrar fronteras para frenar migracion ilegal, reforma radical del poder judicial, fortalecer inteligencia del Estado y combate al crimen transnaciónal.',
-      importance: 'Voz de sectores de derecha moderada que priorizan seguridad instituciónal sobre propuestas reformistas.',
-      question: 'Puede un candidato con perfil militar diferenciarse de Lopez Aliaga en el mismo espacio ideologico sin quedar opacado?',
-      detail: 'General retirado. Propone cerrar fronteras y reforma judicial.', plan: 'https://mpesije.jne.gob.pe/docs/ae0c9ba2-6278-4ca7-b077-16ed2cc39e76.pdf', weight: 16 },
+      thesis: 'General en retiro y exparlamentario. Se presenta como una opcion de derecha con foco en seguridad y gestion del Estado.',
+      mechanism: 'Habla de control de fronteras, inteligencia, reforma judicial y una respuesta firme contra el crimen.',
+      importance: 'Compite en un espacio donde la seguridad pesa mucho, pero debe diferenciarse de otros candidatos de derecha mas conocidos.',
+      question: 'Puede abrirse espacio propio en una derecha con varios nombres fuertes?',
+      detail: 'General en retiro. Seguridad, fronteras y reforma judicial.', plan: 'https://mpesije.jne.gob.pe/docs/ae0c9ba2-6278-4ca7-b077-16ed2cc39e76.pdf', weight: 16 },
 
     { cat: 'derecha', name: 'Alvaro Paz de la Barra', val: 'Fe en el Peru', ref: 'Derecha — Lima',
-      thesis: 'Exalcalde del distrito de La Molina. Candidato de un partido menor que apuesta por valores tradiciónales, familia cristiana y libre mercado.',
-      mechanism: 'Seguridad, familia, valores cristianos, libre mercado, reducción del Estado y eliminación de burocracia.',
-      importance: 'Candidato con base electoral pequeña pero activa en sectores conservadores de Lima clasemedia.',
-      question: 'Puede un candidato sin caudal propio competir en el espacio electoral que ya ocupan Keiko y Lopez Aliaga?',
-      detail: 'Exalcalde de La Molina. Derecha conservadora y libre mercado.', weight: 16 },
+      thesis: 'Exalcalde de La Molina y candidato de Fe en el Peru. Su discurso mezcla seguridad, valores conservadores y libre mercado.',
+      mechanism: 'Propone mas orden, defensa de la familia, menos burocracia y un Estado mas pequeno.',
+      importance: 'Es una candidatura de menor alcance nacional dentro del bloque de derecha.',
+      question: 'Puede hacerse visible frente a candidatos de derecha con mas maquinaria y mas recordacion?',
+      detail: 'Exalcalde de La Molina. Seguridad y libre mercado.', weight: 16 },
 
     // CENTRO-DERECHA
     { cat: 'centroderecha', name: 'Cesar Acuna', val: 'Alianza para el Progreso', ref: 'Centro-derecha — La Libertad',
-      thesis: 'Empresario educativo del norte. Exgobernador de La Libertad. Fundador y lider de APP, el partido con mayor presencia territorial fuera de Lima.',
-      mechanism: 'Plan de choque contra el crimen: Comando Nacional contra Extorsion, Centro de Inteligencia anticriminal, incorporacion de rondas campesinas, inversión en tecnologia policíal.',
-      importance: 'Solo 0.9% en Polymarket pese a ser conocido a nivel naciónal. Su partido domina varias regiones del norte — su fuerza real esta en el Congreso, no en la presidencia.',
-      question: 'Puede superar el escandalo del Acunavideo y la imagen de candidato que compra votos con dadivas para construir credibilidad presidencial?',
-      detail: 'Empresario nortenio. Gran maquinaria regional. Bajo en Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/72576403-804a-4f28-85d3-bf4c7e648667.pdf', weight: 19 },
+      thesis: 'Empresario, exgobernador de La Libertad y fundador de APP. Su principal fortaleza es el partido que construyo en varias regiones.',
+      mechanism: 'Su plan habla de seguridad, lucha contra la extorsion, inteligencia y mas apoyo a la policia.',
+      importance: 'Tiene presencia politica nacional por APP, aunque en Polymarket aparece lejos de los primeros puestos.',
+      question: 'Su organizacion regional puede convertirlo en un actor mas competitivo en la campaña?',
+      detail: 'Fundador de APP. Presencia regional. Bajo en Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/72576403-804a-4f28-85d3-bf4c7e648667.pdf', weight: 19 },
 
     { cat: 'centroderecha', name: 'George Forsyth', val: 'Somos Peru', ref: 'Centro-derecha — Lima',
-      thesis: 'Exarquero de la selección peruana y exalcalde de La Victoria. Fue sorpresa en las encuestas de 2021. Vuelve con Somos Perú con imagen de gestor joven.',
-      mechanism: 'Seguridad ciudadana basada en la experiencia de La Victoria. Inversion en infraestructura. Modernizacion del Estado con enfoque gerencial.',
-      importance: '0.6% en Polymarket. Ha perdido impulso desde 2021 pero mantiene simpatia en Lima por su perfil joven y su gestión en La Victoria.',
-      question: 'Puede reconvertir su imagen de exfutbolista-alcalde en una propuesta presidencial creible sin partido solido ni maquinaria territorial?',
-      detail: 'Exarquero y exalcalde. Perfil joven y gestor. 0.6% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/1334ac30-c28e-42a5-8fc5-79a4638ccd2a.pdf', weight: 17 },
+      thesis: 'Exarquero de la seleccion y exalcalde de La Victoria. Busca volver a la carrera presidencial con una imagen de gestor joven.',
+      mechanism: 'Pone el foco en seguridad, obras e ideas de gestion mas moderna para el Estado.',
+      importance: 'Fue un nombre fuerte en la politica reciente, pero hoy aparece mas abajo en el mercado.',
+      question: 'Puede volver a crecer o su mejor momento politico ya paso?',
+      detail: 'Exarquero y exalcalde. Seguridad y gestion. 0.6% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/1334ac30-c28e-42a5-8fc5-79a4638ccd2a.pdf', weight: 17 },
 
     { cat: 'centroderecha', name: 'Jose Luna Galvez', val: 'Podemos Peru', ref: 'Centro-derecha — Lima',
-      thesis: 'Empresario y fundador de Podemos Perú. Exsenador. Ha estado bajo la lupa por vínculos cuestiónados con magistrados del poder judicial.',
-      mechanism: 'Reforma genuina del sistema de pensiones, retiros de AFP, reducción del costo de vida, apoyo a la pequeña empresa.',
-      importance: 'Su partido tiene presencia en Lima y regiones pero su imagen esta deteriorada por escandalo judicial.',
-      question: 'Los vínculos de Podemos Perú con cuestiónados magistrados del Tribunal Constitucional lo inhabilitan ante el electorado?',
-      detail: 'Fundador de Podemos Perú. Controversial. Reforma de pensiones.', plan: 'https://mpesije.jne.gob.pe/docs/67b637b0-e2f7-47cc-8b23-fa16be709cc2.pdf', weight: 16 },
+      thesis: 'Empresario, excongresista y fundador de Podemos Peru. Es una figura conocida, pero tambien arrastra cuestionamientos publicos.',
+      mechanism: 'Habla de pensiones, retiros de AFP, costo de vida y apoyo a negocios pequenos.',
+      importance: 'Tiene partido y presencia politica, pero llega a la carrera con una imagen discutida.',
+      question: 'Sus propuestas economicas pesan mas que sus cuestionamientos publicos?',
+      detail: 'Fundador de Podemos Peru. Pensiones y costo de vida.', plan: 'https://mpesije.jne.gob.pe/docs/67b637b0-e2f7-47cc-8b23-fa16be709cc2.pdf', weight: 16 },
 
     { cat: 'centroderecha', name: 'Mesías Guevara', val: 'Partido Morado', ref: 'Centro-derecha — Cajamarca',
-      thesis: 'Exgobernador regional de Cajamarca. Candidato del Partido Morado (fundado por Julio Guzman). Perfil regional con base en el norte del pais.',
-      mechanism: 'Descentralizacion, fortalecimiento de gobiernos regionales, gestión territorial, orden y gobernabilidad desde las regiones.',
-      importance: '0.7% en Polymarket. Su base esta en Cajamarca. El Partido Morado busca recuperar el espacio que tuvo en 2021 con Guzman.',
-      question: 'Puede el Partido Morado reconstruir su base electoral fuera de Lima con un candidato regional como Guevara?',
-      detail: 'Exgobernador de Cajamarca. Partido Morado busca recuperar espacio.', plan: 'https://mpesije.jne.gob.pe/docs/6eb5d4b8-bd18-4cf0-ae0e-e250ca085f5f.pdf', weight: 18 },
+      thesis: 'Exgobernador de Cajamarca y candidato del Partido Morado. Se presenta como una opcion de centro con mirada regional.',
+      mechanism: 'Propone mas descentralizacion, fortalecimiento regional y mejor gestion del Estado.',
+      importance: 'Representa el intento del Partido Morado de seguir presente en la eleccion de 2026.',
+      question: 'Su perfil regional puede ayudar al Partido Morado a recuperar espacio?',
+      detail: 'Exgobernador de Cajamarca. Centro con enfoque regional.', plan: 'https://mpesije.jne.gob.pe/docs/6eb5d4b8-bd18-4cf0-ae0e-e250ca085f5f.pdf', weight: 18 },
 
     // CENTRO
     { cat: 'centro', name: 'Alfonso Lopez Chau', val: 'Ahora Nacion', ref: 'Centro — Lima',
-      thesis: 'Ex-superintendente de la SUNAT. Economista con perfil técnico. Su discurso central: La primera tarea del gobierno no es económica, sino moral.',
-      mechanism: 'Reforma integral del sistema de justicia, lucha anticorrupción desde el Estado, formalizacion económica y tributaria, modernizacion de la administración pública.',
-      importance: 'Cuarto en Polymarket (11.1%). Atrae votantes hartos de la corrupción que buscan un candidato limpio con experiencia técnica y sin pasado político cuestiónado.',
-      question: 'Puede un candidato con perfil de tecnócrata moral y sin maquinaria partidaria construir la coalición que le de la presidencia en primera vuelta?',
-      detail: 'Ex-superintendente SUNAT. Discurso moral-técnico. 11.1% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/7d70c5e1-2246-42e8-90c2-372aa1cf7f52.pdf', weight: 36 },
+      thesis: 'Economista y exrector de la UNI. Su campaña mezcla reforma del Estado, lucha anticorrupcion y un tono tecnico.',
+      mechanism: 'Propone cambios en justicia, formalizacion, administracion publica y control de la corrupcion.',
+      importance: 'Al 2 de abril ronda 9% en Polymarket. Es uno de los nombres de centro con mejor posicion en el mercado.',
+      question: 'Puede crecer a nivel nacional sin una maquinaria partidaria tan fuerte como la de otros candidatos?',
+      detail: 'Economista y exrector de la UNI. 9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/7d70c5e1-2246-42e8-90c2-372aa1cf7f52.pdf', weight: 36 },
 
     { cat: 'centro', name: 'Jorge Nieto Montesinos', val: 'Partido del Buen Gobierno', ref: 'Centro — Lima',
-      thesis: 'Exministro de Defensa y Relaciones Exteriores. Politologo, diplomatico y analista. Representa la tecnocracia moderada con solida experiencia de Estado.',
-      mechanism: 'Reforma profunda del Estado, fortalecimiento instituciónal, lucha anticorrupción estructural, política exterior activa y multilateral.',
-      importance: 'Sexto en Polymarket (7%). Atrae votantes de centro que buscan experiencia de gobierno sin extremismos ni pasado controversial.',
-      question: 'Puede un candidato con perfil de tecnócrata instituciónal generar la adhesion emocional que requiere una campaña presidencial masiva?',
-      detail: 'Excanciller y exministro de Defensa. Tecnocrata moderado. 7% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/19bde703-f7f4-4715-92f3-b82e19bbe651.pdf', weight: 32 },
+      thesis: 'Exministro de Defensa y de Cultura. Tiene un perfil de centro marcado por experiencia en el Estado.',
+      mechanism: 'Habla de reforma institucional, lucha anticorrupcion y una politica exterior activa.',
+      importance: 'Al 2 de abril ronda 6% en Polymarket. Es una opcion de centro con experiencia de gobierno.',
+      question: 'Su perfil tecnico puede conectar con un electorado cansado del conflicto politico?',
+      detail: 'Exministro de Defensa y Cultura. 6% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/19bde703-f7f4-4715-92f3-b82e19bbe651.pdf', weight: 32 },
 
     { cat: 'centro', name: 'Ricardo Belmont', val: 'Partido Civico Obras', ref: 'Centro — Lima',
-      thesis: 'Exalcalde de Lima (1989-1998). Empresario mediatico histórico. Vuelve a la política con una propuesta radical: federalizar el Perú.',
-      mechanism: 'Federalizacion del pais con regiones autonomas, grandes obras de infraestructura, descentralización radical del poder y el presupuesto.',
-      importance: 'Septimo en Polymarket (1.5%). Reconocimiento por su histórica gestión en Lima. Atrae votantes con nostalgia de obras y gestión ejecutiva.',
-      question: 'Es la federalización una propuesta técnicamente viable o un slogan de campaña sin sustento instituciónal serio?',
-      detail: 'Exalcalde histórico de Lima. Propone federalizar el Perú. 1.5% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/5643db28-6dbd-4d35-b79e-30d20d3bed85.pdf', weight: 22 },
+      thesis: 'Exalcalde de Lima y figura historica de la politica local. Vuelve con una propuesta fuerte de federalismo.',
+      mechanism: 'Propone dar mas autonomia a las regiones y cambiar la forma en que se reparte el poder en el pais.',
+      importance: 'Al 2 de abril ronda 3% en Polymarket. Sigue siendo un nombre conocido para parte del electorado.',
+      question: 'Su idea de federalizar el Peru puede atraer nuevos votantes o queda como una propuesta de nicho?',
+      detail: 'Exalcalde de Lima. Federalismo. 3% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/5643db28-6dbd-4d35-b79e-30d20d3bed85.pdf', weight: 22 },
 
     { cat: 'centro', name: 'Wolfgang Grozo', val: 'Integridad Democratica', ref: 'Centro — Lima',
-      thesis: 'Candidato outsider que ha crecido sostenidamente en encuestas. Perfil anti-establishment con discurso de integridad y transparencia radical.',
-      mechanism: 'Lucha contra la mineria ilegal, reforma profunda del sistema de justicia, transparencia radical en el gasto público, combate anticorrupción sistemico.',
-      importance: '0.9% en Polymarket pero subiendo consistentemente en encuestas tradiciónales. Fenomeno de redes sociales. La sorpresa de la campaña.',
-      question: 'Es un candidato con propuesta sustantiva y equipo de gobierno real o solo captura el voto de protesta sin proyecto viable?',
-      detail: 'Outsider en ascenso. Integridad y reforma. Crece en encuestas.', plan: 'https://mpesije.jne.gob.pe/docs/ee89ac99-516b-4665-9297-413a0cf104de.pdf', weight: 19 },
+      thesis: 'General FAP en retiro y fundador de Integridad Democratica. Su mensaje junta orden, integridad y lucha anticorrupcion.',
+      mechanism: 'Propone combatir la mineria ilegal, reformar la justicia y vigilar mejor el gasto publico.',
+      importance: 'Al 2 de abril ronda 0.9% en Polymarket. Es una candidatura de menor alcance, pero con mensaje claro.',
+      question: 'Puede convertir su discurso de orden e integridad en apoyo masivo?',
+      detail: 'General FAP en retiro. Integridad y reforma. 0.9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/ee89ac99-516b-4665-9297-413a0cf104de.pdf', weight: 19 },
 
     { cat: 'centro', name: 'Fernando Olivera', val: 'Frente de la Esperanza 2021', ref: 'Centro — Lima',
-      thesis: 'Exfiscal y político con tres decadas de trayectoria. Fue protagonista de las investigaciónes contra Vladimiro Montesinos y el fujimorismo en los años 90.',
-      mechanism: 'Reforma del sistema de justicia, recuperacion de activos del Estado, lucha anticorrupción con base legal, fortalecimiento del Ministerio Publico.',
-      importance: '2% en encuestas. Apela a votantes que valoran trayectoria anticorrupción histórica.',
-      question: 'Puede una figura histórica del pasado político conectar con un electorado joven y hastiado de la clase política tradiciónal?',
-      detail: 'Exfiscal anticorrupción histórico. Trayectoria de los años 90.', plan: 'https://mpesije.jne.gob.pe/docs/d656b83f-3177-4053-a381-0f36ec99490a.pdf', weight: 24 },
+      thesis: 'Abogado y politico con larga trayectoria. Es recordado por sus denuncias contra la corrupcion en los anos noventa.',
+      mechanism: 'Su plan pone el foco en reforma judicial, recuperacion de activos y fortalecimiento del Ministerio Publico.',
+      importance: 'Sigue siendo una figura conocida para quienes valoran su perfil anticorrupcion.',
+      question: 'Su historia politica todavia conecta con votantes mas jovenes?',
+      detail: 'Excongresista y excanciller. Perfil anticorrupcion.', plan: 'https://mpesije.jne.gob.pe/docs/d656b83f-3177-4053-a381-0f36ec99490a.pdf', weight: 24 },
 
     { cat: 'centro', name: 'Marisol Perez Tello', val: 'Primero la Gente', ref: 'Centro — Lima',
-      thesis: 'Exministra de Justicia en el gobierno de PPK. Abogada y política de centro con trayectoria en derechos humanos y justicia constitucional.',
-      mechanism: 'Reforma del sistema penitenciario, fortalecimiento de derechos ciudadanos, gobernabilidad democratica, seguridad con enfoque de derechos.',
-      importance: '0.7% en Polymarket. Intenta llenar el espacio del centro liberal con propuestas instituciónales.',
-      question: 'Puede una candidata de perfil técnico-instituciónal diferenciarse en un espacio donde compiten varios candidatos de centro?',
-      detail: 'Exministra de Justicia. Centro liberal. Derechos y gobernabilidad.', plan: 'https://mpesije.jne.gob.pe/docs/1430b48a-b7d1-4acf-970e-7c5e58f450c2.pdf', weight: 18 },
+      thesis: 'Abogada y exministra de Justicia. Su perfil publico esta ligado a derechos, justicia y gobernabilidad.',
+      mechanism: 'Propone cambios en el sistema penitenciario, defensa de derechos y una agenda de seguridad con enfoque institucional.',
+      importance: 'Al 2 de abril ronda 0.7% en Polymarket. Compite por un espacio de centro con perfil tecnico.',
+      question: 'Puede destacar en una eleccion tan cargada de candidatos de centro y de seguridad dura?',
+      detail: 'Exministra de Justicia. Derechos y gobernabilidad. 0.7% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/1430b48a-b7d1-4acf-970e-7c5e58f450c2.pdf', weight: 18 },
 
     { cat: 'centro', name: 'Yonhy Lescano', val: 'Cooperacion Popular', ref: 'Centro — Apurímac',
-      thesis: 'Excongresista de Accion Popular por decadas. Candidato que obtuvo el 9% en primera vuelta en 2021. Ahora lidera su propia agrupacion política.',
-      mechanism: 'Reformas legislativas estructurales, fortalecimiento de la clase media, descentralización económica, lucha contra el monopolio del poder.',
-      importance: '0.7% en Polymarket, muy lejos del 9% de 2021. El mercado lo descarta como factor presidencial esta vez.',
-      question: 'Por qué bajo tan drasticamente de 9% en 2021 a menos del 1% en Polymarket? Que cambio en el electorado o en el candidato?',
-      detail: 'Excongresista AP. Obtuvo 9% en 2021. Hoy 0.7% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/582e0d55-19ee-4a7f-85ef-c254be5bada6.pdf', weight: 18 },
+      thesis: 'Excongresista y excandidato presidencial. En 2021 tuvo un resultado importante y ahora compite con una agrupacion propia.',
+      mechanism: 'Habla de reformas politicas, apoyo a la clase media, descentralizacion y menos concentracion de poder.',
+      importance: 'Al 2 de abril ronda 0.7% en Polymarket, muy por debajo de su resultado de 2021.',
+      question: 'Puede recuperar parte del apoyo que tuvo en la eleccion pasada?',
+      detail: 'Excongresista. En 2021 saco 9%. Hoy 0.7% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/582e0d55-19ee-4a7f-85ef-c254be5bada6.pdf', weight: 18 },
 
     { cat: 'centro', name: 'Mario Vizcarra', val: 'Perú Primero', ref: 'Centro — Moquegua',
-      thesis: 'Hermano del ex-presidente Martin Vizcarra (destituido en 2020). Candidato que capitaliza el voto martinista. Ha prometido indultar a su hermano si gana.',
-      mechanism: 'Continuidad del reformismo de Martin Vizcarra, lucha anticorrupción, reforma del Congreso, indulto al expresidente.',
-      importance: 'Menos del 0.5% en Polymarket. Su valor electoral reside principalmente en la lealtad al exmandatario, cuyo recuerdo es positivo para muchos peruanos.',
-      question: 'Es viable presentarse como candidato cuya principal propuesta es el indulto de su hermano? Es eso suficiente para una campaña presidencial?',
-      detail: 'Hermano del ex-presidente. Propone indultarlo si gana.', plan: 'https://mpesije.jne.gob.pe/docs/f9624874-7cf6-4737-8db3-b73707c98e70.pdf', weight: 16 },
+      thesis: 'Hermano de Martin Vizcarra y candidato de Peru Primero. Su campana esta muy ligada a la figura del expresidente.',
+      mechanism: 'Ofrece continuidad del reformismo de Vizcarra, lucha anticorrupcion y hasta el indulto para su hermano.',
+      importance: 'En Polymarket aparece por debajo de 0.5%. Su candidatura depende mucho del peso politico de Martin Vizcarra.',
+      question: 'Una campana tan ligada a otro lider puede crecer por si sola?',
+      detail: 'Hermano de Martin Vizcarra. Menos de 0.5% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/f9624874-7cf6-4737-8db3-b73707c98e70.pdf', weight: 16 },
 
     { cat: 'centro', name: 'Rosario Fernandez', val: 'Un Camino Diferente', ref: 'Centro — Lima',
-      thesis: 'Exministra de Justicia y expresidenta del Consejo de Ministros en el gobierno de Alan Garcia. Abogada y exfiscal con trayectoria en justicia.',
-      mechanism: 'Reforma del sistema de justicia, instituciónalidad democratica, gobernabilidad, propuestas de transparencia y Estado de derecho.',
-      importance: 'Candidata con trayectoria pero bajo perfil en la campaña actual. Representa el centro instituciónal alanista.',
-      question: 'Puede una candidata con historia en el alanismo construir un proyecto propio creible para 2026 dado el desastre del segúndo gobierno de Garcia?',
-      detail: 'Expresidenta del Consejo de Ministros de Garcia. Jurista.', plan: 'https://mpesije.jne.gob.pe/docs/de662f06-21d5-4523-a3ec-4fcbacabe16c.pdf', weight: 16 },
+      thesis: 'Abogada, exministra de Justicia y ex primera ministra. Su perfil esta muy ligado a la justicia y la gobernabilidad.',
+      mechanism: 'Habla de Estado de derecho, transparencia, reforma judicial y fortalecimiento institucional.',
+      importance: 'Es una candidata con experiencia, aunque con poca visibilidad en la campana actual.',
+      question: 'Puede convertir su experiencia tecnica en una propuesta que conecte con mas gente?',
+      detail: 'Exministra y ex primera ministra. Justicia y gobernabilidad.', plan: 'https://mpesije.jne.gob.pe/docs/de662f06-21d5-4523-a3ec-4fcbacabe16c.pdf', weight: 16 },
 
     { cat: 'centro', name: 'Rafael Belaunde', val: 'Libertad Popular', ref: 'Centro — Lima',
-      thesis: 'Candidato de centro con propuesta de liberalismo social moderado. Hereda tradiciónes de la democracia cristiana y el reformismo histórico peruano.',
-      mechanism: 'Liberalismo social moderado, reformas instituciónales, Estado de derecho, dialogo político como herramienta de gobierno.',
-      importance: 'Candidato de bajo perfil mediatico que representa tradiciónes políticas en declive en el Perú actual.',
-      question: 'Tienen aún vigencia los partidos históricos peruanos en un escenario electoral fragmentado y dominado por outsiders?',
-      detail: 'Liberalismo social histórico. Tradiciones políticas en declive.', plan: 'https://mpesije.jne.gob.pe/docs/30bab146-a532-4d1b-87a7-e0f8078dc70b.pdf', weight: 16 },
+      thesis: 'Candidato de centro con mensaje moderado. Habla de dialogo, Estado de derecho y reformas sin ruptura brusca.',
+      mechanism: 'Propone reformas institucionales, defensa de la ley y acuerdos politicos para gobernar.',
+      importance: 'Es una opcion de bajo perfil dentro del centro politico.',
+      question: 'Hay espacio en esta eleccion para una propuesta moderada y menos confrontacional?',
+      detail: 'Centro moderado. Dialogo y reformas institucionales.', plan: 'https://mpesije.jne.gob.pe/docs/30bab146-a532-4d1b-87a7-e0f8078dc70b.pdf', weight: 16 },
 
     { cat: 'centro', name: 'Enrique Valderrama', val: 'Partido Apristaa Peruano', ref: 'Centro — Lima',
-      thesis: 'Candidato presidencial del histórico APRA, fundado por Victor Raul Haya de la Torre. El partido más antiguo del Perú enfrenta su peor momento electoral.',
-      mechanism: 'Propuestas apristas de centro-izquierda histórica: Estado de bienestar, industrializacion, integración latinoamericana.',
-      importance: 'El APRA fue la fuerza política más importante del siglo XX peruano. Hoy esta en minimos históricos. Esta elección medira su resiliencia instituciónal.',
-      question: 'Puede el APRA sobrevivir como fuerza electoral relevante tras el desastre del segúndo gobierno de Alan Garcia y el suicidio del lider?',
-      detail: 'Candidato del histórico APRA. El partido más antiguo del Perú.', plan: 'https://mpesije.jne.gob.pe/docs/4d581919-b090-43d4-89e4-e284fde587b7.pdf', weight: 16 },
+      thesis: 'Es el candidato del APRA, uno de los partidos historicos del Peru. Su postulación busca mantener vivo ese espacio politico.',
+      mechanism: 'Su mensaje recoge ideas clasicas del aprismo sobre bienestar, industria e integracion regional.',
+      importance: 'Su candidatura importa porque muestra si el APRA todavia puede tener lugar en la politica nacional.',
+      question: 'El APRA todavia puede mover votos en una eleccion tan fragmentada?',
+      detail: 'Candidato del APRA. Busca mantener vigente al partido.', plan: 'https://mpesije.jne.gob.pe/docs/4d581919-b090-43d4-89e4-e284fde587b7.pdf', weight: 16 },
 
     { cat: 'centro', name: 'Carlos Espa', val: 'Partido SiCreo', ref: 'Centro — Lima',
-      thesis: 'Candidato de un partido menor de centro. Propuestas de reforma instituciónal con perfil bajo en medios naciónales.',
-      mechanism: 'Reforma del Estado, instituciónalidad, reducción de la burocracia, transparencia en la gestión pública.',
-      importance: '1.1% en Polymarket — sorprendentemente alto para un candidato de perfil bajo. El mercado ve algo en el que las encuestas aún no captan.',
-      question: 'Que explica que Polymarket le asigne 1.1% mientras tiene tan poco perfil mediatico? Hay información que el mercado tiene y las encuestas no?',
-      detail: 'Partido SiCreo. 1.1% Polymarket. Perfil bajo pero presente en mercados.', plan: 'https://mpesije.jne.gob.pe/docs/e9d731a4-a79f-42e0-9ff7-29f6abe2bd3f.pdf', weight: 21 },
+      thesis: 'Candidato de SiCreo, un partido de centro con poca exposicion nacional. Su mensaje gira alrededor de reforma del Estado.',
+      mechanism: 'Propone menos burocracia, mas institucionalidad y mas transparencia en la gestion publica.',
+      importance: 'Al 2 de abril ronda 1.1% en Polymarket. Tiene poca visibilidad, pero si aparece en el radar del mercado.',
+      question: 'Puede una candidatura de perfil bajo hacerse conocida en una campaña tan cargada?',
+      detail: 'SiCreo. Reforma del Estado. 1.1% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/e9d731a4-a79f-42e0-9ff7-29f6abe2bd3f.pdf', weight: 21 },
 
     { cat: 'centro', name: 'Carlos Jaico', val: 'Perú Moderno', ref: 'Centro — Lima',
-      thesis: 'Candidato de Perú Moderno. Partido de centro con enfoque en modernizacion del Estado y reformas graduales y técnicas.',
-      mechanism: 'Modernizacion del Estado, reforma del servicio civil, eficiencia del gasto público, digitalizacion de servicios.',
-      importance: 'Candidato testimonial que representa la busqueda de una tercera via técnica entre extremos ideologicos.',
-      question: 'Puede una propuesta de modernizacion gradual captar la atencion en un contexto de crisis e inseguridad extrema?',
-      detail: 'Perú Moderno. Modernizacion del Estado y reformas técnicas.', plan: 'https://mpesije.jne.gob.pe/docs/12de1a7b-008b-43c5-9159-c62c9b45eab1.pdf', weight: 16 },
+      thesis: 'Candidato de Peru Moderno. Su propuesta se presenta como una opcion de centro enfocada en gestionar mejor el Estado.',
+      mechanism: 'Habla de servicio civil, gasto publico, digitalizacion y cambios graduales en la administracion.',
+      importance: 'Es una candidatura pequena dentro del centro, con un discurso tecnico y administrativo.',
+      question: 'Hay espacio para un mensaje de gestion gradual en una campana tan dura y polarizada?',
+      detail: 'Peru Moderno. Gestion publica y reformas graduales.', plan: 'https://mpesije.jne.gob.pe/docs/12de1a7b-008b-43c5-9159-c62c9b45eab1.pdf', weight: 16 },
 
     // IZQUIERDA
     { cat: 'izquierda', name: 'Roberto Sanchez', val: 'Juntos por el Peru', ref: 'Izquierda — Lima',
-      thesis: 'Economista y exministro de Comercio Exterior en el gobierno de Pedro Castillo. Candidato de la izquierda democratica y moderada para 2026.',
-      mechanism: 'Estrategia integral contra la inseguridad, regulación de la mineria con participación comunitaria, fortalecimiento del Estado, dialogo social.',
-      importance: 'Quinto en Polymarket (10%). Principal candidato de la izquierda moderada. Intenta recuperar el voto progresista tras el desastre del gobierno Castillo.',
-      question: 'Puede un exministro de Castillo convencer a votantes de izquierda que el representa una alternativa real y no una continuidad de ese gobierno?',
-      detail: 'Exministro de Castillo. Izquierda democratica y moderada. 10% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/3dd0e649-061c-4f31-8c3f-7a0836b58bde.pdf', weight: 35 },
+      thesis: 'Psicologo, excongresista y exministro de Comercio Exterior y Turismo. Busca representar una izquierda moderada en 2026.',
+      mechanism: 'Propone dialogo social, regulacion de recursos, fortalecimiento del Estado y una estrategia amplia de seguridad.',
+      importance: 'Al 2 de abril ronda 8.9% en Polymarket. Es uno de los nombres con mas peso dentro de la izquierda moderada.',
+      question: 'Puede crecer sin quedar atado al desgaste del gobierno de Pedro Castillo?',
+      detail: 'Excongresista y exministro. 8.9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/3dd0e649-061c-4f31-8c3f-7a0836b58bde.pdf', weight: 35 },
 
     { cat: 'izquierda', name: 'Vladimir Cerron', val: 'Perú Libre', ref: 'Izquierda radical — Junín',
-      thesis: 'Exgobernador de Junín condenado por corrupción. Fundador de Perú Libre y arquitecto de la victoria de Pedro Castillo en 2021. Candidatura jurídicamente cuestiónada.',
-      mechanism: 'Programa marxista-leninista: naciónalizacion de recursos naturales, reforma agraria, nueva Constitucion, ruptura con el modelo neoliberal.',
-      importance: 'Candidatura simbólica y polemica. Tiene impedimentos legales por condena firme. Su presencia en la carrera activa el voto anti-izquierda que beneficia a Keiko.',
-      question: 'Puede un candidato con condena firme por corrupción postular a la presidencia? Que dice sobre el sistema judicial peruano que este en campaña?',
-      detail: 'Fundador de Perú Libre. Condenado por corrupción. Candidatura en disputa.', plan: 'https://mpesije.jne.gob.pe/docs/b2d25860-484e-4226-bd13-a57fb83c59cb.pdf', weight: 16 },
+      thesis: 'Exgobernador de Junin y fundador de Peru Libre. Su candidatura esta marcada por su condena por corrupcion y por una propuesta de izquierda dura.',
+      mechanism: 'Su programa plantea nacionalizacion, reforma agraria, nueva Constitucion y ruptura con el modelo economico actual.',
+      importance: 'Es una candidatura polemica por su situacion judicial y por el peso que tuvo en la victoria de Pedro Castillo en 2021.',
+      question: 'Su figura moviliza apoyo real o pesa mas como simbolo y conflicto politico?',
+      detail: 'Fundador de Peru Libre. Condenado por corrupcion.', plan: 'https://mpesije.jne.gob.pe/docs/b2d25860-484e-4226-bd13-a57fb83c59cb.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Fiorella Molinelli', val: 'Fuerza y Libertad', ref: 'Izquierda — Lima',
-      thesis: 'Expresidenta ejecutiva de EsSalud. Candidata de izquierda moderada con enfoque en derechos sociales, salud universal y equidad de genero.',
-      mechanism: 'Fortalecimiento del sistema de salud público, universalizacion de la seguridad social, derechos laborales, equidad de genero en el Estado.',
-      importance: 'Representa un nicho electoral de izquierda socialdemócrata con perfil femenino en una campaña dominada por hombres.',
-      question: 'Puede una candidata de izquierda moderada con perfil de gestora pública diferenciarse en un espacio electoral tan fragmentado?',
-      detail: 'Expresidenta de EsSalud. Izquierda social. Salud universal.', plan: 'https://mpesije.jne.gob.pe/docs/d4ab9fba-d366-4083-bbf5-63aa465114d9.pdf', weight: 16 },
+      thesis: 'Expresidenta ejecutiva de EsSalud. Su perfil esta muy ligado a salud publica, seguridad social y gestion.',
+      mechanism: 'Propone fortalecer el sistema de salud, ampliar la seguridad social y defender derechos laborales.',
+      importance: 'Es una candidatura de izquierda con foco social en una carrera dominada por perfiles mas duros o mas conocidos.',
+      question: 'Puede convertir su experiencia en salud en una ventaja politica clara?',
+      detail: 'Expresidenta de EsSalud. Salud y seguridad social.', plan: 'https://mpesije.jne.gob.pe/docs/d4ab9fba-d366-4083-bbf5-63aa465114d9.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Ronald Atencio', val: 'Alianza Electoral Venceremos', ref: 'Izquierda — Regiones',
-      thesis: 'Candidato de una alianza electoral de izquierda con base en regiones. Perfil sindical y de movimientos sociales populares.',
-      mechanism: 'Derechos laborales, fortalecimiento de sindicatos, control estatal de recursos naturales, reforma agraria.',
-      importance: '2% en encuestas. Representa la izquierda radical con menor perfil que Cerron pero más viabilidad jurídica.',
-      question: 'Puede una alianza electoral de izquierda capturar el voto que Cerron no puede consolidar por sus problemas legales?',
-      detail: 'Alianza de izquierda. Base sindical y movimientos sociales.', plan: 'https://mpesije.jne.gob.pe/docs/9984addc-e998-43b1-920f-1178d4d973aa.pdf', weight: 16 },
+      thesis: 'Candidato de una alianza de izquierda con base regional y social. Su perfil esta ligado al mundo sindical y popular.',
+      mechanism: 'Habla de derechos laborales, sindicatos, control estatal de recursos y reforma agraria.',
+      importance: 'Es una opcion de izquierda con menor visibilidad nacional, pero con mensaje claro en temas sociales.',
+      question: 'Puede crecer en las regiones donde la izquierda mantiene base social?',
+      detail: 'Alianza de izquierda. Trabajo y recursos naturales.', plan: 'https://mpesije.jne.gob.pe/docs/9984addc-e998-43b1-920f-1178d4d973aa.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Francisco Diez-Canseco', val: 'Perú Accion', ref: 'Izquierda — Lima',
-      thesis: 'Politico de izquierda con trayectoria en derechos humanos y movimientos sociales. Candidato de Perú Accion con propuesta de izquierda democratica.',
-      mechanism: 'Derechos humanos, reforma del Estado, economia mixta, integración latinoamericana progresista.',
-      importance: 'Candidato de bajo perfil que representa la izquierda con enfoque en derechos y movimientos sociales.',
-      question: 'Puede la izquierda de derechos humanos construir una propuesta electoral viable cuando el debate principal es inseguridad y discursos de mano dura?',
-      detail: 'Izquierda democratica con enfoque en derechos humanos.', plan: 'https://mpesije.jne.gob.pe/docs/f4e5c2c2-b0df-4033-adda-6617af774154.pdf', weight: 16 },
+      thesis: 'Politico con trayectoria publica y candidato de Peru Accion. Su discurso mezcla derechos, programas sociales y cambio institucional.',
+      mechanism: 'Propone fortalecer programas sociales, reformar el Estado y mantener una economia con mayor presencia publica.',
+      importance: 'Es una candidatura de izquierda con bajo perfil, pero con agenda social definida.',
+      question: 'Puede un discurso social y de derechos abrirse paso en una eleccion centrada en seguridad?',
+      detail: 'Peru Accion. Derechos y programas sociales.', plan: 'https://mpesije.jne.gob.pe/docs/f4e5c2c2-b0df-4033-adda-6617af774154.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Walter Chirinos', val: 'Partido Regionalista Integrac. Nacional', ref: 'Izquierda — Regiones',
-      thesis: 'Candidato de un partido regionalista de base andina. Propone integración naciónal desde las regiones y fortalecimiento de comunidades campesinas.',
-      mechanism: 'Regionalismo, comunidades campesinas, recursos naturales con beneficio local, integración andina.',
-      importance: 'Candidato testimonial con base en regiones andinas y comunidades campesinas. Perfil muy local.',
-      question: 'Puede el regionalismo ser una plataforma competitiva a nivel presidencial o solo suma votos simbólicos en zonas especificas?',
-      detail: 'Partido Regionalista. Base andina y comunidades campesinas.', plan: 'https://mpesije.jne.gob.pe/docs/3b89548c-81fa-479d-9ff9-2b7011fec7d2.pdf', weight: 16 },
+      thesis: 'Candidato regionalista con base andina. Su mensaje da mas peso a las regiones y a las comunidades campesinas.',
+      mechanism: 'Propone mas poder regional, mejor uso local de recursos y una mirada andina de integracion.',
+      importance: 'Es una candidatura pequena, pero muestra que el regionalismo sigue buscando lugar en la politica nacional.',
+      question: 'El regionalismo puede pasar de un mensaje local a una propuesta presidencial mas amplia?',
+      detail: 'Regionalismo andino. Comunidades y descentralizacion.', plan: 'https://mpesije.jne.gob.pe/docs/3b89548c-81fa-479d-9ff9-2b7011fec7d2.pdf', weight: 16 },
 
     // OUTSIDER / OTROS
     { cat: 'centro', name: 'Carlos Álvarez', val: 'Pais Para Todos', ref: 'Outsider — Lima',
-      thesis: 'Humorista y actor político. Protagonista del programa El Especial del Humor. Outsider populista que ha sorprendido en encuestas llegando al 7%, tercero a nivel naciónal.',
-      mechanism: 'Reducir el sueldo de congresistas, luchar contra la corrupción desde la ciudadania, formalizacion del trabajo, reducción del costo de vida.',
-      importance: 'Tercero en Polymarket (15.3%). Capitaliza el descontento profundo con la clase política. Candidato genuinamente nuevo y sin pasado político cuestiónado.',
-      question: 'Tiene la experiencia de gobierno necesaria para gobernar o es solo un fenómeno mediatico de protesta que se disolvera en segúnda vuelta?',
-      detail: 'Humorista convertido en candidato sorpresa. Tercero en Polymarket (15.3%).', plan: 'https://mpesije.jne.gob.pe/docs/76291ee3-eba2-4c88-adef-2530f2d70bb8.pdf', weight: 39 },
+      thesis: 'Humorista y actor conocido por television. Entra a la carrera como outsider y conecta con el voto de protesta.',
+      mechanism: 'Habla de bajar privilegios politicos, luchar contra la corrupcion y aliviar el costo de vida.',
+      importance: 'Al 2 de abril aparece tercero en Polymarket con 15.3%. Es uno de los nombres nuevos con mas atencion en el mercado.',
+      question: 'Puede pasar de figura mediática a candidato con estructura y equipo de gobierno?',
+      detail: 'Humorista y outsider. Tercero en Polymarket (15.3%).', plan: 'https://mpesije.jne.gob.pe/docs/76291ee3-eba2-4c88-adef-2530f2d70bb8.pdf', weight: 39 },
 
     { cat: 'centro', name: 'Charlie Carrasco', val: 'Partido Democrata Unido Peru', ref: 'Outsider — Lima',
-      thesis: 'Candidato de un partido menor con perfil mediatico. Busca diferenciarse en un campo electoral muy saturado con propuestas ciudadanas.',
-      mechanism: 'Reforma del Estado, propuestas ciudadanas directas, combate a la corrupción, transparencia.',
-      importance: 'Candidato de bajo perfil que representa la fragmentación del sistema político peruano.',
-      question: 'Que espacio real tiene un partido pequeño sin estructura territorial en unas elecciones con 35 candidatos?',
-      detail: 'Partido menor. Perfil mediatico ciudadano.', plan: 'https://mpesije.jne.gob.pe/docs/2e5235de-e828-45f0-92cc-017a830abc33.pdf', weight: 16 },
+      thesis: 'Candidato de un partido pequeno en una carrera muy cargada. Su mensaje busca presentarse como una opcion ciudadana.',
+      mechanism: 'Propone reforma del Estado, transparencia y mas peso para propuestas directas de la ciudadania.',
+      importance: 'Es una candidatura de bajo perfil que refleja la gran fragmentacion de esta eleccion.',
+      question: 'Un partido pequeno puede hacerse visible en una carrera con tantos candidatos?',
+      detail: 'Partido pequeno. Reforma y transparencia.', plan: 'https://mpesije.jne.gob.pe/docs/2e5235de-e828-45f0-92cc-017a830abc33.pdf', weight: 16 },
 
     { cat: 'derecha', name: 'Herbert Caller', val: 'Partido Patriotico del Peru', ref: 'Otros — Lima',
-      thesis: 'Candidato del Partido Patriotico del Perú. Propuestas de corte naciónalista con enfoque en soberania y control de recursos naturales.',
-      mechanism: 'Soberania naciónal, control de recursos naturales, defensa de fronteras, identidad naciónal peruana.',
-      importance: 'Candidato testimonial de un partido menor con perfil patriotico y base pequeña.',
-      question: 'Puede el naciónalismo económico ser una propuesta diferenciadora cuando el electorado prioriza inseguridad y economia cotidiana?',
-      detail: 'Partido Patriotico. Soberania y recursos naturales.', plan: 'https://mpesije.jne.gob.pe/docs/6de519cb-bb4d-4319-a11b-be65d4438f4f.pdf', weight: 16 },
+      thesis: 'Candidato del Partido Patriotico del Peru. Su discurso es nacionalista y pone enfasis en soberania.',
+      mechanism: 'Habla de fronteras, recursos naturales, defensa nacional e identidad peruana.',
+      importance: 'Es una candidatura menor, pero con un mensaje claro de corte nacionalista.',
+      question: 'Ese mensaje nacionalista puede diferenciarlo en una campana tan centrada en seguridad y economia?',
+      detail: 'Nacionalismo, fronteras y recursos naturales.', plan: 'https://mpesije.jne.gob.pe/docs/6de519cb-bb4d-4319-a11b-be65d4438f4f.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Paul Jaimes', val: 'Progresemos', ref: 'Otros — Lima',
-      thesis: 'Candidato de Progresemos, partido de centro con propuestas de reforma gradual y modernizacion instituciónal.',
-      mechanism: 'Progresismo moderado, reformas sociales graduales, fortalecimiento de servicios públicos.',
-      importance: 'Candidato testimonial en un campo electoral muy fragmentado con pocas posibilidades de impacto presidencial.',
-      question: 'Puede el progresismo gradual capturar votos en una campaña dominada por candidatos de posiciones más extremas y mediáticas?',
-      detail: 'Progresemos. Reformismo gradual y moderado.', plan: 'https://mpesije.jne.gob.pe/docs/b2f303a2-1e0d-4933-9d5f-04682a3710b0.pdf', weight: 16 },
+      thesis: 'Candidato de Progresemos. Su propuesta ofrece cambios moderados y mas servicios publicos.',
+      mechanism: 'Plantea reformas sociales graduales y fortalecimiento del Estado en areas basicas.',
+      importance: 'Es una candidatura pequena dentro de una eleccion muy fragmentada.',
+      question: 'Un mensaje moderado puede destacar entre candidaturas mas ruidosas?',
+      detail: 'Progresemos. Cambios graduales y servicios publicos.', plan: 'https://mpesije.jne.gob.pe/docs/b2f303a2-1e0d-4933-9d5f-04682a3710b0.pdf', weight: 16 },
 
     { cat: 'centroderecha', name: 'Joaquin Masse', val: 'Partido Democratico Federal', ref: 'Otros — Lima',
-      thesis: 'Candidato del Partido Democratico Federal. Apuesta por la federalización del Estado peruano como eje central de su propuesta.',
-      mechanism: 'Federalismo, autonomía regional, descentralización del poder político y presupuestal, gobiernos regionales con más soberania.',
-      importance: 'Candidato testimonial que comparte la propuesta federal con Belmont sin lograr diferenciarse.',
-      question: 'Por qué conviven dos candidatos con propuesta federal (Belmont y Masse) sin que ninguno se convierta en el referente unico de ese eje?',
-      detail: 'Partido Democratico Federal. Federalismo y descentralización.', weight: 16 },
+      thesis: 'Candidato del Partido Democratico Federal. Su propuesta principal es darle mas autonomia a las regiones.',
+      mechanism: 'Defiende federalismo, descentralizacion y mas poder politico y presupuestal para gobiernos regionales.',
+      importance: 'Es una candidatura menor, pero insiste en un tema poco comun: cambiar la estructura centralista del pais.',
+      question: 'El federalismo puede dejar de ser una idea de nicho y ganar apoyo real?',
+      detail: 'Federalismo y descentralizacion regional.', weight: 16 },
 
     { cat: 'izquierda', name: 'Alex Gonzales Castillo', val: 'Partido Democrata Verde', ref: 'Otros — Lima',
-      thesis: 'Candidato del Partido Democrata Verde con enfoque en medio ambiente, mineria sostenible y recursos naturales.',
-      mechanism: 'Transicion ecologica, mineria responsable, protección de ecosistemas, energías renovables, economia verde.',
-      importance: 'Unico candidato con eje verde como propuesta central. Nicho electoral pequeño pero coherente y diferenciado.',
-      question: 'Puede la agenda verde ser una propuesta electoralmente viable en un pais donde el debate central es inseguridad y economia inmediata?',
-      detail: 'Partido Verde. Medio ambiente y mineria sostenible.', plan: 'https://mpesije.jne.gob.pe/docs/3f2a939b-edf2-4505-b709-df775a5e0038.pdf', weight: 16 },
+      thesis: 'Candidato del Partido Democrata Verde. Su discurso pone el ambiente en el centro de la campaña.',
+      mechanism: 'Propone mineria responsable, cuidado de ecosistemas, energias renovables y una economia mas verde.',
+      importance: 'Es una candidatura de nicho, pero destaca por hablar del ambiente como tema principal.',
+      question: 'La agenda verde puede ganar espacio en una eleccion dominada por seguridad y costo de vida?',
+      detail: 'Agenda verde. Ambiente y mineria responsable.', plan: 'https://mpesije.jne.gob.pe/docs/3f2a939b-edf2-4505-b709-df775a5e0038.pdf', weight: 16 },
 
     { cat: 'centro', name: 'Antonio Ortiz', val: 'Salvemos al Peru', ref: 'Otros — Lima',
-      thesis: 'Candidato de Salvemos al Perú con un discurso de urgencia naciónal y reforma instituciónal profunda desde la ciudadania.',
-      mechanism: 'Reforma de Estado de urgencia, combate a la corrupción sistemica, reconstruccion instituciónal.',
-      importance: 'Candidato testimonial con discurso de crisis naciónal en un campo muy fragmentado.',
-      question: 'Cuántos candidatos con discurso de salvacíon naciónal puede absorber el electorado sin que el mensaje pierda todo impacto?',
-      detail: 'Salvemos al Perú. Discurso de urgencia naciónal.', plan: 'https://mpesije.jne.gob.pe/docs/40877746-e670-42d3-840b-cdf683f46355.pdf', weight: 16 },
+      thesis: 'Candidato de Salvemos al Peru. Su mensaje parte de la idea de que el pais vive una crisis profunda.',
+      mechanism: 'Habla de reforma urgente del Estado, anticorrupcion y reconstruccion institucional.',
+      importance: 'Es una candidatura pequena con discurso de emergencia nacional.',
+      question: 'Ese mensaje de crisis puede diferenciarlo entre tantos candidatos?',
+      detail: 'Crisis, anticorrupcion y reforma del Estado.', plan: 'https://mpesije.jne.gob.pe/docs/40877746-e670-42d3-840b-cdf683f46355.pdf', weight: 16 },
   ]
 
   const CONNECTIONS = {
@@ -1104,7 +1132,12 @@
   const chapterImportance = document.getElementById('chapter-importance')
   const chapterQuestion = document.getElementById('chapter-question')
   const chapterRelated = document.getElementById('chapter-related')
+  const MOBILE_BREAKPOINT = 768
+  const DESKTOP_TIER_THRESHOLDS = [600, 2500, 7000, 18000]
+  const MOBILE_TIER_THRESHOLDS = [200, 800, 3000, 9000]
   let selectedBlock = null
+  let activeBlock = null
+  let isMobileLayout = window.innerWidth <= MOBILE_BREAKPOINT
   let mouseX = -9999, mouseY = -9999
   const CURSOR_RADIUS = 220
   const EXPAND_FACTOR = 3.0
@@ -1114,10 +1147,44 @@
   let blocks = []
   let activeCat = null
 
+  function setPointerOffscreen() {
+    mouseX = -9999
+    mouseY = -9999
+  }
+
   function closePanels() {
     chapterPanel.classList.remove('visible')
     docPanel.classList.remove('visible')
     selectedBlock = null
+  }
+
+  function closeChapterPanel({ keepActive = false } = {}) {
+    chapterPanel.classList.remove('visible')
+    selectedBlock = null
+    if (!keepActive) activeBlock = null
+  }
+
+  function setActiveBlock(block) {
+    activeBlock = block
+    if (isMobileLayout) setPointerOffscreen()
+  }
+
+  function syncLayoutMode() {
+    const nextIsMobile = window.innerWidth <= MOBILE_BREAKPOINT
+    if (nextIsMobile === isMobileLayout) return
+    isMobileLayout = nextIsMobile
+    setPointerOffscreen()
+    activeBlock = null
+    if (!isMobileLayout) selectedBlock = null
+  }
+
+  function getTier(area) {
+    const [t1, t2, t3, t4] = isMobileLayout ? MOBILE_TIER_THRESHOLDS : DESKTOP_TIER_THRESHOLDS
+    if (area >= t4) return 4
+    if (area >= t3) return 3
+    if (area >= t2) return 2
+    if (area >= t1) return 1
+    return 0
   }
 
   function uniqueWords(text, count = 4) {
@@ -1404,25 +1471,14 @@
     hudBlocks.textContent = blocks.length
   }
 
-  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY })
-  document.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999 })
-
-  let touchTimer = null
-  document.addEventListener('touchstart', e => {
-    if (infoPanel.classList.contains('visible')) return
-    if (e.target.closest('.legend-bar') || e.target.closest('.about-btn') || e.target.closest('.info-panel')) return
-    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY
-    clearTimeout(touchTimer)
-  }, { passive: true })
-  document.addEventListener('touchmove', e => {
-    if (infoPanel.classList.contains('visible')) return
-    if (e.target.closest('.legend-bar')) return
-    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY
-    e.preventDefault()
-  }, { passive: false })
-  document.addEventListener('touchend', () => {
-    clearTimeout(touchTimer)
-    touchTimer = setTimeout(() => { mouseX = -9999; mouseY = -9999 }, 800)
+  document.addEventListener('mousemove', e => {
+    if (isMobileLayout) return
+    mouseX = e.clientX
+    mouseY = e.clientY
+  })
+  document.addEventListener('mouseleave', () => {
+    if (isMobileLayout) return
+    setPointerOffscreen()
   })
 
   document.getElementById('about-btn').addEventListener('click', () => {
@@ -1440,12 +1496,26 @@
   })
   document.getElementById('chapter-panel-close').addEventListener('click', e => {
     e.stopPropagation()
-    chapterPanel.classList.remove('visible')
-    selectedBlock = null
+    closeChapterPanel()
+  })
+
+  document.addEventListener('click', e => {
+    if (!isMobileLayout) return
+    if (
+      e.target.closest('.block') ||
+      e.target.closest('.chapter-panel') ||
+      e.target.closest('.doc-panel') ||
+      e.target.closest('.legend-bar') ||
+      e.target.closest('.about-btn') ||
+      e.target.closest('.load-btn') ||
+      e.target.closest('.info-panel')
+    ) return
+    closeChapterPanel()
   })
 
   function openChapterPanel(block) {
     selectedBlock = block
+    setActiveBlock(block)
     chapterPanel.classList.add('visible')
     chapterKicker.textContent = `${CATEGORIES[block.marker.cat].label} · ${block.marker.val}`
     chapterTitle.textContent = block.marker.name
@@ -1476,6 +1546,8 @@
     currentChapters = [...CHAPTERS]
     currentConnections = CONNECTIONS
     docStatus.textContent = 'Loaded sample map.'
+    activeBlock = null
+    selectedBlock = null
     rebuildMap()
     docPanel.classList.remove('visible')
   }
@@ -1495,6 +1567,8 @@
     currentCategories = generated.categories
     currentChapters = generated.chapters
     currentConnections = generated.connections
+    activeBlock = null
+    selectedBlock = null
     rebuildMap()
     docStatus.textContent = `Generated ${generated.chapters.length} blocks.`
     docPanel.classList.remove('visible')
@@ -1522,6 +1596,8 @@
           currentCategories = parsed.categories
           currentChapters = parsed.chapters
           currentConnections = parsed.connections || {}
+          activeBlock = null
+          selectedBlock = null
           rebuildMap()
           docStatus.textContent = `Loaded ${file.name}.`
           docPanel.classList.remove('visible')
@@ -1538,6 +1614,20 @@
   document.getElementById('load-sample-btn').addEventListener('click', loadSample)
   document.getElementById('generate-btn').addEventListener('click', generateFromInput)
 
+  function handleBlockTap(block, event) {
+    if (!isMobileLayout) {
+      openChapterPanel(block)
+      return
+    }
+    event.stopPropagation()
+    if (activeBlock !== block) {
+      setActiveBlock(block)
+      if (chapterPanel.classList.contains('visible')) closeChapterPanel({ keepActive: true })
+      return
+    }
+    openChapterPanel(block)
+  }
+
   function lerpColor(a, b, t) {
     const ar = parseInt(a.slice(1,3),16), ag = parseInt(a.slice(3,5),16), ab = parseInt(a.slice(5,7),16)
     const br = parseInt(b.slice(1,3),16), bg = parseInt(b.slice(3,5),16), bb = parseInt(b.slice(5,7),16)
@@ -1552,11 +1642,16 @@
 
     for (const b of blocks) {
       let expand = 1
+      let intensity = 0
       const cx = b.rx + b.rw / 2, cy = b.ry + b.rh / 2
-      const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2)
-      if (dist < CURSOR_RADIUS) {
-        const force = 1 - dist / CURSOR_RADIUS
-        expand = 1 + force * force * EXPAND_FACTOR
+      if (isMobileLayout) {
+        if (activeBlock === b) intensity = 1
+      } else {
+        const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2)
+        if (dist < CURSOR_RADIUS) intensity = 1 - dist / CURSOR_RADIUS
+      }
+      if (intensity > 0) {
+        expand = 1 + intensity * intensity * EXPAND_FACTOR
       }
       if (activeCat !== null) {
         if (b.marker.cat === activeCat) expand = Math.max(expand, 2.5)
@@ -1587,8 +1682,13 @@
       const opi = Math.round(b.currentOpacity * 100)
       if (b._pop !== opi) { b.el.style.opacity = b.currentOpacity; b._pop = opi }
 
-      const dist = Math.sqrt((mouseX - (b.rx + b.rw / 2)) ** 2 + (mouseY - (b.ry + b.rh / 2)) ** 2)
-      const intensity = dist < CURSOR_RADIUS ? (1 - dist / CURSOR_RADIUS) : 0
+      let intensity = 0
+      if (isMobileLayout) {
+        if (activeBlock === b) intensity = 1
+      } else {
+        const dist = Math.sqrt((mouseX - (b.rx + b.rw / 2)) ** 2 + (mouseY - (b.ry + b.rh / 2)) ** 2)
+        intensity = dist < CURSOR_RADIUS ? (1 - dist / CURSOR_RADIUS) : 0
+      }
       const hoverLevel = Math.round(intensity * 5)
       if (b._hoverLevel !== hoverLevel) {
         if (hoverLevel > 0) {
@@ -1610,11 +1710,7 @@
       layout(b.prepared, availW, LH)
       layoutCalls++
       const area = rw * rh
-      let tier = 0
-      if (area >= 18000) tier = 4
-      else if (area >= 7000) tier = 3
-      else if (area >= 2500) tier = 2
-      else if (area >= 600) tier = 1
+      const tier = getTier(area)
 
       if (!b._els) {
         b._els = {
@@ -1623,7 +1719,7 @@
           detail: b.el.querySelector('.block-detail'),
           ref: b.el.querySelector('.block-ref'),
         }
-        b.el.addEventListener('click', () => openChapterPanel(b))
+        b.el.addEventListener('click', e => handleBlockTap(b, e))
       }
 
       const { title, value, detail, ref } = b._els
@@ -1631,18 +1727,18 @@
         if (tier === 0) {
           title.style.display = 'none'; value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 1) {
-          title.style.display = 'block'; title.style.fontSize = '9px'; title.style.whiteSpace = 'nowrap'
+          title.style.display = 'block'; title.style.fontSize = `${Math.max(8, isMobileLayout ? 8 : 9)}px`; title.style.whiteSpace = 'nowrap'
           value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 2) {
-          title.style.display = 'block'; title.style.fontSize = '11px'; title.style.whiteSpace = 'normal'
+          title.style.display = 'block'; title.style.fontSize = `${Math.max(8, isMobileLayout ? 10 : 11)}px`; title.style.whiteSpace = 'normal'
           value.style.display = 'block'; value.style.fontSize = '9px'
           detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 3) {
-          title.style.display = 'block'; title.style.fontSize = '13px'; title.style.whiteSpace = 'normal'
+          title.style.display = 'block'; title.style.fontSize = `${Math.max(8, isMobileLayout ? 12 : 13)}px`; title.style.whiteSpace = 'normal'
           value.style.display = 'block'; value.style.fontSize = '9px'
           detail.style.display = 'block'; detail.style.fontSize = '7px'; detail.style.maxHeight = Math.max(0, rh - 48) + 'px'; ref.style.display = 'block'
         } else {
-          title.style.display = 'block'; title.style.fontSize = Math.min(19, 12 + area / 10000) + 'px'; title.style.whiteSpace = 'normal'
+          title.style.display = 'block'; title.style.fontSize = Math.max(8, Math.min(19, 12 + area / 10000)) + 'px'; title.style.whiteSpace = 'normal'
           value.style.display = 'block'; value.style.fontSize = Math.min(11, 8 + area / 28000) + 'px'
           detail.style.display = 'block'; detail.style.fontSize = Math.min(10, 7.5 + area / 30000) + 'px'
           detail.style.maxHeight = Math.max(0, rh - 56) + 'px'
@@ -1672,6 +1768,7 @@
 
   let resizeTimer
   window.addEventListener('resize', () => {
+    syncLayoutMode()
     clearTimeout(resizeTimer)
     resizeTimer = setTimeout(() => {
       frozenRows = buildRowStructure(blocks)
