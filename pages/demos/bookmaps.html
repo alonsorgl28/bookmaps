@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bookmaps | Pretext</title>
-<meta name="description" content="Bookmaps turns dense documents into interactive visual maps. This demo uses Revoluciones tecnologicas y capital financiero as a sample.">
+<meta name="description" content="Bookmaps turns dense documents into interactive visual maps. This demo uses Revoluciónes tecnologicas y capital financiero as a sample.">
 <meta name="theme-color" content="#f5f0ea">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
     overflow: hidden;
     height: 100vh;
     width: 100vw;
-    cursor: crosshair;
+    cursor: default;
     -webkit-font-smoothing: antialiased;
   }
   body::before {
@@ -158,11 +158,10 @@
   .block-title-inline {
     display: none;
     font-size: 9px;
-    line-height: 1.2;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
     font-weight: 700;
-    opacity: 0.95;
+    color: rgba(0,0,0,0.88);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -757,7 +756,7 @@
       <h2>Elecciones Perú 2026</h2>
       <p>Un mapa en tiempo real de los <strong>35 candidatos presidenciales</strong> de las elecciones peruanas del 12 de abril de 2026. Cada bloque es un candidato. Mueve el cursor: los candidatos cercanos se <strong>expanden</strong>, revelando su propuesta, posición y contexto. Los bloques comprimen y el layout se recalcula cada frame.</p>
       <h3>Cómo se mide el tamaño</h3>
-      <p>El area de cada bloque refleja su probabilidad en <strong>Polymarket</strong> — el mercado de predicción con $4.6M de volumen en esta elección. Lopez Aliaga lidera (33%), seguido por Keiko (18%) y Carlos Alvarez (15%). El mercado es mas preciso que las encuestas porque usa dinero real.</p>
+      <p>El area de cada bloque refleja su probabilidad en <strong>Polymarket</strong> — el mercado de predicción con $4.6M de volumen en esta elección. Lopez Aliaga lidera (33%), seguido por Keiko (18%) y Carlos Alvarez (15%). El mercado es más preciso que las encuestas porque usa dinero real.</p>
       <h3>Qué estás viendo</h3>
       <ul>
         <li><strong>35 candidatos</strong> organizados por posición ideológica: Derecha, Centro-derecha, Centro, Izquierda y Outsiders.</li>
@@ -795,17 +794,17 @@
 
   const CHAPTERS = [
     // DERECHA
-    { cat: 'derecha', name: 'Rafael Lopez Aliaga', val: 'Renovacion Popular', ref: 'Derecha extrema — Lima',
-      thesis: 'Empresario ultraconservador, exalcalde de Lima (2022-2026). Apodado Porky. Candidato de la derecha dura con discurso de shock económico, valores catolicos y mano dura.',
+    { cat: 'derecha', name: 'Rafael Lopez Aliaga', val: 'Renovacíon Popular', ref: 'Derecha extrema — Lima',
+      thesis: 'Empresario ultraconservador, exalcalde de Lima (2022-2026). Apodado Porky. Candidato de la derecha dura con discurso de shock económico, valores católicos y mano dura.',
       mechanism: 'Fusion de Ministerios de Interior y Defensa para sumar 300,000 efectivos. Expulsar migrantes ilegales. Pena de muerte. Salir de la Corte IDH. Cambiar la capital a Junín.',
-      importance: 'Lider en Polymarket con 33%. Empata técnicamente con Keiko en encuestas. Base fuerte en Lima y sectores conservadores urbanos con alta movilizacion.',
-      question: 'Sus propuestas mas extremas — pena de muerte, cambio de capital, fusion de ministerios — son un programa de gobierno real o retorica electoral para movilizar su base?',
+      importance: 'Lider en Polymarket con 33%. Empata técnicamente con Keiko en encuestas. Base fuerte en Lima y sectores conservadores urbanos con alta movilización.',
+      question: 'Sus propuestas más extremas — pena de muerte, cambio de capital, fusion de ministerios — son un programa de gobierno real o retórica electoral para movilizar su base?',
       detail: 'Exalcalde de Lima. Ultraconservador. Lider en Polymarket (33%).', plan: 'https://mpesije.jne.gob.pe/docs/2096b44a-f3b6-4c81-b03d-94fbfc9ac762.pdf', weight: 48 },
 
     { cat: 'derecha', name: 'Keiko Fujimori', val: 'Fuerza Popular', ref: 'Derecha — Lima',
-      thesis: 'Hija del ex-presidente Alberto Fujimori. Lleva tres campañas presidenciales (2011, 2016, 2021) sin ganar. Tiene la base electoral mas solida y organizada del pais.',
+      thesis: 'Hija del ex-presidente Alberto Fujimori. Lleva tres campañas presidenciales (2011, 2016, 2021) sin ganar. Tiene la base electoral más solida y organizada del pais.',
       mechanism: 'Seguridad ciudadana con mano dura, atracción de inversión privada, fortalecimiento de las Fuerzas Armadas y reconstruccion del tejido instituciónal.',
-      importance: 'Segunda en Polymarket (18%). Maquinaria territorial extensa y voto fiel que la convierten en favorita para segunda vuelta. Su resultado definitivo depende de si su base se consolida.',
+      importance: 'Segunda en Polymarket (18%). Maquinaria territorial extensa y voto fiel que la convierten en favorita para segúnda vuelta. Su resultado definitivo depende de si su base se consolida.',
       question: 'Puede superar el peso de las investigaciónes por lavado de activos y la herencia ambivalente del fujimorismo para ganar por primera vez la presidencia?',
       detail: 'Tres veces candidata. Segunda en Polymarket (18%). Base electoral fiel.', plan: 'https://mpesije.jne.gob.pe/docs/da4b943d-4344-4743-9362-a11ccf3054cb.pdf', weight: 41 },
 
@@ -824,7 +823,7 @@
       detail: 'General retirado. Propone cerrar fronteras y reforma judicial.', plan: 'https://mpesije.jne.gob.pe/docs/ae0c9ba2-6278-4ca7-b077-16ed2cc39e76.pdf', weight: 16 },
 
     { cat: 'derecha', name: 'Alvaro Paz de la Barra', val: 'Fe en el Peru', ref: 'Derecha — Lima',
-      thesis: 'Exalcalde del distrito de La Molina. Candidato de un partido menor que apuesta por valores tradicionales, familia cristiana y libre mercado.',
+      thesis: 'Exalcalde del distrito de La Molina. Candidato de un partido menor que apuesta por valores tradiciónales, familia cristiana y libre mercado.',
       mechanism: 'Seguridad, familia, valores cristianos, libre mercado, reducción del Estado y eliminación de burocracia.',
       importance: 'Candidato con base electoral pequeña pero activa en sectores conservadores de Lima clasemedia.',
       question: 'Puede un candidato sin caudal propio competir en el espacio electoral que ya ocupan Keiko y Lopez Aliaga?',
@@ -833,7 +832,7 @@
     // CENTRO-DERECHA
     { cat: 'centroderecha', name: 'Cesar Acuna', val: 'Alianza para el Progreso', ref: 'Centro-derecha — La Libertad',
       thesis: 'Empresario educativo del norte. Exgobernador de La Libertad. Fundador y lider de APP, el partido con mayor presencia territorial fuera de Lima.',
-      mechanism: 'Plan de choque contra el crimen: Comando Nacional contra Extorsion, Centro de Inteligencia anticriminal, incorporacion de rondas campesinas, inversión en tecnologia policial.',
+      mechanism: 'Plan de choque contra el crimen: Comando Nacional contra Extorsion, Centro de Inteligencia anticriminal, incorporacion de rondas campesinas, inversión en tecnologia policíal.',
       importance: 'Solo 0.9% en Polymarket pese a ser conocido a nivel naciónal. Su partido domina varias regiones del norte — su fuerza real esta en el Congreso, no en la presidencia.',
       question: 'Puede superar el escandalo del Acunavideo y la imagen de candidato que compra votos con dadivas para construir credibilidad presidencial?',
       detail: 'Empresario nortenio. Gran maquinaria regional. Bajo en Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/72576403-804a-4f28-85d3-bf4c7e648667.pdf', weight: 19 },
@@ -846,10 +845,10 @@
       detail: 'Exarquero y exalcalde. Perfil joven y gestor. 0.6% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/1334ac30-c28e-42a5-8fc5-79a4638ccd2a.pdf', weight: 17 },
 
     { cat: 'centroderecha', name: 'Jose Luna Galvez', val: 'Podemos Peru', ref: 'Centro-derecha — Lima',
-      thesis: 'Empresario y fundador de Podemos Perú. Exsenador. Ha estado bajo la lupa por vinculos cuestionados con magistrados del poder judicial.',
+      thesis: 'Empresario y fundador de Podemos Perú. Exsenador. Ha estado bajo la lupa por vínculos cuestiónados con magistrados del poder judicial.',
       mechanism: 'Reforma genuina del sistema de pensiones, retiros de AFP, reducción del costo de vida, apoyo a la pequeña empresa.',
       importance: 'Su partido tiene presencia en Lima y regiones pero su imagen esta deteriorada por escandalo judicial.',
-      question: 'Los vinculos de Podemos Perú con cuestionados magistrados del Tribunal Constitucional lo inhabilitan ante el electorado?',
+      question: 'Los vínculos de Podemos Perú con cuestiónados magistrados del Tribunal Constitucional lo inhabilitan ante el electorado?',
       detail: 'Fundador de Podemos Perú. Controversial. Reforma de pensiones.', plan: 'https://mpesije.jne.gob.pe/docs/67b637b0-e2f7-47cc-8b23-fa16be709cc2.pdf', weight: 16 },
 
     { cat: 'centroderecha', name: 'Mesías Guevara', val: 'Partido Morado', ref: 'Centro-derecha — Cajamarca',
@@ -863,15 +862,15 @@
     { cat: 'centro', name: 'Alfonso Lopez Chau', val: 'Ahora Nacion', ref: 'Centro — Lima',
       thesis: 'Ex-superintendente de la SUNAT. Economista con perfil técnico. Su discurso central: La primera tarea del gobierno no es económica, sino moral.',
       mechanism: 'Reforma integral del sistema de justicia, lucha anticorrupción desde el Estado, formalizacion económica y tributaria, modernizacion de la administración pública.',
-      importance: 'Cuarto en Polymarket (11.1%). Atrae votantes hartos de la corrupción que buscan un candidato limpio con experiencia técnica y sin pasado político cuestionado.',
-      question: 'Puede un candidato con perfil de tecnocrata moral y sin maquinaria partidaria construir la coalición que le de la presidencia en primera vuelta?',
+      importance: 'Cuarto en Polymarket (11.1%). Atrae votantes hartos de la corrupción que buscan un candidato limpio con experiencia técnica y sin pasado político cuestiónado.',
+      question: 'Puede un candidato con perfil de tecnócrata moral y sin maquinaria partidaria construir la coalición que le de la presidencia en primera vuelta?',
       detail: 'Ex-superintendente SUNAT. Discurso moral-técnico. 11.1% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/7d70c5e1-2246-42e8-90c2-372aa1cf7f52.pdf', weight: 36 },
 
     { cat: 'centro', name: 'Jorge Nieto Montesinos', val: 'Partido del Buen Gobierno', ref: 'Centro — Lima',
       thesis: 'Exministro de Defensa y Relaciones Exteriores. Politologo, diplomatico y analista. Representa la tecnocracia moderada con solida experiencia de Estado.',
       mechanism: 'Reforma profunda del Estado, fortalecimiento instituciónal, lucha anticorrupción estructural, política exterior activa y multilateral.',
       importance: 'Sexto en Polymarket (7%). Atrae votantes de centro que buscan experiencia de gobierno sin extremismos ni pasado controversial.',
-      question: 'Puede un candidato con perfil de tecnocrata instituciónal generar la adhesion emocional que requiere una campaña presidencial masiva?',
+      question: 'Puede un candidato con perfil de tecnócrata instituciónal generar la adhesion emocional que requiere una campaña presidencial masiva?',
       detail: 'Excanciller y exministro de Defensa. Tecnocrata moderado. 7% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/19bde703-f7f4-4715-92f3-b82e19bbe651.pdf', weight: 32 },
 
     { cat: 'centro', name: 'Ricardo Belmont', val: 'Partido Civico Obras', ref: 'Centro — Lima',
@@ -884,7 +883,7 @@
     { cat: 'centro', name: 'Wolfgang Grozo', val: 'Integridad Democratica', ref: 'Centro — Lima',
       thesis: 'Candidato outsider que ha crecido sostenidamente en encuestas. Perfil anti-establishment con discurso de integridad y transparencia radical.',
       mechanism: 'Lucha contra la mineria ilegal, reforma profunda del sistema de justicia, transparencia radical en el gasto público, combate anticorrupción sistemico.',
-      importance: '0.9% en Polymarket pero subiendo consistentemente en encuestas tradicionales. Fenomeno de redes sociales. La sorpresa de la campaña.',
+      importance: '0.9% en Polymarket pero subiendo consistentemente en encuestas tradiciónales. Fenomeno de redes sociales. La sorpresa de la campaña.',
       question: 'Es un candidato con propuesta sustantiva y equipo de gobierno real o solo captura el voto de protesta sin proyecto viable?',
       detail: 'Outsider en ascenso. Integridad y reforma. Crece en encuestas.', plan: 'https://mpesije.jne.gob.pe/docs/ee89ac99-516b-4665-9297-413a0cf104de.pdf', weight: 19 },
 
@@ -892,7 +891,7 @@
       thesis: 'Exfiscal y político con tres decadas de trayectoria. Fue protagonista de las investigaciónes contra Vladimiro Montesinos y el fujimorismo en los años 90.',
       mechanism: 'Reforma del sistema de justicia, recuperacion de activos del Estado, lucha anticorrupción con base legal, fortalecimiento del Ministerio Publico.',
       importance: '2% en encuestas. Apela a votantes que valoran trayectoria anticorrupción histórica.',
-      question: 'Puede una figura histórica del pasado político conectar con un electorado joven y hastiado de la clase política tradicional?',
+      question: 'Puede una figura histórica del pasado político conectar con un electorado joven y hastiado de la clase política tradiciónal?',
       detail: 'Exfiscal anticorrupción histórico. Trayectoria de los años 90.', plan: 'https://mpesije.jne.gob.pe/docs/d656b83f-3177-4053-a381-0f36ec99490a.pdf', weight: 24 },
 
     { cat: 'centro', name: 'Marisol Perez Tello', val: 'Primero la Gente', ref: 'Centro — Lima',
@@ -906,7 +905,7 @@
       thesis: 'Excongresista de Accion Popular por decadas. Candidato que obtuvo el 9% en primera vuelta en 2021. Ahora lidera su propia agrupacion política.',
       mechanism: 'Reformas legislativas estructurales, fortalecimiento de la clase media, descentralización económica, lucha contra el monopolio del poder.',
       importance: '0.7% en Polymarket, muy lejos del 9% de 2021. El mercado lo descarta como factor presidencial esta vez.',
-      question: 'Por que bajo tan drasticamente de 9% en 2021 a menos del 1% en Polymarket? Que cambio en el electorado o en el candidato?',
+      question: 'Por qué bajo tan drasticamente de 9% en 2021 a menos del 1% en Polymarket? Que cambio en el electorado o en el candidato?',
       detail: 'Excongresista AP. Obtuvo 9% en 2021. Hoy 0.7% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/582e0d55-19ee-4a7f-85ef-c254be5bada6.pdf', weight: 18 },
 
     { cat: 'centro', name: 'Mario Vizcarra', val: 'Perú Primero', ref: 'Centro — Moquegua',
@@ -920,27 +919,27 @@
       thesis: 'Exministra de Justicia y expresidenta del Consejo de Ministros en el gobierno de Alan Garcia. Abogada y exfiscal con trayectoria en justicia.',
       mechanism: 'Reforma del sistema de justicia, instituciónalidad democratica, gobernabilidad, propuestas de transparencia y Estado de derecho.',
       importance: 'Candidata con trayectoria pero bajo perfil en la campaña actual. Representa el centro instituciónal alanista.',
-      question: 'Puede una candidata con historia en el alanismo construir un proyecto propio creible para 2026 dado el desastre del segundo gobierno de Garcia?',
+      question: 'Puede una candidata con historia en el alanismo construir un proyecto propio creible para 2026 dado el desastre del segúndo gobierno de Garcia?',
       detail: 'Expresidenta del Consejo de Ministros de Garcia. Jurista.', plan: 'https://mpesije.jne.gob.pe/docs/de662f06-21d5-4523-a3ec-4fcbacabe16c.pdf', weight: 16 },
 
     { cat: 'centro', name: 'Rafael Belaunde', val: 'Libertad Popular', ref: 'Centro — Lima',
-      thesis: 'Candidato de centro con propuesta de liberalismo social moderado. Hereda tradiciones de la democracia cristiana y el reformismo histórico peruano.',
+      thesis: 'Candidato de centro con propuesta de liberalismo social moderado. Hereda tradiciónes de la democracia cristiana y el reformismo histórico peruano.',
       mechanism: 'Liberalismo social moderado, reformas instituciónales, Estado de derecho, dialogo político como herramienta de gobierno.',
-      importance: 'Candidato de bajo perfil mediatico que representa tradiciones políticas en declive en el Perú actual.',
-      question: 'Tienen aun vigencia los partidos históricos peruanos en un escenario electoral fragmentado y dominado por outsiders?',
+      importance: 'Candidato de bajo perfil mediatico que representa tradiciónes políticas en declive en el Perú actual.',
+      question: 'Tienen aún vigencia los partidos históricos peruanos en un escenario electoral fragmentado y dominado por outsiders?',
       detail: 'Liberalismo social histórico. Tradiciones políticas en declive.', plan: 'https://mpesije.jne.gob.pe/docs/30bab146-a532-4d1b-87a7-e0f8078dc70b.pdf', weight: 16 },
 
-    { cat: 'centro', name: 'Enrique Valderrama', val: 'Partido Aprista Peruano', ref: 'Centro — Lima',
-      thesis: 'Candidato presidencial del histórico APRA, fundado por Victor Raul Haya de la Torre. El partido mas antiguo del Perú enfrenta su peor momento electoral.',
-      mechanism: 'Propuestas apristas de centro-izquierda histórica: Estado de bienestar, industrializacion, integracion latinoamericana.',
-      importance: 'El APRA fue la fuerza política mas importante del siglo XX peruano. Hoy esta en minimos históricos. Esta elección medira su resiliencia instituciónal.',
-      question: 'Puede el APRA sobrevivir como fuerza electoral relevante tras el desastre del segundo gobierno de Alan Garcia y el suicidio del lider?',
-      detail: 'Candidato del histórico APRA. El partido mas antiguo del Perú.', plan: 'https://mpesije.jne.gob.pe/docs/4d581919-b090-43d4-89e4-e284fde587b7.pdf', weight: 16 },
+    { cat: 'centro', name: 'Enrique Valderrama', val: 'Partido Apristaa Peruano', ref: 'Centro — Lima',
+      thesis: 'Candidato presidencial del histórico APRA, fundado por Victor Raul Haya de la Torre. El partido más antiguo del Perú enfrenta su peor momento electoral.',
+      mechanism: 'Propuestas apristas de centro-izquierda histórica: Estado de bienestar, industrializacion, integración latinoamericana.',
+      importance: 'El APRA fue la fuerza política más importante del siglo XX peruano. Hoy esta en minimos históricos. Esta elección medira su resiliencia instituciónal.',
+      question: 'Puede el APRA sobrevivir como fuerza electoral relevante tras el desastre del segúndo gobierno de Alan Garcia y el suicidio del lider?',
+      detail: 'Candidato del histórico APRA. El partido más antiguo del Perú.', plan: 'https://mpesije.jne.gob.pe/docs/4d581919-b090-43d4-89e4-e284fde587b7.pdf', weight: 16 },
 
     { cat: 'centro', name: 'Carlos Espa', val: 'Partido SiCreo', ref: 'Centro — Lima',
       thesis: 'Candidato de un partido menor de centro. Propuestas de reforma instituciónal con perfil bajo en medios naciónales.',
       mechanism: 'Reforma del Estado, instituciónalidad, reducción de la burocracia, transparencia en la gestión pública.',
-      importance: '1.1% en Polymarket — sorprendentemente alto para un candidato de perfil bajo. El mercado ve algo en el que las encuestas aun no captan.',
+      importance: '1.1% en Polymarket — sorprendentemente alto para un candidato de perfil bajo. El mercado ve algo en el que las encuestas aún no captan.',
       question: 'Que explica que Polymarket le asigne 1.1% mientras tiene tan poco perfil mediatico? Hay información que el mercado tiene y las encuestas no?',
       detail: 'Partido SiCreo. 1.1% Polymarket. Perfil bajo pero presente en mercados.', plan: 'https://mpesije.jne.gob.pe/docs/e9d731a4-a79f-42e0-9ff7-29f6abe2bd3f.pdf', weight: 21 },
 
@@ -960,7 +959,7 @@
       detail: 'Exministro de Castillo. Izquierda democratica y moderada. 10% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/3dd0e649-061c-4f31-8c3f-7a0836b58bde.pdf', weight: 35 },
 
     { cat: 'izquierda', name: 'Vladimir Cerron', val: 'Perú Libre', ref: 'Izquierda radical — Junín',
-      thesis: 'Exgobernador de Junín condenado por corrupción. Fundador de Perú Libre y arquitecto de la victoria de Pedro Castillo en 2021. Candidatura jurídicamente cuestionada.',
+      thesis: 'Exgobernador de Junín condenado por corrupción. Fundador de Perú Libre y arquitecto de la victoria de Pedro Castillo en 2021. Candidatura jurídicamente cuestiónada.',
       mechanism: 'Programa marxista-leninista: naciónalizacion de recursos naturales, reforma agraria, nueva Constitucion, ruptura con el modelo neoliberal.',
       importance: 'Candidatura simbólica y polemica. Tiene impedimentos legales por condena firme. Su presencia en la carrera activa el voto anti-izquierda que beneficia a Keiko.',
       question: 'Puede un candidato con condena firme por corrupción postular a la presidencia? Que dice sobre el sistema judicial peruano que este en campaña?',
@@ -969,27 +968,27 @@
     { cat: 'izquierda', name: 'Fiorella Molinelli', val: 'Fuerza y Libertad', ref: 'Izquierda — Lima',
       thesis: 'Expresidenta ejecutiva de EsSalud. Candidata de izquierda moderada con enfoque en derechos sociales, salud universal y equidad de genero.',
       mechanism: 'Fortalecimiento del sistema de salud público, universalizacion de la seguridad social, derechos laborales, equidad de genero en el Estado.',
-      importance: 'Representa un nicho electoral de izquierda socialdemocrata con perfil femenino en una campaña dominada por hombres.',
+      importance: 'Representa un nicho electoral de izquierda socialdemócrata con perfil femenino en una campaña dominada por hombres.',
       question: 'Puede una candidata de izquierda moderada con perfil de gestora pública diferenciarse en un espacio electoral tan fragmentado?',
       detail: 'Expresidenta de EsSalud. Izquierda social. Salud universal.', plan: 'https://mpesije.jne.gob.pe/docs/d4ab9fba-d366-4083-bbf5-63aa465114d9.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Ronald Atencio', val: 'Alianza Electoral Venceremos', ref: 'Izquierda — Regiones',
       thesis: 'Candidato de una alianza electoral de izquierda con base en regiones. Perfil sindical y de movimientos sociales populares.',
       mechanism: 'Derechos laborales, fortalecimiento de sindicatos, control estatal de recursos naturales, reforma agraria.',
-      importance: '2% en encuestas. Representa la izquierda radical con menor perfil que Cerron pero mas viabilidad jurídica.',
+      importance: '2% en encuestas. Representa la izquierda radical con menor perfil que Cerron pero más viabilidad jurídica.',
       question: 'Puede una alianza electoral de izquierda capturar el voto que Cerron no puede consolidar por sus problemas legales?',
       detail: 'Alianza de izquierda. Base sindical y movimientos sociales.', plan: 'https://mpesije.jne.gob.pe/docs/9984addc-e998-43b1-920f-1178d4d973aa.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Francisco Diez-Canseco', val: 'Perú Accion', ref: 'Izquierda — Lima',
       thesis: 'Politico de izquierda con trayectoria en derechos humanos y movimientos sociales. Candidato de Perú Accion con propuesta de izquierda democratica.',
-      mechanism: 'Derechos humanos, reforma del Estado, economia mixta, integracion latinoamericana progresista.',
+      mechanism: 'Derechos humanos, reforma del Estado, economia mixta, integración latinoamericana progresista.',
       importance: 'Candidato de bajo perfil que representa la izquierda con enfoque en derechos y movimientos sociales.',
       question: 'Puede la izquierda de derechos humanos construir una propuesta electoral viable cuando el debate principal es inseguridad y discursos de mano dura?',
       detail: 'Izquierda democratica con enfoque en derechos humanos.', plan: 'https://mpesije.jne.gob.pe/docs/f4e5c2c2-b0df-4033-adda-6617af774154.pdf', weight: 16 },
 
     { cat: 'izquierda', name: 'Walter Chirinos', val: 'Partido Regionalista Integrac. Nacional', ref: 'Izquierda — Regiones',
-      thesis: 'Candidato de un partido regionalista de base andina. Propone integracion naciónal desde las regiones y fortalecimiento de comunidades campesinas.',
-      mechanism: 'Regionalismo, comunidades campesinas, recursos naturales con beneficio local, integracion andina.',
+      thesis: 'Candidato de un partido regionalista de base andina. Propone integración naciónal desde las regiones y fortalecimiento de comunidades campesinas.',
+      mechanism: 'Regionalismo, comunidades campesinas, recursos naturales con beneficio local, integración andina.',
       importance: 'Candidato testimonial con base en regiones andinas y comunidades campesinas. Perfil muy local.',
       question: 'Puede el regionalismo ser una plataforma competitiva a nivel presidencial o solo suma votos simbólicos en zonas especificas?',
       detail: 'Partido Regionalista. Base andina y comunidades campesinas.', plan: 'https://mpesije.jne.gob.pe/docs/3b89548c-81fa-479d-9ff9-2b7011fec7d2.pdf', weight: 16 },
@@ -998,8 +997,8 @@
     { cat: 'centro', name: 'Carlos Álvarez', val: 'Pais Para Todos', ref: 'Outsider — Lima',
       thesis: 'Humorista y actor político. Protagonista del programa El Especial del Humor. Outsider populista que ha sorprendido en encuestas llegando al 7%, tercero a nivel naciónal.',
       mechanism: 'Reducir el sueldo de congresistas, luchar contra la corrupción desde la ciudadania, formalizacion del trabajo, reducción del costo de vida.',
-      importance: 'Tercero en Polymarket (15.3%). Capitaliza el descontento profundo con la clase política. Candidato genuinamente nuevo y sin pasado político cuestionado.',
-      question: 'Tiene la experiencia de gobierno necesaria para gobernar o es solo un fenómeno mediatico de protesta que se disolvera en segunda vuelta?',
+      importance: 'Tercero en Polymarket (15.3%). Capitaliza el descontento profundo con la clase política. Candidato genuinamente nuevo y sin pasado político cuestiónado.',
+      question: 'Tiene la experiencia de gobierno necesaria para gobernar o es solo un fenómeno mediatico de protesta que se disolvera en segúnda vuelta?',
       detail: 'Humorista convertido en candidato sorpresa. Tercero en Polymarket (15.3%).', plan: 'https://mpesije.jne.gob.pe/docs/76291ee3-eba2-4c88-adef-2530f2d70bb8.pdf', weight: 39 },
 
     { cat: 'centro', name: 'Charlie Carrasco', val: 'Partido Democrata Unido Peru', ref: 'Outsider — Lima',
@@ -1020,19 +1019,19 @@
       thesis: 'Candidato de Progresemos, partido de centro con propuestas de reforma gradual y modernizacion instituciónal.',
       mechanism: 'Progresismo moderado, reformas sociales graduales, fortalecimiento de servicios públicos.',
       importance: 'Candidato testimonial en un campo electoral muy fragmentado con pocas posibilidades de impacto presidencial.',
-      question: 'Puede el progresismo gradual capturar votos en una campaña dominada por candidatos de posiciones mas extremas y mediáticas?',
+      question: 'Puede el progresismo gradual capturar votos en una campaña dominada por candidatos de posiciones más extremas y mediáticas?',
       detail: 'Progresemos. Reformismo gradual y moderado.', plan: 'https://mpesije.jne.gob.pe/docs/b2f303a2-1e0d-4933-9d5f-04682a3710b0.pdf', weight: 16 },
 
     { cat: 'centroderecha', name: 'Joaquin Masse', val: 'Partido Democratico Federal', ref: 'Otros — Lima',
       thesis: 'Candidato del Partido Democratico Federal. Apuesta por la federalización del Estado peruano como eje central de su propuesta.',
-      mechanism: 'Federalismo, autonomia regional, descentralización del poder político y presupuestal, gobiernos regionales con mas soberania.',
+      mechanism: 'Federalismo, autonomía regional, descentralización del poder político y presupuestal, gobiernos regionales con más soberania.',
       importance: 'Candidato testimonial que comparte la propuesta federal con Belmont sin lograr diferenciarse.',
-      question: 'Por que conviven dos candidatos con propuesta federal (Belmont y Masse) sin que ninguno se convierta en el referente unico de ese eje?',
+      question: 'Por qué conviven dos candidatos con propuesta federal (Belmont y Masse) sin que ninguno se convierta en el referente unico de ese eje?',
       detail: 'Partido Democratico Federal. Federalismo y descentralización.', weight: 16 },
 
     { cat: 'izquierda', name: 'Alex Gonzales Castillo', val: 'Partido Democrata Verde', ref: 'Otros — Lima',
       thesis: 'Candidato del Partido Democrata Verde con enfoque en medio ambiente, mineria sostenible y recursos naturales.',
-      mechanism: 'Transicion ecologica, mineria responsable, protección de ecosistemas, energias renovables, economia verde.',
+      mechanism: 'Transicion ecologica, mineria responsable, protección de ecosistemas, energías renovables, economia verde.',
       importance: 'Unico candidato con eje verde como propuesta central. Nicho electoral pequeño pero coherente y diferenciado.',
       question: 'Puede la agenda verde ser una propuesta electoralmente viable en un pais donde el debate central es inseguridad y economia inmediata?',
       detail: 'Partido Verde. Medio ambiente y mineria sostenible.', plan: 'https://mpesije.jne.gob.pe/docs/3f2a939b-edf2-4505-b709-df775a5e0038.pdf', weight: 16 },
@@ -1041,15 +1040,15 @@
       thesis: 'Candidato de Salvemos al Perú con un discurso de urgencia naciónal y reforma instituciónal profunda desde la ciudadania.',
       mechanism: 'Reforma de Estado de urgencia, combate a la corrupción sistemica, reconstruccion instituciónal.',
       importance: 'Candidato testimonial con discurso de crisis naciónal en un campo muy fragmentado.',
-      question: 'Cuantos candidatos con discurso de salvacion naciónal puede absorber el electorado sin que el mensaje pierda todo impacto?',
+      question: 'Cuántos candidatos con discurso de salvacíon naciónal puede absorber el electorado sin que el mensaje pierda todo impacto?',
       detail: 'Salvemos al Perú. Discurso de urgencia naciónal.', plan: 'https://mpesije.jne.gob.pe/docs/40877746-e670-42d3-840b-cdf683f46355.pdf', weight: 16 },
   ]
 
   const CONNECTIONS = {
     'Rafael Lopez Aliaga': [
-      ['Keiko Fujimori', 'Ambos lideran la derecha. Una alianza entre ellos en segunda vuelta seria determinante para el resultado final.'],
+      ['Keiko Fujimori', 'Ambos lideran la derecha. Una alianza entre ellos en segúnda vuelta seria determinante para el resultado final.'],
       ['Roberto Chiabra', 'Ambos proponen mano dura y orden desde perspectivas distintas — uno empresarial, otro militar.'],
-      ['Carlos Álvarez', 'El crecimiento de Alvarez como outsider podria afectar el techo electoral de Lopez Aliaga en Lima.'],
+      ['Carlos Álvarez', 'El crecimiento de Alvarez como outsider podría afectar el techo electoral de Lopez Aliaga en Lima.'],
     ],
     'Keiko Fujimori': [
       ['Rafael Lopez Aliaga', 'Empatan técnicamente en primer lugar. La competencia entre ellos divide el voto de derecha y complica la primera vuelta.'],
@@ -1057,8 +1056,8 @@
       ['Vladimir Cerron', 'Sus candidaturas definen la polarizacion central de esta eleccion: derecha vs izquierda radical.'],
     ],
     'Carlos Álvarez': [
-      ['Wolfgang Grozo', 'Ambos outsiders que crecen capitalizando el descontento ciudadano con la clase política tradicional.'],
-      ['Alfonso Lopez Chau', 'Ambos se presentan como ajenos a la política tradicional, aunque con perfiles muy distintos (humorista vs tecnocrata).'],
+      ['Wolfgang Grozo', 'Ambos outsiders que crecen capitalizando el descontento ciudadano con la clase política tradiciónal.'],
+      ['Alfonso Lopez Chau', 'Ambos se presentan como ajenos a la política tradiciónal, aunque con perfiles muy distintos (humorista vs tecnócrata).'],
     ],
     'Alfonso Lopez Chau': [
       ['Jorge Nieto Montesinos', 'Ambos candidatos técnicos de centro que compiten por el mismo electorado anticorrupción.'],
@@ -1074,7 +1073,7 @@
     ],
     'Cesar Acuna': [
       ['George Forsyth', 'Ambos de centro-derecha compiten por el voto de gestión y pragmatismo regional.'],
-      ['Jose Williams Zapata', 'Potenciales aliados en una coalición de centroderecha para segunda vuelta.'],
+      ['Jose Williams Zapata', 'Potenciales aliados en una coalición de centroderecha para segúnda vuelta.'],
     ],
     'Jorge Nieto Montesinos': [
       ['Alfonso Lopez Chau', 'Ambos candidatos técnicos de centro anticorrupción que se canibalizan mutuamente.'],
@@ -1380,23 +1379,10 @@
       const id = marker.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 18)
       el.innerHTML = `
         <div class="block-inner">
-          <div class="block-head">
-            <div class="term-toolbar">
-              <div class="term-meta">
-                <div class="term-id">${id}</div>
-              </div>
-            </div>
-          </div>
           <div class="block-body">
             <div class="block-title-inline">${marker.name}</div>
-            <div class="term-line">
-              <div class="term-prompt">&gt;</div>
-              <div class="term-text block-value">${marker.val}</div>
-            </div>
-            <div class="term-line">
-              <div class="term-prompt"></div>
-              <div class="term-text block-detail">${marker.detail}</div>
-            </div>
+            <div class="block-value">${marker.val}</div>
+            <div class="block-detail">${marker.detail}</div>
           </div>
           <div class="block-foot">
             <div class="term-footer">
@@ -1645,22 +1631,22 @@
         if (tier === 0) {
           title.style.display = 'none'; value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 1) {
-          title.style.display = ''; title.style.fontSize = '12px'
+          title.style.display = 'block'; title.style.fontSize = '12px'; title.style.whiteSpace = 'nowrap'
           value.style.display = 'none'; detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 2) {
-          title.style.display = ''; title.style.fontSize = '20px'
-          value.style.display = ''; value.style.fontSize = '10px'
+          title.style.display = 'block'; title.style.fontSize = '16px'; title.style.whiteSpace = 'normal'
+          value.style.display = 'block'; value.style.fontSize = '10px'
           detail.style.display = 'none'; ref.style.display = 'none'
         } else if (tier === 3) {
-          title.style.display = ''; title.style.fontSize = '20px'
-          value.style.display = ''; value.style.fontSize = '10px'
-          detail.style.display = ''; detail.style.fontSize = '7px'; detail.style.maxHeight = Math.max(0, rh - 48) + 'px'; ref.style.display = ''
+          title.style.display = 'block'; title.style.fontSize = '18px'; title.style.whiteSpace = 'normal'
+          value.style.display = 'block'; value.style.fontSize = '10px'
+          detail.style.display = 'block'; detail.style.fontSize = '7px'; detail.style.maxHeight = Math.max(0, rh - 48) + 'px'; ref.style.display = 'block'
         } else {
-          title.style.display = ''; title.style.fontSize = Math.min(30, 20 + area / 7000) + 'px'
-          value.style.display = ''; value.style.fontSize = Math.min(11, 8 + area / 28000) + 'px'
-          detail.style.display = ''; detail.style.fontSize = Math.min(10, 7.5 + area / 30000) + 'px'
+          title.style.display = 'block'; title.style.fontSize = Math.min(32, 20 + area / 6000) + 'px'; title.style.whiteSpace = 'normal'
+          value.style.display = 'block'; value.style.fontSize = Math.min(11, 8 + area / 28000) + 'px'
+          detail.style.display = 'block'; detail.style.fontSize = Math.min(10, 7.5 + area / 30000) + 'px'
           detail.style.maxHeight = Math.max(0, rh - 56) + 'px'
-          ref.style.display = ''
+          ref.style.display = 'block'
         }
         b._tier = tier
       }
