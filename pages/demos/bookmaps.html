@@ -694,9 +694,7 @@
     }
     .mobile-topbar {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto;
-      gap: 6px;
-      align-items: center;
+      grid-template-columns: minmax(0, 1fr);
     }
     .mobile-mode-switch {
       display: grid;
@@ -715,21 +713,6 @@
       background: rgba(18,18,18,0.92);
       color: #f6f4ef;
     }
-    .mobile-utility-btn {
-      min-width: 52px;
-      border: 1px solid rgba(18,18,18,0.10);
-      background: rgba(255,255,255,0.76);
-      color: rgba(18,18,18,0.58);
-      font: 700 10px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
-      padding: 10px 9px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .mobile-utility-btn.active {
-      background: rgba(18,18,18,0.92);
-      color: #f6f4ef;
-    }
     .mobile-search {
       display: none;
       align-items: center;
@@ -739,7 +722,6 @@
       background: rgba(255,255,255,0.74);
       backdrop-filter: blur(10px);
     }
-    body.mobile-search-open .mobile-search,
     body.mobile-list-mode .mobile-search {
       display: flex;
     }
@@ -759,41 +741,12 @@
       letter-spacing: 0.12em;
       flex: 0 0 auto;
     }
-    .mobile-featured {
-      display: none;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(124px, 1fr);
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: none;
-    }
-    body.mobile-summary-open .mobile-featured {
-      display: grid;
-    }
-    .mobile-featured::-webkit-scrollbar {
-      display: none;
-    }
-    .mobile-featured-card {
-      border: 1px solid rgba(18,18,18,0.10);
-      background: rgba(255,255,255,0.80);
-      padding: 10px 10px 11px;
-      text-align: left;
-      min-height: 72px;
-      cursor: pointer;
-    }
-    .mobile-featured-card.active {
-      box-shadow: 0 10px 24px rgba(18,18,18,0.10);
-      background: rgba(255,255,255,0.95);
-    }
-    .mobile-featured-rank,
     .mobile-list-rank {
       font: 700 9px/1 'IBM Plex Mono', 'SF Mono', monospace;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(18,18,18,0.40);
     }
-    .mobile-featured-name,
     .mobile-list-name {
       margin-top: 8px;
       font-size: 12px;
@@ -801,7 +754,6 @@
       font-weight: 700;
       color: #141210;
     }
-    .mobile-featured-meta,
     .mobile-list-meta {
       margin-top: 6px;
       font-size: 10px;
@@ -811,7 +763,7 @@
     .mobile-list-view {
       display: none;
       position: fixed;
-      top: 108px;
+      top: 98px;
       left: 0;
       right: 0;
       bottom: calc(60px + env(safe-area-inset-bottom, 0px));
@@ -941,14 +893,11 @@
         <button class="mobile-mode-btn active" id="mobile-mode-map" data-mode="map">Mapa</button>
         <button class="mobile-mode-btn" id="mobile-mode-list" data-mode="list">Lista</button>
       </div>
-      <button class="mobile-utility-btn" id="mobile-search-toggle" type="button">Buscar</button>
-      <button class="mobile-utility-btn" id="mobile-summary-toggle" type="button">Top</button>
     </div>
     <label class="mobile-search">
       <span class="mobile-search-label">Buscar</span>
       <input id="mobile-search-input" type="search" placeholder="Nombre o partido">
     </label>
-    <div class="mobile-featured" id="mobile-featured"></div>
   </div>
 </div>
 
@@ -1343,46 +1292,8 @@
       detail: 'Crisis, anticorrupción y reforma del Estado.', plan: 'https://mpesije.jne.gob.pe/docs/40877746-e670-42d3-840b-cdf683f46355.pdf', weight: 16 },
   ]
 
-  const CONNECTIONS = {
-    'Rafael López Aliaga': [
-      ['Keiko Fujimori', 'Ambos lideran la derecha. Una alianza entre ellos en segunda vuelta sería determinante para el resultado final.'],
-      ['Roberto Chiabra', 'Ambos proponen mano dura y orden desde perspectivas distintas — uno empresarial, otro militar.'],
-      ['Carlos Álvarez', 'El crecimiento de Álvarez como outsider podría afectar el techo electoral de López Aliaga en Lima.'],
-    ],
-    'Keiko Fujimori': [
-      ['Rafael López Aliaga', 'Empatan técnicamente en primer lugar. La competencia entre ellos divide el voto de derecha y complica la primera vuelta.'],
-      ['José Williams Zapata', 'Comparten el espacio de la derecha institucional y el voto anti-Castillo.'],
-      ['Vladimir Cerrón', 'Sus candidaturas definen la polarización central de esta elección: derecha vs. izquierda radical.'],
-    ],
-    'Carlos Álvarez': [
-      ['Wolfgang Grozo', 'Ambos son outsiders que buscan captar el descontento ciudadano con la clase política tradicional.'],
-      ['Alfonso López Chau', 'Ambos se presentan como ajenos a la política tradicional, aunque con perfiles muy distintos: humorista y tecnócrata.'],
-    ],
-    'Alfonso López Chau': [
-      ['Jorge Nieto Montesinos', 'Ambos candidatos técnicos de centro que compiten por el mismo electorado anticorrupción.'],
-      ['Wolfgang Grozo', 'Los tres compiten por el voto anticorrupción de centro. Podrían quitarse apoyo entre sí.'],
-    ],
-    'Roberto Sánchez': [
-      ['Vladimir Cerrón', 'Compiten por el voto de izquierda. Sánchez busca separarse del legado de Cerrón y Castillo.'],
-      ['Fiorella Molinelli', 'Ambos de izquierda moderada. Sus candidaturas dividen ese espacio electoral.'],
-    ],
-    'Vladimir Cerrón': [
-      ['Roberto Sánchez', 'Fue fundador del partido que llevó a Castillo al poder. Sánchez busca diferenciarse de ese legado para crecer.'],
-      ['Keiko Fujimori', 'Su candidatura activa el voto antiizquierda que puede beneficiar a Fujimori y a López Aliaga.'],
-    ],
-    'César Acuña': [
-      ['George Forsyth', 'Ambos de centro-derecha compiten por el voto de gestión y pragmatismo regional.'],
-      ['José Williams Zapata', 'Podrían ser aliados en una coalición de centro-derecha para una segunda vuelta.'],
-    ],
-    'Jorge Nieto Montesinos': [
-      ['Alfonso López Chau', 'Ambos son candidatos técnicos de centro y compiten por un electorado parecido.'],
-      ['Ricardo Belmont', 'Dos candidatos de centro con propuestas distintas que compiten por el mismo espacio de centro moderado.'],
-    ],
-  }
-
   let currentCategories = CATEGORIES
   let currentChapters = [...CHAPTERS]
-  let currentConnections = CONNECTIONS
   let frozenRows = []
   const treemapEl = document.getElementById('treemap')
   const hudBlocks = document.getElementById('hud-blocks')
@@ -1404,23 +1315,17 @@
   const chapterControversy = document.getElementById('chapter-controversy')
   const chapterQuestion = document.getElementById('chapter-question')
   const chapterSources = document.getElementById('chapter-sources')
-  const mobileFeatured = document.getElementById('mobile-featured')
   const mobileListView = document.getElementById('mobile-list-view')
   const mobileSearchInput = document.getElementById('mobile-search-input')
   const mobileModeButtons = [...document.querySelectorAll('.mobile-mode-btn')]
-  const mobileSearchToggle = document.getElementById('mobile-search-toggle')
-  const mobileSummaryToggle = document.getElementById('mobile-summary-toggle')
   const MOBILE_BREAKPOINT = 768
   const DESKTOP_TIER_THRESHOLDS = [600, 2500, 7000, 18000]
   const MOBILE_TIER_THRESHOLDS = [200, 800, 3000, 9000]
-  const MOBILE_FEATURED_COUNT = 8
   let selectedBlock = null
   let activeBlock = null
   let isMobileLayout = window.innerWidth <= MOBILE_BREAKPOINT
   let mobileViewMode = 'map'
   let mobileSearchQuery = ''
-  let mobileSearchOpen = false
-  let mobileSummaryOpen = false
   let mouseX = -9999, mouseY = -9999
   const CURSOR_RADIUS = 220
   const EXPAND_FACTOR = 3.0
@@ -1445,14 +1350,12 @@
     chapterPanel.classList.remove('visible')
     selectedBlock = null
     if (!keepActive) activeBlock = null
-    renderMobileFeatured()
     renderMobileList()
   }
 
   function setActiveBlock(block) {
     activeBlock = block
     if (isMobileLayout) setPointerOffscreen()
-    renderMobileFeatured()
     renderMobileList()
   }
 
@@ -1463,11 +1366,8 @@
     setPointerOffscreen()
     activeBlock = null
     mobileViewMode = 'map'
-    mobileSearchOpen = false
-    mobileSummaryOpen = false
     if (!isMobileLayout) selectedBlock = null
     updateMobileModeUI()
-    renderMobileFeatured()
     renderMobileList()
   }
 
@@ -1621,7 +1521,6 @@
       br.item.rh = br.h
     }
     hudBlocks.textContent = blocks.length
-    renderMobileFeatured()
     renderMobileList()
   }
 
@@ -1645,13 +1544,9 @@
 
   function updateMobileModeUI() {
     document.body.classList.toggle('mobile-list-mode', isMobileLayout && mobileViewMode === 'list')
-    document.body.classList.toggle('mobile-search-open', isMobileLayout && (mobileSearchOpen || mobileViewMode === 'list'))
-    document.body.classList.toggle('mobile-summary-open', isMobileLayout && mobileSummaryOpen && mobileViewMode === 'map')
     mobileModeButtons.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.mode === mobileViewMode)
     })
-    mobileSearchToggle.classList.toggle('active', isMobileLayout && (mobileSearchOpen || mobileViewMode === 'list'))
-    mobileSummaryToggle.classList.toggle('active', isMobileLayout && mobileSummaryOpen && mobileViewMode === 'map')
   }
 
   function focusMarker(marker, { openPanel = false, switchToMap = false } = {}) {
@@ -1663,30 +1558,6 @@
       updateMobileModeUI()
     }
     if (openPanel) openChapterPanel(block)
-  }
-
-  function renderMobileFeatured() {
-    if (!mobileFeatured) return
-    mobileFeatured.innerHTML = ''
-    if (!isMobileLayout) return
-    const featured = getFilteredChapters().slice(0, MOBILE_FEATURED_COUNT)
-    if (!featured.length) return
-    const activeName = getActiveBlockName()
-    featured.forEach((marker, index) => {
-      const card = document.createElement('button')
-      card.className = 'mobile-featured-card'
-      if (marker.name === activeName) card.classList.add('active')
-      card.innerHTML = `
-        <div class="mobile-featured-rank">#${index + 1}</div>
-        <div class="mobile-featured-name">${marker.name}</div>
-        <div class="mobile-featured-meta">${marker.val}</div>
-      `
-      card.addEventListener('click', e => {
-        e.stopPropagation()
-        focusMarker(marker, { openPanel: true, switchToMap: true })
-      })
-      mobileFeatured.appendChild(card)
-    })
   }
 
   function renderMobileList() {
@@ -1821,7 +1692,6 @@
       e.preventDefault()
       activeCat = null
       updateLegendActive()
-      renderMobileFeatured()
       renderMobileList()
     })
     legendBar.appendChild(allItem)
@@ -1838,7 +1708,6 @@
         e.preventDefault()
         activeCat = activeCat === key ? null : key
         updateLegendActive()
-        renderMobileFeatured()
         renderMobileList()
       })
       legendBar.appendChild(item)
@@ -1921,8 +1790,6 @@
       e.target.closest('.load-btn') ||
       e.target.closest('.info-panel')
     ) return
-    mobileSearchOpen = false
-    mobileSummaryOpen = false
     updateMobileModeUI()
     closeChapterPanel()
   })
@@ -1969,14 +1836,12 @@
       item.innerHTML = `<strong><a href="${href}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${label} ↗</a></strong>${why}`
       chapterSources.appendChild(item)
     })
-    renderMobileFeatured()
     renderMobileList()
   }
 
   function loadSample() {
     currentCategories = CATEGORIES
     currentChapters = [...CHAPTERS]
-    currentConnections = CONNECTIONS
     docStatus.textContent = 'Loaded sample map.'
     activeBlock = null
     selectedBlock = null
@@ -1998,7 +1863,6 @@
     }
     currentCategories = generated.categories
     currentChapters = generated.chapters
-    currentConnections = generated.connections
     activeBlock = null
     selectedBlock = null
     rebuildMap()
@@ -2027,7 +1891,6 @@
         if (parsed.chapters && parsed.categories) {
           currentCategories = parsed.categories
           currentChapters = parsed.chapters
-          currentConnections = parsed.connections || {}
           activeBlock = null
           selectedBlock = null
           rebuildMap()
@@ -2047,35 +1910,13 @@
   document.getElementById('generate-btn').addEventListener('click', generateFromInput)
   mobileSearchInput.addEventListener('input', e => {
     mobileSearchQuery = e.target.value || ''
-    if (isMobileLayout && mobileSearchQuery.trim()) mobileSearchOpen = true
-    updateMobileModeUI()
-    renderMobileFeatured()
     renderMobileList()
   })
   mobileModeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       mobileViewMode = btn.dataset.mode
-      if (mobileViewMode === 'list') {
-        mobileSearchOpen = true
-        mobileSummaryOpen = false
-      } else {
-        mobileSearchOpen = false
-        mobileSummaryOpen = false
-      }
       updateMobileModeUI()
     })
-  })
-  mobileSearchToggle.addEventListener('click', () => {
-    mobileSearchOpen = !mobileSearchOpen
-    if (!mobileSearchOpen && mobileViewMode === 'map' && !mobileSearchQuery.trim()) {
-      mobileSearchInput.blur()
-    }
-    updateMobileModeUI()
-    if (mobileSearchOpen) mobileSearchInput.focus()
-  })
-  mobileSummaryToggle.addEventListener('click', () => {
-    mobileSummaryOpen = !mobileSummaryOpen
-    updateMobileModeUI()
   })
 
   function handleBlockTap(block, event) {
