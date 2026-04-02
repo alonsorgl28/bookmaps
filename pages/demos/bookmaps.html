@@ -661,23 +661,19 @@
   .chapter-answer {
     margin-top: 8px;
   }
-  .mobile-shell,
-  .mobile-list-view {
+  .mobile-shell {
     display: none;
   }
   @media (max-width: 768px) {
     #treemap {
-      top: 56px;
+      top: 0;
       bottom: 74px;
-    }
-    body.mobile-list-mode #treemap {
-      display: none;
     }
     .hud {
       display: none;
     }
     .mobile-shell {
-      display: block;
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -688,140 +684,8 @@
         linear-gradient(180deg, rgba(252,250,246,0.96), rgba(252,250,246,0.84) 74%, rgba(252,250,246,0));
       pointer-events: none;
     }
-    body.mobile-list-mode .mobile-shell {
-      background: #fcfaf6;
-      border-bottom: 1px solid rgba(18,18,18,0.08);
-    }
     .mobile-shell > * {
       pointer-events: auto;
-    }
-    .mobile-toolbar {
-      display: grid;
-      gap: 6px;
-    }
-    .mobile-topbar {
-      display: grid;
-      grid-template-columns: auto;
-      justify-content: end;
-    }
-    .mobile-view-toggle {
-      border: 1px solid rgba(18,18,18,0.10);
-      background: rgba(255,255,255,0.76);
-      color: rgba(18,18,18,0.54);
-      font: 700 11px/1.2 'IBM Plex Mono', 'SF Mono', monospace;
-      padding: 9px 10px;
-      cursor: pointer;
-      min-width: 68px;
-    }
-    .mobile-view-toggle.active {
-      background: rgba(18,18,18,0.92);
-      color: #f6f4ef;
-    }
-    .mobile-search {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      padding: 0 12px;
-      border: 1px solid rgba(18,18,18,0.08);
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(10px);
-    }
-    body.mobile-list-mode .mobile-search {
-      display: flex;
-    }
-    .mobile-search input {
-      width: 100%;
-      height: 34px;
-      border: 0;
-      outline: none;
-      background: transparent;
-      color: #181614;
-      font: 500 12px/1.3 'IBM Plex Mono', 'SF Mono', monospace;
-    }
-    .mobile-search-label {
-      font: 700 10px/1 'IBM Plex Mono', 'SF Mono', monospace;
-      color: rgba(18,18,18,0.42);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      flex: 0 0 auto;
-    }
-    .mobile-list-rank {
-      font: 700 9px/1 'IBM Plex Mono', 'SF Mono', monospace;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(18,18,18,0.34);
-    }
-    .mobile-list-name {
-      margin-top: 8px;
-      font-size: 13px;
-      line-height: 1.22;
-      font-weight: 700;
-      color: #11100e;
-    }
-    .mobile-list-meta {
-      margin-top: 4px;
-      font-size: 9px;
-      line-height: 1.35;
-      color: rgba(18,18,18,0.44);
-    }
-    .mobile-list-view {
-      display: none;
-      position: fixed;
-      top: 92px;
-      left: 0;
-      right: 0;
-      bottom: calc(60px + env(safe-area-inset-bottom, 0px));
-      z-index: 23;
-      overflow-y: auto;
-      padding: 10px 12px 24px;
-      background: #fcfaf6;
-    }
-    body.mobile-list-mode .mobile-list-view {
-      display: block;
-    }
-    .mobile-list-empty {
-      padding: 16px 12px;
-      color: rgba(18,18,18,0.56);
-      font-size: 12px;
-      line-height: 1.5;
-      border: 1px solid rgba(18,18,18,0.08);
-      background: rgba(255,255,255,0.68);
-    }
-    .mobile-list-card {
-      width: 100%;
-      margin-top: 10px;
-      border: 1px solid rgba(18,18,18,0.08);
-      background: rgba(255,255,255,0.94);
-      padding: 14px 13px;
-      text-align: left;
-      cursor: pointer;
-    }
-    .mobile-list-card:first-child {
-      margin-top: 0;
-    }
-    .mobile-list-card.active {
-      box-shadow: 0 8px 18px rgba(18,18,18,0.08);
-      background: #ffffff;
-    }
-    .mobile-list-topline {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: baseline;
-    }
-    .mobile-list-label {
-      margin-top: 9px;
-      font-size: 10px;
-      line-height: 1.35;
-      color: rgba(18,18,18,0.78);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .mobile-list-detail {
-      margin-top: 8px;
-      font-size: 10.5px;
-      line-height: 1.55;
-      color: rgba(18,18,18,0.68);
     }
     .legend-bar {
       gap: 6px;
@@ -892,20 +756,6 @@
 </head>
 <body>
 <div id="treemap"></div>
-
-<div class="mobile-shell" id="mobile-shell">
-  <div class="mobile-toolbar">
-    <div class="mobile-topbar">
-      <button class="mobile-view-toggle" id="mobile-view-toggle" type="button">Lista</button>
-    </div>
-    <label class="mobile-search">
-      <span class="mobile-search-label">Buscar</span>
-      <input id="mobile-search-input" type="search" placeholder="Nombre o partido">
-    </label>
-  </div>
-</div>
-
-<div class="mobile-list-view" id="mobile-list-view"></div>
 
 <div class="hud" id="hud">
   <div><span class="val" id="hud-blocks">0</span> blocks</div>
@@ -1037,23 +887,27 @@
       thesis: 'Empresario y exalcalde de Lima. Es el candidato presidencial de Renovación Popular y su campaña gira alrededor de la seguridad, el orden y un discurso conservador.',
       mechanism: 'Propone medidas duras contra el crimen, cambios fuertes en seguridad y una reforma del Estado con menos trabas y más autoridad.',
       importance: 'Al 2 de abril aparece primero en Polymarket con 33%. Es uno de los nombres más visibles de la derecha en esta elección.',
+      controversy: 'Su salida anticipada de la alcaldía de Lima para postular a la presidencia abrió críticas porque dejó el cargo antes del final del periodo municipal.',
       question: '¿Su campaña crecerá más por sus propuestas de seguridad o por su estilo directo y confrontacional?',
       detail: 'Empresario y exalcalde de Lima. Primero en Polymarket (33%).', plan: 'https://mpesije.jne.gob.pe/docs/2096b44a-f3b6-4c81-b03d-94fbfc9ac762.pdf',
       sources: [
         ['Perfil oficial en la Municipalidad de Lima', 'Confirma su cargo como alcalde de Lima.', 'https://www.gob.pe/institucion/munilima/funcionarios/90804-rafael-lopez-aliaga'],
-        ['Andina: propuesta de expulsión de extranjeros con delitos', 'Sirve para contrastar una de sus propuestas de seguridad en campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-lopez-aliaga-ofrece-expulsar-a-extranjeros-que-cometan-delitos-1063374.aspx']
+        ['Andina: propuesta de expulsión de extranjeros con delitos', 'Sirve para contrastar una de sus propuestas de seguridad en campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-lopez-aliaga-ofrece-expulsar-a-extranjeros-que-cometan-delitos-1063374.aspx'],
+        ['El Comercio: renuncia oficial a la alcaldía', 'Sustenta que dejó la Municipalidad de Lima para competir en 2026.', 'https://elcomercio.pe/politica/elecciones/elecciones-2026-rafael-lopez-aliaga-hace-oficial-su-renuncia-ante-el-concejo-metropolitano-renovacion-popular-ultimas-noticia/?outputType=lite'],
+        ['Gestión: en 2024 descartó renunciar a la alcaldía', 'Ayuda a entender por qué su salida generó críticas públicas.', 'https://gestion.pe/peru/politica/renovacion-popular-forma-alianza-con-movimiento-regional-para-elecciones-de-2026-rafael-lopez-aliaga-noticia/']
       ], weight: 48 },
 
     { cat: 'derecha', name: 'Keiko Fujimori', val: 'Fuerza Popular', ref: 'Derecha — Lima',
       thesis: 'Líder de Fuerza Popular e hija de Alberto Fujimori. Ya compitió tres veces por la presidencia y sigue teniendo una base política fiel.',
       mechanism: 'Su campaña insiste en seguridad, inversión privada, apoyo a las Fuerzas Armadas y orden institucional.',
       importance: 'Al 2 de abril aparece segunda en Polymarket con 20%. Sigue siendo una de las figuras con más reconocimiento nacional.',
-      controversy: 'Su candidatura sigue marcada por las investigaciones por lavado de activos y por el rechazo que genera el legado político del fujimorismo en parte del país.',
+      controversy: 'Su candidatura sigue marcada por el caso de presuntos aportes irregulares a sus campañas y por el largo arrastre judicial de ese expediente.',
       question: '¿Su experiencia y su base partidaria le alcanzarán para volver a pelear la presidencia?',
       detail: 'Líder de Fuerza Popular. Segunda en Polymarket (20%).', plan: 'https://mpesije.jne.gob.pe/docs/da4b943d-4344-4743-9362-a11ccf3054cb.pdf',
       sources: [
         ['Andina: propuesta de seguridad de Fuerza Popular', 'Resume una parte central de su oferta de campaña en 2026.', 'https://andina.pe/agencia/noticia-elecciones-2026-fuerza-popular-propone-sistema-seguridad-que-permita-combatir-crimen-organizado-1063202.aspx'],
-        ['Andina: cierre de fronteras y relación con Bolivia', 'Ayuda a verificar una propuesta pública de su campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-keiko-fujimori-promete-cerrar-fronteras-si-bolivia-no-pide-disculpas-1065993.aspx']
+        ['Andina: cierre de fronteras y relación con Bolivia', 'Ayuda a verificar una propuesta pública de su campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-keiko-fujimori-promete-cerrar-fronteras-si-bolivia-no-pide-disculpas-1065993.aspx'],
+        ['Poder Judicial: prisión preventiva en el caso de aportes irregulares', 'Sirve para sostener que su candidatura sigue marcada por ese proceso.', 'https://justiciatv.pj.gob.pe/corte-suprema-dispone-18-meses-de-prision-preventiva-contra-keiko-fujimori/']
       ], weight: 41 },
 
     { cat: 'derecha', name: 'José Williams Zapata', val: 'Avanza País', ref: 'Derecha — Lima',
@@ -1115,11 +969,14 @@
       thesis: 'Economista y exrector de la UNI. Su campaña mezcla reforma del Estado, lucha anticorrupción y un tono técnico.',
       mechanism: 'Propone cambios en justicia, formalización, administración pública y control de la corrupción.',
       importance: 'Al 2 de abril ronda 9% en Polymarket. Es uno de los nombres de centro con mejor posición en el mercado.',
+      controversy: 'Su hoja de vida recibió observaciones del JEE por presuntas omisiones sobre acciones en una empresa. Su partido negó que hubiera ocultamiento y presentó descargos.',
       question: '¿Puede crecer a nivel nacional sin una maquinaria partidaria tan fuerte como la de otros candidatos?',
       detail: 'Economista y exrector de la UNI. 9% Polymarket.', plan: 'https://mpesije.jne.gob.pe/docs/7d70c5e1-2246-42e8-90c2-372aa1cf7f52.pdf',
       sources: [
         ['UNI: rectorado', 'Confirma su paso por el rectorado de la Universidad Nacional de Ingeniería.', 'https://uni.edu.pe/index.php/rectorado/10-autoridades/559-alfonso-lopez-chau-nava'],
-        ['Andina: propuesta sobre Loreto y energía', 'Ayuda a verificar una línea visible de su campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-lopez-chau-promete-convertir-a-loreto-motor-energetico-y-economico-1064939.aspx']
+        ['Andina: propuesta sobre Loreto y energía', 'Ayuda a verificar una línea visible de su campaña.', 'https://andina.pe/agencia/noticia-elecciones-2026-lopez-chau-promete-convertir-a-loreto-motor-energetico-y-economico-1064939.aspx'],
+        ['El Comercio: JEE inicia proceso sancionador', 'Resume la observación electoral sobre su hoja de vida.', 'https://elcomercio.pe/politica/elecciones/elecciones-generales-2026-jee-inicia-proceso-sancionador-contra-alfonso-lopez-chau-y-mario-vizcarra-ultimas-noticia/'],
+        ['Infobae: descargos de Ahora Nación', 'Muestra la respuesta pública del partido frente a esa observación.', 'https://www.infobae.com/peru/2026/03/04/alfonso-lopez-chau-no-declaro-empresa-en-su-hoja-de-vida-porque-nunca-funciono-dice-ahora-nacion/']
       ], weight: 36 },
 
     { cat: 'centro', name: 'Jorge Nieto Montesinos', val: 'Partido del Buen Gobierno', ref: 'Centro — Lima',
@@ -1222,7 +1079,7 @@
       thesis: 'Exgobernador de Junín y fundador de Perú Libre. Su candidatura está marcada por su condena por corrupción y por una propuesta de izquierda dura.',
       mechanism: 'Su programa plantea nacionalización, reforma agraria, nueva Constitución y ruptura con el modelo económico actual.',
       importance: 'Es una candidatura polémica por su situación judicial y por el peso que tuvo en la victoria de Pedro Castillo en 2021.',
-      controversy: 'Su principal controversia es su condena por corrupción. Además, su relación con el gobierno de Castillo sigue siendo un tema de fuerte rechazo para muchos votantes.',
+      controversy: 'Su principal controversia es su condena por corrupción en el caso Aeródromo Wanka y su papel como fundador de Perú Libre en el ciclo político que llevó a Pedro Castillo al poder.',
       question: '¿Su figura moviliza apoyo real o pesa más como símbolo y conflicto político?',
       detail: 'Fundador de Perú Libre. Condenado por corrupción.', plan: 'https://mpesije.jne.gob.pe/docs/b2d25860-484e-4226-bd13-a57fb83c59cb.pdf',
       sources: [
@@ -1336,17 +1193,12 @@
   const chapterControversy = document.getElementById('chapter-controversy')
   const chapterQuestion = document.getElementById('chapter-question')
   const chapterSources = document.getElementById('chapter-sources')
-  const mobileListView = document.getElementById('mobile-list-view')
-  const mobileSearchInput = document.getElementById('mobile-search-input')
-  const mobileViewToggle = document.getElementById('mobile-view-toggle')
   const MOBILE_BREAKPOINT = 768
   const DESKTOP_TIER_THRESHOLDS = [600, 2500, 7000, 18000]
   const MOBILE_TIER_THRESHOLDS = [200, 800, 3000, 9000]
   let selectedBlock = null
   let activeBlock = null
   let isMobileLayout = window.innerWidth <= MOBILE_BREAKPOINT
-  let mobileViewMode = 'map'
-  let mobileSearchQuery = ''
   let mouseX = -9999, mouseY = -9999
   const CURSOR_RADIUS = 220
   const EXPAND_FACTOR = 3.0
@@ -1371,13 +1223,11 @@
     chapterPanel.classList.remove('visible')
     selectedBlock = null
     if (!keepActive) activeBlock = null
-    renderMobileList()
   }
 
   function setActiveBlock(block) {
     activeBlock = block
     if (isMobileLayout) setPointerOffscreen()
-    renderMobileList()
   }
 
   function syncLayoutMode() {
@@ -1386,10 +1236,7 @@
     isMobileLayout = nextIsMobile
     setPointerOffscreen()
     activeBlock = null
-    mobileViewMode = 'map'
     if (!isMobileLayout) selectedBlock = null
-    updateMobileModeUI()
-    renderMobileList()
   }
 
   function getTier(area) {
@@ -1542,76 +1389,6 @@
       br.item.rh = br.h
     }
     hudBlocks.textContent = blocks.length
-    renderMobileList()
-  }
-
-  function getSortedChapters() {
-    return [...currentChapters].sort((a, b) => b.weight - a.weight)
-  }
-
-  function getActiveBlockName() {
-    return activeBlock?.marker?.name || selectedBlock?.marker?.name || ''
-  }
-
-  function getFilteredChapters() {
-    const query = mobileSearchQuery.trim().toLowerCase()
-    return getSortedChapters().filter(marker => {
-      if (activeCat && marker.cat !== activeCat) return false
-      if (!query) return true
-      const haystack = `${marker.name} ${marker.val} ${marker.ref} ${marker.detail}`.toLowerCase()
-      return haystack.includes(query)
-    })
-  }
-
-  function updateMobileModeUI() {
-    document.body.classList.toggle('mobile-list-mode', isMobileLayout && mobileViewMode === 'list')
-    mobileViewToggle.classList.toggle('active', isMobileLayout && mobileViewMode === 'list')
-    mobileViewToggle.textContent = mobileViewMode === 'list' ? 'Mapa' : 'Lista'
-  }
-
-  function focusMarker(marker, { openPanel = false, switchToMap = false } = {}) {
-    const block = blocks.find(item => item.marker.name === marker.name)
-    if (!block) return
-    setActiveBlock(block)
-    if (switchToMap && isMobileLayout) {
-      mobileViewMode = 'map'
-      updateMobileModeUI()
-    }
-    if (openPanel) openChapterPanel(block)
-  }
-
-  function renderMobileList() {
-    if (!mobileListView) return
-    mobileListView.innerHTML = ''
-    if (!isMobileLayout) return
-    const filtered = getFilteredChapters()
-    if (!filtered.length) {
-      const empty = document.createElement('div')
-      empty.className = 'mobile-list-empty'
-      empty.textContent = 'No hay resultados con ese filtro.'
-      mobileListView.appendChild(empty)
-      return
-    }
-    const activeName = getActiveBlockName()
-    filtered.forEach((marker, index) => {
-      const item = document.createElement('button')
-      item.className = 'mobile-list-card'
-      if (marker.name === activeName) item.classList.add('active')
-      item.innerHTML = `
-        <div class="mobile-list-topline">
-          <div class="mobile-list-rank">#${index + 1}</div>
-          <div class="mobile-list-meta">${currentCategories[marker.cat]?.label || ''}</div>
-        </div>
-        <div class="mobile-list-name">${marker.name}</div>
-        <div class="mobile-list-label">${marker.val}</div>
-        <div class="mobile-list-detail">${marker.detail}</div>
-      `
-      item.addEventListener('click', e => {
-        e.stopPropagation()
-        focusMarker(marker, { openPanel: true, switchToMap: true })
-      })
-      mobileListView.appendChild(item)
-    })
   }
 
   function calcWorst(row, shorter, rowArea) {
@@ -1804,13 +1581,10 @@
       e.target.closest('.chapter-panel') ||
       e.target.closest('.doc-panel') ||
       e.target.closest('.legend-bar') ||
-      e.target.closest('.mobile-shell') ||
-      e.target.closest('.mobile-list-view') ||
       e.target.closest('.about-btn') ||
       e.target.closest('.load-btn') ||
       e.target.closest('.info-panel')
     ) return
-    updateMobileModeUI()
     closeChapterPanel()
   })
 
@@ -1859,7 +1633,6 @@
       item.innerHTML = `<strong><a href="${href}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${label} ↗</a></strong>${why}`
       chapterSources.appendChild(item)
     })
-    renderMobileList()
   }
 
   function loadSample() {
@@ -1931,15 +1704,6 @@
 
   document.getElementById('load-sample-btn').addEventListener('click', loadSample)
   document.getElementById('generate-btn').addEventListener('click', generateFromInput)
-  mobileSearchInput.addEventListener('input', e => {
-    mobileSearchQuery = e.target.value || ''
-    renderMobileList()
-  })
-  mobileViewToggle.addEventListener('click', () => {
-    mobileViewMode = mobileViewMode === 'list' ? 'map' : 'list'
-    updateMobileModeUI()
-  })
-
   function handleBlockTap(block, event) {
     if (!isMobileLayout) {
       openChapterPanel(block)
